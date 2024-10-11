@@ -7,7 +7,7 @@ export default function ClientApplication({ children}: Readonly<{children: React
 {
     useEffect(() => 
     {
-        clarity.init("ogr24ma7i3")
+        clarity.init("ogsmm2i2lg")
     });
 
     return children;
