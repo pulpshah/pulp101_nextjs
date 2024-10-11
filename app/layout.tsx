@@ -4,7 +4,7 @@ import { Navbar } from "@/components/navbar";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
-import ClientApplication from "@/components/ClientApplication.jsx";
+import ClientApplication from "@/components/ClientApplication";
 
 export const metadata: Metadata = {
   title: "Pulp101",
