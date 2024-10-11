@@ -25,7 +25,7 @@ export const ROUTES: EachRoute[] = [
       {title: "Clarity", href: "/clarity",},
       { title: "Style", href: "/style" },
       { title: "Critical Thinking", href: "/critical-thinking"},
-      { title: "Weights", href: "/weights", noLink:true},
+      { title: "Weights", href: "/weights"},
     ],
   },
   {

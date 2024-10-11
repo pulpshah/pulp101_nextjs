@@ -3,8 +3,8 @@ import { ThemeProvider } from "@/components/contexts/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { Footer } from "@/components/footer";
 import "./globals.css";
+import ClientApplication from "@/components/ClientApplication";
 
 export const metadata: Metadata = {
   title: "Pulp101",
@@ -18,24 +18,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
-        suppressHydrationWarning
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+    <ClientApplication>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
+          suppressHydrationWarning
         >
-          <Navbar />
-          <main className="sm:container mx-auto w-[90vw] h-auto">
-            {children}
-          </main>
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main className="sm:container mx-auto w-[90vw] h-auto">
+              {children}
+            </main>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClientApplication>
   );
 }
