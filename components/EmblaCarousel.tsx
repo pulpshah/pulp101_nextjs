@@ -103,25 +103,25 @@ function BlogCard({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="flex flex-col gap-2 items-start border rounded-md py-5 px-3 min-h-[400px]"
+      className="flex flex-col gap-2 items-start rounded-md py-5 px-3 min-h-[400px] no-underline"
     >
-      <h3 className="text-md font-semibold -mt-1 pr-7">{title}</h3>
-      <div className="w-full">
+      <h3 className="text-base font-semibold pr-7 text-white -mt-[3px]">{title}</h3>
+      <div className="w-full -mt-32">
         <Image
           src={cover}
           alt={title}
           width={400}
           height={150}
           quality={80}
-          className="w-full rounded-md object-cover h-[180px] border"
+          className="w-full rounded-md object-cover h-[200px] "
         />
       </div>
-      <p className="text-sm text-muted-foreground">{description}</p>
-      <div className="flex items-center justify-between w-full mt-auto">
+      <p className="text-xs text-muted-foreground -mt-32">{description}</p>
+      <div className="flex items-center justify-between w-full -mt-8">
         <p className="text-[13px] text-muted-foreground">
           Published on {formatDate2(date)}
         </p>
-        <AvatarGroup users={authors} />
+        <AvatarGroup users={authors}/>
       </div>
     </Link>
   );
@@ -132,11 +132,11 @@ function AvatarGroup({ users, max = 4 }: { users: Author[]; max?: number }) {
   const remainingUsers = Math.max(users.length - max, 0);
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center -mt-4">
       {displayUsers.map((user, index) => (
         <Avatar
           key={user.username}
-          className={`inline-block border-2 w-9 h-9 border-background ${
+          className={`inline-block border-2 w-9 h-9 border ${
             index !== 0 ? "-ml-3" : ""
           } `}
         >
