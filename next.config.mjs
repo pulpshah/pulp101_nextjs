@@ -1,13 +1,24 @@
+import withMDX from '@next/mdx';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**",
+        protocol: 'https',
+        hostname: '**',
       },
     ],
   },
 };
 
-export default nextConfig;
+const mdxOptions = {
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+};
+
+export default withMDX(mdxOptions)(nextConfig);

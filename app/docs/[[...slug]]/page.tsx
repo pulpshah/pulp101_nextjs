@@ -15,6 +15,7 @@ export default async function DocsPage({ params: { slug = [] } }: PageProps) {
   const res = await getDocsForSlug(pathName);
 
   if (!res) notFound();
+  
   return (
     <div className="flex items-start gap-10">
       <div className="flex-[4.5] pt-10">

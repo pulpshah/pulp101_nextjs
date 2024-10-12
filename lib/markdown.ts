@@ -8,6 +8,8 @@ import rehypeSlug from "rehype-slug";
 import rehypeCodeTitles from "rehype-code-titles";
 import { page_routes } from "./routes-config";
 import { visit } from "unist-util-visit";
+import { components as mdxComponents } from "@/lib/mdx-components";
+
 
 // custom components imports
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,7 +33,6 @@ const components = {
   a: Link,
 };
 
-// can be used for other pages like blogs, Guides etc
 async function parseMdx<Frontmatter>(rawMdx: string) {
   return await compileMDX<Frontmatter>({
     source: rawMdx,
@@ -49,9 +50,10 @@ async function parseMdx<Frontmatter>(rawMdx: string) {
         remarkPlugins: [remarkGfm],
       },
     },
-    components,
+    components: mdxComponents,
   });
 }
+
 
 // logic for docs
 
@@ -60,6 +62,7 @@ type BaseMdxFrontmatter = {
   description: string;
 };
 
+// Function to fetch the docs by slug
 export async function getDocsForSlug(slug: string) {
   try {
     const contentPath = getDocsContentPath(slug);
@@ -67,6 +70,7 @@ export async function getDocsForSlug(slug: string) {
     return await parseMdx<BaseMdxFrontmatter>(rawMdx);
   } catch (err) {
     console.log(err);
+    return null;
   }
 }
 
