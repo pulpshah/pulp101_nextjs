@@ -103,9 +103,9 @@ function BlogCard({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="flex flex-col gap-2 items-start rounded-md py-5 px-3 min-h-[400px] no-underline"
+      className="flex flex-col gap-3 items-start rounded-md py-5 px-3 min-h-[400px] no-underline"
     >
-      <h3 className="text-base font-semibold pr-7 text-white -mt-[3px]">{title}</h3>
+      <h3 className="text-base font-semibold pr-7 text-white mt-1">{title}</h3>
       <div className="w-full -mt-32">
         <Image
           src={cover}
