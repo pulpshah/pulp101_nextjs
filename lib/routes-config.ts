@@ -22,10 +22,99 @@ export const ROUTES: EachRoute[] = [
           { title: "Logos", href: "/logos" },
         ],
       },
-      {title: "Clarity", href: "/clarity",},
-      { title: "Style", href: "/style" },
-      { title: "Critical Thinking", href: "/critical-thinking"},
-      { title: "Weights", href: "/weights"},
+      {
+        title: "Clarity",
+        href: "/clarity",
+        items: [
+          {title: "Aspect",
+            href: "/aspect"
+          },
+          {title: "Clause",
+            href: "/clause",
+            items: [
+              {title: "Clause Types",
+                href: "/clause-types"
+              }
+            ]
+          }
+        ]
+      },
+      { 
+        title: "Style", 
+        href: "/style",
+        items: [
+          {title: "Character",
+            href: "/character",
+            items: [
+              {title: "Charcter Types",
+                href: "/character-types"
+              }
+            ]
+          }
+        ]},
+      { 
+        title: "Critical Thinking",
+        href: "/critical-thinking",
+        items: [
+          {
+            title: "Argument",
+            href: "/arguments"
+          },
+          {
+            title: "Accuracy Risk",
+            href: "/accuracy-risk"
+          },
+          {
+            title: "Bias",
+            href: "/bias"
+          },
+          {
+            title: "Claim", 
+            href: "/claims",
+            items: [
+              {
+                title: "Claim Scores",
+                href: "/claim-scores"
+              },
+              {
+                title: "Claim Types",
+                href: "/claim-types"
+              }
+            ]
+          },
+          {title: "Cognitive Strength",
+            href: "/cognitive-strength",
+            items: [
+              {title: "Cognitive Dependability", 
+                href: "/cognitive-dependability"
+              },
+              {title: "Cognitive Risk",
+                href: "/cognitive-risk"
+              }
+            ]
+          }
+        ]
+      },
+      { 
+        title: "Weights",
+        href: "/weights",
+        items: [
+          {
+            title: "Contextual Weight", 
+            href: "/contextual-weight",
+            items: [
+              {
+                title: "Age Range",
+                href: "/age-range"
+              },
+              {
+                title: "Alertness",
+                href: "/alertness"
+              }
+            ]
+          }
+        ]
+      },
     ],
   },
   {
