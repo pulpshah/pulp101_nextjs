@@ -18,7 +18,18 @@ export const ROUTES: EachRoute[] = [
         href: "/appeal",
         items: [
           { title: "Ethos", href: "/ethos" },
-          { title: "Pathos", href: "/pathos" },
+          { title: "Pathos", href: "/pathos", items: [
+            {title: "Emotion",
+              href: "/emotion"
+            },
+            {title: "Feeling",
+              href: "/feeling"
+            },
+            {
+              title: "Mood",
+              href: "/mood"
+            }
+          ]},
           { title: "Logos", href: "/logos" },
         ],
       },
@@ -36,6 +47,24 @@ export const ROUTES: EachRoute[] = [
                 href: "/clause-types"
               }
             ]
+          },
+          {
+            title: "PartOfSpeech",
+            href: "/partofspeech"
+          },
+          {
+            title: "Phrase Types",
+            href: "/phrase-types"
+          },
+          {
+            title: "VocabularyLevel",
+            href: "/vocab-level",
+            items: [
+              {
+                title: "VocabularyLevelType",
+                href: "/vocab-level-type"
+              }
+            ]
           }
         ]
       },
@@ -50,6 +79,28 @@ export const ROUTES: EachRoute[] = [
                 href: "/character-types"
               }
             ]
+          },
+          {
+            title: "Sentence",
+            href: "/sentence",
+            items: [
+              {
+                title: "Sentence Purpose",
+                href: "/sentence-purpose"
+              },
+              {
+                title: "SentenceType",
+                href: "/sentence-type"
+              },
+            ]
+          },
+          {
+            title: "Token",
+            href: "/token"
+          },
+          {
+            title: "Virtual Language",
+            href: "/virtual-language"
           }
         ]},
       { 
@@ -79,8 +130,16 @@ export const ROUTES: EachRoute[] = [
               {
                 title: "Claim Types",
                 href: "/claim-types"
-              }
+              },
+              {
+                title: "Knowledge Types",
+                href: "/knowledge-types"
+              },
             ]
+          },
+          {
+            title: "Critical Thinking Rate",
+            href: "/critical-thinking-rate"
           },
           {title: "Cognitive Strength",
             href: "/cognitive-strength",
@@ -92,6 +151,18 @@ export const ROUTES: EachRoute[] = [
                 href: "/cognitive-risk"
               }
             ]
+          },
+          {
+            title: "Fallacy",
+            href: "/fallacy"
+          },
+          {
+            title: "RiskLevel",
+            href: "/risk-level"
+          },
+          {
+            title: "StrengthLevel",
+            href: "/strength-level"
           }
         ]
       },
@@ -110,11 +181,77 @@ export const ROUTES: EachRoute[] = [
               {
                 title: "Alertness",
                 href: "/alertness"
+              },
+              {
+                title: "Conversation Style",
+                href: "/conversation-style"
+              },
+              {
+                title: "Demeanor",
+                href: "/demeanor"
+              },
+              {
+                title: "Demographics",
+                href: "/demographics"
+              },
+              {
+                title: "Intention",
+                href: "/intention"
+              },
+              {
+                title: "Mind-state",
+                href: "/mind-state"
+              },
+              {
+                title: "Psychographics",
+                href: "/psychographics"
+              },
+              {
+                title: "Sentiment",
+                href: "/sentiment"
+              },
+              {
+                title: "Speaker",
+                href: "/speaker"
+              },
+              {
+                title: "Topic",
+                href: "/topic"
+              },
+              {
+                title: "Turn",
+                href: "/turn",
+                items: [
+                  {
+                    title: "TurnType",
+                    href: "/turn-type"
+                  }
+                ]
               }
             ]
-          }
+          },
+          {
+            title: "Rhetorical Weight",
+            href: "/rhetorical-weight",
+            items: [
+              {
+                title: "Tone",
+                href: "/tone"
+              }
+            ]
+          },
         ]
       },
+      {
+        title: "Persuasive Force",
+        href: "/persuasive-force",
+        items: [
+          {
+            title: "Persuasion Coefficient",
+            href: "/persuasion-coefficient"
+          }
+        ]
+      }
     ],
   },
   {
