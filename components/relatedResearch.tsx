@@ -19,7 +19,6 @@ export default async function RelatedResearch({research}: RelatedResearchProps)
 
   return (
     <div>
-      <h2>Related Research by Us</h2>
       <EmblaCarousel slides={relResearch} options={OPTIONS}/>
     </div>
   );
