@@ -7,25 +7,12 @@ import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from 'next/navigation';
-
 
 type PageProps = {
   params: { slug: string };
 };
 
-export async function generateMetadata({ params: { slug } }: PageProps) 
-{
-  const session = await getServerSession(authOptions);
-  console.log(session)
-
-  if (!session || !session.user?.email) 
-  {
-    redirect('/enter-password');
-  }
-
+export async function generateMetadata({ params: { slug } }: PageProps) {
   const res = await getBlogForSlug(slug);
   if (!res) return null;
   const { frontmatter } = res;
@@ -36,15 +23,6 @@ export async function generateMetadata({ params: { slug } }: PageProps)
 }
 
 export async function generateStaticParams() {
-
-  const session = await getServerSession(authOptions);
-  console.log(session)
-
-  if (!session || !session.user?.email) 
-  {
-    redirect('/enter-password');
-  }
-
   const val = await getAllBlogStaticPaths();
   if (!val) return [];
   return val.map((it) => ({ slug: it }));

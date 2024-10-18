@@ -6,7 +6,6 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import ClientApplication from "@/components/ClientApplication";
 import Script from "next/script";
-import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Pulp101",
