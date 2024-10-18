@@ -1,13 +1,12 @@
-import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const authOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Password",
+      name: "Credentials",
       credentials: {
-        password: { label: "Password", type: "password" },
         email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         const userPassword = credentials?.password;
@@ -23,11 +22,7 @@ const authOptions = {
     }),
   ],
   session: {
-    strategy: "jwt" as const, // Explicitly set the session strategy to "jwt"
+    strategy: "jwt" as const, // Use JWT session
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
