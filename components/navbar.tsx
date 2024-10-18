@@ -44,7 +44,7 @@ export function Navbar() {
             <Search />
             <div className="flex ml-2.5 sm:ml-0">
               <ModeToggle />
-              <button className="bg-zinc-1000 w-28 hover:bg-zinc-900"><a href="/login">Log in</a></button>
+              <a href="/auth/login"><button className="bg-zinc-1000 w-28 hover:bg-zinc-900">Log in</button></a>
             </div>
           </div>
         </div>
