@@ -4,12 +4,25 @@ import { formatDate2, stringToDate } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: "Pulp101-Research",
 };
 
-export default async function BlogIndexPage() {
+export default async function BlogIndexPage() 
+{
+
+  const session = await getServerSession(authOptions);
+  console.log(session)
+  
+  if (!session || !session.user?.email) 
+  {
+    redirect('/enter-password');
+  }
+
   const blogs = (await getAllBlogs()).sort(
     (a, b) =>
       stringToDate(b.frontmatter.date).getTime() -

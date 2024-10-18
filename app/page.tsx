@@ -1,9 +1,21 @@
 import { buttonVariants } from "@/components/ui/button";
 import { page_routes } from "@/lib/routes-config";
 import { MoveUpRightIcon, TerminalSquareIcon } from "lucide-react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Link from "next/link";
+import { redirect } from 'next/navigation';
 
-export default function Home() {
+export default async function Home() {
+
+  const session = await getServerSession(authOptions);
+  console.log(session)
+
+  if (!session || !session.user?.email) 
+  {
+    redirect('/enter-password');
+  }
+
   return (
     <div className="flex sm:min-h-[91vh] min-h-[88vh] flex-col items-center justify-center text-center px-2 py-8">
       <h1 className="text-3xl font-bold mb-4 sm:text-7xl">

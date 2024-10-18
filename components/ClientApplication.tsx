@@ -1,5 +1,6 @@
 "use client";
 
+import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { clarity } from "react-microsoft-clarity";
 
@@ -10,5 +11,5 @@ export default function ClientApplication({ children}: Readonly<{children: React
         clarity.init("ogsmm2i2lg")
     });
 
-    return children;
+    return <SessionProvider>{children}</SessionProvider>;
 }

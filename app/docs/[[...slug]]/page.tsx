@@ -5,12 +5,27 @@ import { page_routes } from "@/lib/routes-config";
 import { notFound } from "next/navigation";
 import { getDocsForSlug } from "@/lib/markdown";
 import { Typography } from "@/components/typography";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from 'next/navigation';
+
 
 type PageProps = {
   params: { slug: string[] };
 };
 
-export default async function DocsPage({ params: { slug = [] } }: PageProps) {
+export default async function DocsPage({ params: { slug = [] } }: PageProps) 
+{
+
+  const session = await getServerSession(authOptions);
+  console.log(session)
+
+  if (!session || !session.user?.email) 
+  {
+    redirect('/enter-password');
+  }
+  
+
   const pathName = slug.join("/");
   const res = await getDocsForSlug(pathName);
 
