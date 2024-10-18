@@ -2,7 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { page_routes } from "@/lib/routes-config";
 import { MoveUpRightIcon, TerminalSquareIcon } from "lucide-react";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authOptions";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Link from "next/link";
 import { redirect } from 'next/navigation';
 
