@@ -1,4 +1,3 @@
-
 "use client";  
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -10,6 +9,7 @@ const SignUpPage: React.FC = () => {
     password: '',
   });
 
+  const [error, setError] = useState<string | null>(null); // New state for error message
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,9 @@ const SignUpPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    setError(null); // Reset error state before submission
+
     // Call the API route to handle the sign-up
     const response = await fetch('/api/signup', {
       method: 'POST',
@@ -34,16 +36,21 @@ const SignUpPage: React.FC = () => {
     const result = await response.json();
     if (result.status === 'success') {
       router.push('/');  // Redirect to home page after success
+      router.refresh();
     } else {
-      alert('Error signing up');
+      setError('Error signing up. Please try again.'); // Set error message
     }
-
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-900">Sign Up</h2>
+        
+        {error && (
+          <p className="text-red-500 mb-4 text-center">{error}</p> // Display error message if present
+        )}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
@@ -97,6 +104,13 @@ const SignUpPage: React.FC = () => {
             Sign Up
           </button>
         </form>
+
+        <p className="mt-4 text-center text-gray-500">
+          Already have an account?{' '}
+          <a href="/auth/login" className="text-blue-500 hover:underline">
+            Log in here
+          </a>
+        </p> {/* Link to login page */}
       </div>
     </div>
   );
