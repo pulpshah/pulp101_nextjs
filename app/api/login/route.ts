@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { driver } from '@/lib/neo4j';
 import bcrypt from 'bcrypt';
+import { addSession } from '@/lib/session';
 
 export async function POST(req: Request) {
   const { email, password } = await req.json();
@@ -9,7 +10,7 @@ export async function POST(req: Request) {
   try {
     // Query Neo4j for the user with the provided email
     const result = await session.run(
-      `MATCH (u:User {email: $email}) RETURN u.password AS hashedPassword, u`,
+      `MATCH (u:User {email: $email}) RETURN u.password AS hashedPassword, u.name AS name, u`,
       { email }
     );
 
@@ -21,8 +22,15 @@ export async function POST(req: Request) {
 
       if (passwordMatch) {
         const user = result.records[0].get('u');
+        const name = result.records[0].get('name');
+
+        // Successfully authenticated, now add the session
+        const sessionResponse = await addSession(name, email);
+
         console.log('Login successful:', user);
-        return NextResponse.json({ status: 'success', user });
+
+        // Return the session response with cookie set
+        return sessionResponse;
       } else {
         console.log('Invalid password');
         return NextResponse.json({ status: 'error', message: 'Invalid password' }, { status: 401 });
