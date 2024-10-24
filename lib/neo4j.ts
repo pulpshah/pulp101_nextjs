@@ -19,32 +19,32 @@ export async function getCommentsData(slug: string) {
   const session = driver.session();
 
   const query = `
-    MATCH (blog:Blog {slug: $slug})-[:HAS_COMMENT]->(comment:Comment)
-    OPTIONAL MATCH (comment)<-[:WROTE]-(author:User)
-    WITH blog, comment, author
-    OPTIONAL MATCH (reply:Comment)-[:REPLIED_TO]->(comment)
-    OPTIONAL MATCH (reply)<-[:WROTE]-(replyAuthor:User)
-    WITH blog, comment, author, collect({
-      id: reply.id,
+    MATCH (blog:Blog {slug: $slug})-[:HAS_COMMENT]->(root:Comment) // Get all root comments for the blog
+    OPTIONAL MATCH (root)-[:HAS_REPLY*0..]->(reply:Comment) // Recursively match all replies
+    OPTIONAL MATCH (reply)<-[:HAS_REPLY]-(parent:Comment) // Get the parent of each reply
+    OPTIONAL MATCH (u:User)-[:WROTE]->(reply) // Match the user who wrote the reply
+    WITH reply, parent, u, reply.id AS replyId, parent.id AS parentId
+    ORDER BY reply.createdAt
+    RETURN {
+      id: replyId,        
       text: reply.text,
       createdAt: reply.createdAt,
-      author: replyAuthor.email
-    }) AS replies
-    RETURN blog.title AS title, blog.slug AS slug, collect({
-      id: comment.id,
-      text: comment.text,
-      createdAt: comment.createdAt,
-      author: author.email,
-      replies: replies
-    }) AS comments
+      author: u.name,     
+      parentId: parentId
+    } AS comment
   `;
 
   try {
     const result = await session.run(query, { slug });
 
-    if (result.records.length > 0) {
-      const blogData = result.records[0].get('comments');
-      return blogData;
+    if (result.records.length > 0) 
+    {
+      let comments = [];
+      for (let i = 0; i<result.records.length; i++)
+      {
+         comments.push(result.records[i].get('comment'));
+      }
+      return comments;
     } else {
       return null;
     }

@@ -24,7 +24,7 @@ export default function ChatPill({ slug }: { slug: string }) {
       {/* Chat window */}
       {isOpen && (
         <div className="fixed bottom-20 right-10 w-96 bg-white border shadow-lg rounded-lg p-4 z-50">
-          <ChatWindow/>
+          <ChatWindow slug={slug}/>
         </div>
       )}
     </>
