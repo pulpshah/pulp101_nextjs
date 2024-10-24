@@ -71,6 +71,21 @@
   }
 }
 
+@font-face {
+  font-family: 'Roc Grotesk';
+  src: url('/fonts/Roc Grotesk Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roc Grotesk';
+  src: url('/fonts/Roc Grotesk Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+
 .prose {
   margin: 0 !important;
 }
@@ -119,4 +134,8 @@ blockquote>p::before {
 
 .highlight-comp>code {
   background-color: transparent !important;
+}
+
+.blog-content {
+  font-family: 'Poppins', sans-serif;
 }

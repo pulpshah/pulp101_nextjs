@@ -61,6 +61,7 @@ const config = {
       fontFamily: {
         code: ["var(--font-geist-mono)"],
         regular: ["var(--font-geist-sans)"],
+        RG: ['Roc Grotesk', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {

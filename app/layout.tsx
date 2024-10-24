@@ -19,10 +19,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <ClientApplication>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          {/* Add Poppins font from Google Fonts */}
+          <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
+        </head>
         <body
           className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
           suppressHydrationWarning
@@ -58,7 +61,7 @@ export default function RootLayout({
               reb2b.load("961Y0HX0XYNG");
             }();
           `}
-        </Script>
+          </Script>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
