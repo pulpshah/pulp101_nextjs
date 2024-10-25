@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import ChatWindow from './ChatWindow';
+import React from 'react';
 
-export default function ChatPill({ slug }: { slug: string }) {
+export default function ChatPill({ slug, email }: { slug: string, email:string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Toggle the visibility of the chat window
@@ -24,7 +25,7 @@ export default function ChatPill({ slug }: { slug: string }) {
       {/* Chat window */}
       {isOpen && (
         <div className="fixed bottom-20 right-10 w-96 bg-white border shadow-lg rounded-lg p-4 z-50">
-          <ChatWindow slug={slug}/>
+          <ChatWindow slug={slug} email={email}/>
         </div>
       )}
     </>
