@@ -107,6 +107,19 @@ pre>code {
   @apply border-l-2 border-transparent
 }
 
+.shadow-loading {
+  box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.4);
+}
+
+.shadow-valid {
+  box-shadow: 0px 0px 16px 0px rgba(199, 252, 182, 0.4);
+}
+
+.shadow-invalid {
+  box-shadow: 0px 0px 15px 0px rgba(255, 148, 148, 0.4);
+}
+
+
 .line-number::before {
   display: inline-block;
   width: 1rem;
