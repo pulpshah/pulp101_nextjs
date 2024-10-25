@@ -1,17 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Define the type for each comment
-interface Comment {
+type Comment = {
   id: number;
   author: string;
   text: string;
   createdAt: string;
-  isOwner?: boolean; // Optional flag to indicate if it's the owner or the user
-  isYou?: boolean; // Optional flag to indicate if it's the user's comment
-  replies: Comment[]; // A comment can have an array of replies (which are also comments)
-}
+  replies: Comment[];
+};
+
+// Function to format the date object into a human-readable string
+const formatDate = (createdAt: any): string => {
+  const { day, month, year, hour, minute, second } = createdAt;
+  return `${year.low}-${month.low}-${day.low} ${hour.low}:${minute.low}:${second.low}`;
+};
+
+// Recursive function to build the comment structure
+const convertComments = (array: any[]): Comment[] => {
+  const commentMap: { [key: string]: Comment } = {};
+  const topLevelComments: Comment[] = [];
+
+  array.forEach((item, index) => {
+    const comment: Comment = {
+      id: item.id,
+      author: item.author,
+      text: item.text,
+      createdAt: formatDate(item.createdAt),
+      replies: []
+    };
+
+    commentMap[item.id] = comment;
+
+    if (item.parentId) {
+      // This is a reply, push it to the parent comment's replies
+      commentMap[item.parentId]?.replies.push(comment);
+    } else {
+      // Top-level comment
+      topLevelComments.push(comment);
+    }
+  });
+
+  return topLevelComments;
+};
+
+
 
 // Truncate text to show only the first 3-4 words
 const truncateText = (text: string, wordLimit: number = 3) => {
@@ -25,10 +59,9 @@ const truncateText = (text: string, wordLimit: number = 3) => {
 const initialComments: Comment[] = [
   {
     id: 1,
-    author: 'Username (Owner)',
+    author: 'User 1',
     text: 'Olive Garden isn’t authentic, and it’s also not what a lot of us grew up eating. So we don’t like it. Would I eat Gordon Ramsey’s carbonara? Absolutely!',
     createdAt: '5d ago',
-    isOwner: true,
     replies: [
       {
         id: 11,
@@ -49,10 +82,9 @@ const initialComments: Comment[] = [
   },
   {
     id: 2,
-    author: 'Username (You)',
+    author: 'User 5',
     text: 'Here’s another comment I made! What do you think about Taco Bell’s Mexican food?',
     createdAt: '2d ago',
-    isYou: true,
     replies: [
       {
         id: 21,
@@ -79,11 +111,34 @@ const initialComments: Comment[] = [
   },
 ];
 
-export default function ChatWindow() {
-  const [comments, setComments] = useState<Comment[]>(initialComments);
+export default function ChatWindow({ slug }: { slug: string }) {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [replyView, setReplyView] = useState<Comment | null>(null); // Track if a reply view is open
   const [breadcrumb, setBreadcrumb] = useState<Comment[]>([]);
   const [isParentCollapsed, setIsParentCollapsed] = useState<boolean>(true); // Track if the parent comment is collapsed
+  const [loading, setLoading] = useState(true); // Loading state for the data
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setLoading(true); // Start loading
+        const response = await fetch(`/api/comments/${slug}`); // Fetch data from API route
+        const data = await response.json();
+        if (response.ok) {
+          setComments(convertComments(data)); // Set the fetched comments
+        } else {
+          console.error('Error fetching comments:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    }
+
+    fetchData();
+  }, [slug]);
+
 
   // Handle opening replies for a comment
   const handleViewReplies = (comment: Comment) => {
@@ -106,7 +161,9 @@ export default function ChatWindow() {
     }
   };
 
-  console.log(replyView)
+  if (loading) {
+    return <div>Loading comments...</div>;
+  }
 
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white p-4 max-w-lg mx-auto rounded-lg shadow-lg">
@@ -156,14 +213,8 @@ export default function ChatWindow() {
           {(replyView ? replyView.replies : comments).map((comment) => (
             <div
               key={comment.id}
-              className={`mb-4 p-4 rounded-lg shadow-lg ${
-                comment.isOwner
-                  ? 'bg-gray-800 text-gray-300'
-                  : comment.isYou
-                  ? 'bg-gray-600 text-gray-300'
-                  : 'bg-gray-800 text-gray-300'
-              }`}
-            >
+              className={`mb-4 p-4 rounded-lg shadow-lg ${'bg-gray-800 text-gray-300'}`}
+              >
               {replyView && (
                 <div className="text-sm text-gray-400 mb-2">
                   Replying to: {replyView.author}
