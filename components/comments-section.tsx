@@ -26,8 +26,8 @@ export default function CommentsSection() {
       {/* Comments section slides up from the bottom with a high z-index */}
       {showComments && (
         <div
-          className={`fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-[60px] shadow-lg transition-transform z-[100] ${
-            expandComments ? "translate-y-0 h-[80%]" : "translate-y-[75%] h-[25%]"
+          className={`fixed bottom-0 left-0 w-full transition-transform z-[100] bg-[#FFFFFF]/80 backdrop-blur-[60px] shadow-threads overflow-auto ${
+            expandComments ? "max-h-[80vh]" : "max-h-[20vh]"
           }`}
         >
           <Threads onDockLineClick={handleDockLineClick} isExpanded={expandComments} />
