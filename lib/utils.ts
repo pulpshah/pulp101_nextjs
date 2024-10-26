@@ -84,3 +84,13 @@ export function stringToDate(date: string) {
   const [day, month, year] = date.split("-").map(Number);
   return new Date(year, month - 1, day);
 }
+
+export function debounce(func: (...args: any[]) => void, delay: number) {
+  let timer: NodeJS.Timeout;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}

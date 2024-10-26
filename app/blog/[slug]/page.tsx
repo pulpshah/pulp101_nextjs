@@ -9,6 +9,8 @@ import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import CommentsSection from "@/components/comments-section";
 import ChatPill from "@/components/CommentBox/ChatPill";
+import { getSession } from "@/lib/session";
+import React from "react";
 
 type PageProps = {
   params: { slug: string };
@@ -30,7 +32,11 @@ export async function generateStaticParams() {
   return val.map((it) => ({ slug: it }));
 }
 
-export default async function BlogPage({ params: { slug } }: PageProps) {
+export default async function BlogPage({ params: { slug } }: PageProps) 
+{
+  const session = await getSession();
+  const email = session?.user.email;
+
   const res = await getBlogForSlug(slug);
   if (!res) notFound();
 
@@ -74,7 +80,7 @@ export default async function BlogPage({ params: { slug } }: PageProps) {
         </div>
         <Typography>{res.content}</Typography>
       </div>
-      <ChatPill slug={slug}/>
+      <ChatPill slug={slug} email={email}/>
     </div>
   );
 }

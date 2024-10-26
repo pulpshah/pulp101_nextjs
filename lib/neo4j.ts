@@ -1,7 +1,15 @@
-import neo4j from 'neo4j-driver';
+import neo4j, { Driver, Session, Record } from 'neo4j-driver';
+
+type Comment = {
+  id: string;
+  text: string;
+  createdAt: string;
+  author: string;
+  parentId: string | null;
+};
 
 // Use environment variables to get the Neo4j Aura connection details
-const NEO4J_URI = process.env.NEO4J_URI ?? '';   // Replace with your Aura's URI
+const NEO4J_URI = process.env.NEO4J_URI ?? ''; // Replace with your Aura's URI
 const NEO4J_USERNAME = process.env.NEO4J_USERNAME ?? 'neo4j';
 const NEO4J_PASSWORD = process.env.NEO4J_PASSWORD ?? '';
 
@@ -10,13 +18,14 @@ if (!NEO4J_URI || !NEO4J_USERNAME || !NEO4J_PASSWORD) {
 }
 
 // Create the Neo4j driver instance without specifying additional encryption configuration
-export const driver = neo4j.driver(
+export const driver: Driver = neo4j.driver(
   NEO4J_URI,
   neo4j.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
 );
 
-export async function getCommentsData(slug: string) {
-  const session = driver.session();
+// Function to fetch comments data for a blog
+export async function getCommentsData(slug: string): Promise<Comment[] | null> {
+  const session: Session = driver.session();
 
   const query = `
     MATCH (blog:Blog {slug: $slug})-[:HAS_COMMENT]->(root:Comment) // Get all root comments for the blog
@@ -26,10 +35,10 @@ export async function getCommentsData(slug: string) {
     WITH reply, parent, u, reply.id AS replyId, parent.id AS parentId
     ORDER BY reply.createdAt
     RETURN {
-      id: replyId,        
+      id: replyId,
       text: reply.text,
       createdAt: reply.createdAt,
-      author: u.name,     
+      author: u.name,
       parentId: parentId
     } AS comment
   `;
@@ -37,13 +46,17 @@ export async function getCommentsData(slug: string) {
   try {
     const result = await session.run(query, { slug });
 
-    if (result.records.length > 0) 
-    {
-      let comments = [];
-      for (let i = 0; i<result.records.length; i++)
-      {
-         comments.push(result.records[i].get('comment'));
-      }
+    if (result.records.length > 0) {
+      const comments: Comment[] = result.records.map((record: Record) => {
+        const comment = record.get('comment');
+        return {
+          id: comment.id,
+          text: comment.text,
+          createdAt: comment.createdAt,
+          author: comment.author,
+          parentId: comment.parentId ?? null
+        };
+      });
       return comments;
     } else {
       return null;
@@ -53,3 +66,85 @@ export async function getCommentsData(slug: string) {
   }
 }
 
+// Function to add a reply to an existing comment
+export async function addReplyToComment(commentId: string, text: string, email: string) {
+  const session: Session = driver.session();
+
+  const query = `
+    MATCH (parent:Comment {id: $commentId})
+    MATCH (u:User {email: $email})
+    CREATE (reply:Comment {id: randomUUID(), text: $text, createdAt: datetime()})
+    CREATE (u)-[:WROTE]->(reply)
+    CREATE (parent)-[:HAS_REPLY]->(reply)
+    RETURN reply.id AS replyId, reply.text AS replyText
+  `;
+
+  try {
+    const result = await session.run(query, { commentId, text, email });
+    if (result.records.length > 0) {
+      const reply = {
+        id: result.records[0].get('replyId'),
+        text: result.records[0].get('replyText'),
+      };
+      return reply;
+    } else {
+      throw new Error('Failed to add reply to comment');
+    }
+  } finally {
+    await session.close();
+  }
+}
+
+// Function to add a top-level comment (reply to the blog)
+export async function addReplyToBlog(slug: string, text: string, email: string) {
+  const session: Session = driver.session();
+
+  const query = `
+    MATCH (blog:Blog {slug: $slug})
+    MATCH (u:User {email: $email})
+    CREATE (comment:Comment {id: randomUUID(), text: $text, createdAt: datetime()})
+    CREATE (u)-[:WROTE]->(comment)
+    CREATE (blog)-[:HAS_COMMENT]->(comment)
+    RETURN comment.id AS commentId, comment.text AS commentText
+  `;
+
+  try {
+    const result = await session.run(query, { slug, text, email });
+    if (result.records.length > 0) {
+      const comment = {
+        id: result.records[0].get('commentId'),
+        text: result.records[0].get('commentText'),
+      };
+      return comment;
+    } else {
+      throw new Error('Failed to add top-level comment to blog');
+    }
+  } finally {
+    await session.close();
+  }
+}
+
+/**
+ * Function to vote on a comment.
+ * @param email - The email of the user voting.
+ * @param commentId - The ID of the comment being voted on.
+ * @param level - The voting level (-3 for invalid level 3 to 3 for valid level 3).
+ */
+export async function voteOnComment(email: string, commentId: string, level: number): Promise<void> {
+  const session: Session = driver.session();
+
+  const query = `
+    MATCH (u:User {email: $email}), (c:Comment {id: $commentId})
+    MERGE (u)-[v:VOTED]->(c)
+    SET v.level = $level
+  `;
+
+  try {
+    await session.run(query, { email, commentId, level });
+  } catch (error) {
+    console.error('Error adding vote:', error);
+    throw new Error('Failed to add vote to comment');
+  } finally {
+    await session.close();
+  }
+}

@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import VotingSystem from './VotingSystem'; // Import the voting system
 
 // Define the type for each comment
 type Comment = {
@@ -22,7 +25,7 @@ const convertComments = (array: any[]): Comment[] => {
   const commentMap: { [key: string]: Comment } = {};
   const topLevelComments: Comment[] = [];
 
-  array.forEach((item, index) => {
+  array.forEach((item) => {
     const comment: Comment = {
       id: item.id,
       author: item.author,
@@ -41,11 +44,8 @@ const convertComments = (array: any[]): Comment[] => {
       topLevelComments.push(comment);
     }
   });
-
   return topLevelComments;
 };
-
-
 
 // Truncate text to show only the first 3-4 words
 const truncateText = (text: string, wordLimit: number = 3) => {
@@ -56,108 +56,129 @@ const truncateText = (text: string, wordLimit: number = 3) => {
   return text;
 };
 
-const initialComments: Comment[] = [
-  {
-    id: 1,
-    author: 'User 1',
-    text: 'Olive Garden isn’t authentic, and it’s also not what a lot of us grew up eating. So we don’t like it. Would I eat Gordon Ramsey’s carbonara? Absolutely!',
-    createdAt: '5d ago',
-    replies: [
-      {
-        id: 11,
-        author: 'User 2',
-        text: 'I agree! There’s a difference between what we ate growing up and “authentic” food.',
-        createdAt: '4d ago',
-        replies: [
-          {
-            id: 12,
-            author: 'User 3',
-            text: 'Authentic is subjective. It depends on how you define it.',
-            createdAt: '3d ago',
-            replies: [],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    author: 'User 5',
-    text: 'Here’s another comment I made! What do you think about Taco Bell’s Mexican food?',
-    createdAt: '2d ago',
-    replies: [
-      {
-        id: 21,
-        author: 'User 4',
-        text: 'I think Taco Bell is great for what it is. Not authentic but tasty.',
-        createdAt: '1d ago',
-        replies: [],
-      },
-      {
-        id: 22,
-        author: 'User 5',
-        text: 'Taco Bell is fast food. Comparing it to “authentic” Mexican food isn’t fair.',
-        createdAt: '1d ago',
-        replies: [],
-      },
-    ],
-  },
-  {
-    id: 3,
-    author: 'User 6',
-    text: 'I think food authenticity is overrated. Eat what you enjoy!',
-    createdAt: '1d ago',
-    replies: [],
-  },
-];
-
-export default function ChatWindow({ slug }: { slug: string }) {
+export default function ChatWindow({ slug, email }: { slug: string, email: string | null }) {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [replyView, setReplyView] = useState<Comment | null>(null); // Track if a reply view is open
+  const [replyView, setReplyView] = useState<Comment | null>(null);
   const [breadcrumb, setBreadcrumb] = useState<Comment[]>([]);
-  const [isParentCollapsed, setIsParentCollapsed] = useState<boolean>(true); // Track if the parent comment is collapsed
-  const [loading, setLoading] = useState(true); // Loading state for the data
+  const [isParentCollapsed, setIsParentCollapsed] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [replyText, setReplyText] = useState<string>(''); // State for reply text input
 
   useEffect(() => {
     async function fetchData() {
       try {
-        setLoading(true); // Start loading
-        const response = await fetch(`/api/comments/${slug}`); // Fetch data from API route
+        setLoading(true);
+        const response = await fetch(`/api/comments/${slug}`);
         const data = await response.json();
         if (response.ok) {
-          setComments(convertComments(data)); // Set the fetched comments
+          setComments(convertComments(data));
         } else {
           console.error('Error fetching comments:', data.error);
         }
       } catch (error) {
         console.error('Error fetching comments:', error);
       } finally {
-        setLoading(false); // Stop loading
+        setLoading(false);
       }
     }
 
     fetchData();
   }, [slug]);
 
-
-  // Handle opening replies for a comment
   const handleViewReplies = (comment: Comment) => {
-    setBreadcrumb([...breadcrumb, comment]); // Add the clicked comment to the breadcrumb
-    setReplyView(comment); // Show replies for the clicked comment
-    setIsParentCollapsed(true); // Default to collapsed when a reply is opened
+    setBreadcrumb([...breadcrumb, comment]);
+    setReplyView(comment);
+    setIsParentCollapsed(true);
   };
 
-  // Handle breadcrumb click to navigate back to a specific level
   const handleBreadcrumbClick = (index: number) => {
-    const updatedBreadcrumbs = breadcrumb.slice(0, index); // Only keep the breadcrumbs up to the clicked level
+    const updatedBreadcrumbs = breadcrumb.slice(0, index);
     if (index === 0) {
-      setReplyView(null); // Go back to the top-level comments if the first breadcrumb is clicked
-      setBreadcrumb([]);  // Remove the entire breadcrumb since it's the top layer
+      setReplyView(null);
+      setBreadcrumb([]);
     } else {
-      const selectedComment = updatedBreadcrumbs[index-1];
-      console.log(selectedComment)
-      setBreadcrumb(updatedBreadcrumbs); // Update the breadcrumb state
-      setReplyView(selectedComment); // Show replies for the selected breadcrumb
+      const selectedComment = updatedBreadcrumbs[index - 1];
+      setBreadcrumb(updatedBreadcrumbs);
+      setReplyView(selectedComment);
+    }
+  };
+
+  // Submit reply function
+  const handleReplySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!email) {
+      toast.error('You need to log in to reply');
+      return;
+    }
+
+    try {
+      const response = replyView
+        ? await fetch('/api/addReplyToComment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              commentId: replyView.id,
+              text: replyText,
+              email,
+            }),
+          })
+        : await fetch('/api/addReplyToBlog', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              slug,
+              text: replyText,
+              email,
+            }),
+          });
+
+      if (!response.ok) {
+        throw new Error('Failed to add reply');
+      }
+
+      // Fetch updated comments
+      try {
+        const fetchResponse = await fetch(`/api/comments/${slug}`);
+        const data = await fetchResponse.json();
+        
+        if (fetchResponse.ok && Array.isArray(data)) {
+          const updatedComments = convertComments(data);
+
+          // Update comments in state
+          setComments(updatedComments);
+
+          // Find the updated replyView in the newly fetched comments
+          if (replyView) {
+            const findReplyView = (comments: Comment[], targetId: number): Comment | null => {
+              for (const comment of comments) {
+                if (comment.id === targetId) return comment;
+                const foundInReplies = findReplyView(comment.replies, targetId);
+                if (foundInReplies) return foundInReplies;
+              }
+              return null;
+            };
+
+            const updatedReplyView = findReplyView(updatedComments, replyView.id);
+            setReplyView(updatedReplyView || null);
+          }
+        } else {
+          console.error('Error fetching comments or data is not an array:', data?.error || data);
+        }
+      } catch (fetchError) {
+        console.error('Error fetching comments:', fetchError);
+      }
+
+      // Clear the reply text input after submission
+      setReplyText('');
+      toast.success('Reply added successfully');
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Failed to add reply');
     }
   };
 
@@ -167,10 +188,8 @@ export default function ChatWindow({ slug }: { slug: string }) {
 
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white p-4 max-w-lg mx-auto rounded-lg shadow-lg">
-      {/* Chat window with fixed height */}
-      <div className="flex flex-col h-[500px]"> {/* Fixed height of 500px */}
-        
-        {/* Breadcrumb Navigation */}
+      <ToastContainer />
+      <div className="flex flex-col h-[500px]">
         {breadcrumb.length > 0 && (
           <div className="p-2 bg-gray-800 text-gray-300 rounded-md mb-4">
             {breadcrumb.map((crumb, idx) => (
@@ -179,14 +198,13 @@ export default function ChatWindow({ slug }: { slug: string }) {
                 onClick={() => handleBreadcrumbClick(idx)}
                 className="text-blue-500 cursor-pointer"
               >
-                {truncateText(crumb.text)} {idx < breadcrumb.length - 1 && '>'} {/* Breadcrumb separator */}
+                {truncateText(crumb.text)} {idx < breadcrumb.length - 1 && '>'}
               </span>
             ))}
           </div>
         )}
 
-        {/* Show parent comment at the top when viewing replies */}
-        {replyView && (
+        {replyView ? (
           <div className="mb-4 p-2 bg-gray-800 text-gray-300 rounded-lg shadow-lg text-sm">
             <div className="flex justify-between items-center">
               <div className="font-bold">{replyView.author}</div>
@@ -198,53 +216,69 @@ export default function ChatWindow({ slug }: { slug: string }) {
               </button>
             </div>
             <div className="text-xs text-gray-500">{replyView.createdAt}</div>
-
-            {/* Collapsible comment text */}
             <div className="my-2">
               {isParentCollapsed
-                ? truncateText(replyView.text, 10) // Show only first 10 words when collapsed
+                ? truncateText(replyView.text, 10)
                 : replyView.text}
             </div>
           </div>
-        )}
+        ) : <></>}
 
-        {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto">
           {(replyView ? replyView.replies : comments).map((comment) => (
             <div
               key={comment.id}
-              className={`mb-4 p-4 rounded-lg shadow-lg ${'bg-gray-800 text-gray-300'}`}
-              >
-              {replyView && (
-                <div className="text-sm text-gray-400 mb-2">
-                  Replying to: {replyView.author}
-                </div>
-              )}
-              <div className="font-bold mb-1">{comment.author}</div>
-              <div className="text-sm text-gray-500">{comment.createdAt}</div>
-              <div className="my-2">{comment.text}</div>
+              className="flex items-start mb-4 p-4 rounded-lg shadow-lg bg-gray-800 text-gray-300"
+            >
+              {/* Left section: comment content */}
+              <div className="flex-1">
+                {replyView && (
+                  <div className="text-sm text-gray-400 mb-2">
+                    Replying to: {replyView.author}
+                  </div>
+                )}
+                <div className="font-bold mb-1">{comment.author}</div>
+                <div className="text-sm text-gray-500">{comment.createdAt}</div>
+                <div className="my-2">{comment.text}</div>
+
+                {comment.replies.length > 0 ? (
+                  <button
+                    onClick={() => handleViewReplies(comment)}
+                    className="text-blue-400 text-sm"
+                  >
+                    {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleViewReplies(comment)}
+                    className="text-blue-400 text-sm"
+                  >
+                    Add a reply
+                  </button>
+                )}
+              </div>
               
-              {/* Show the number of replies */}
-              {comment.replies.length > 0 && (
-                <button onClick={() => handleViewReplies(comment)} className="text-blue-400 text-sm">
-                  {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
-                </button>
-              )}
+              {/* Right section: voting system, vertically centered */}
+              <div className="flex items-center justify-center">
+                <VotingSystem email={email} commentId={String(comment.id)} />
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Add new comment or reply */}
-        <div className="border-t border-gray-700 p-2 flex bg-gray-800 rounded-lg mt-4">
+        <form onSubmit={handleReplySubmit} className="border-t border-gray-700 p-2 flex bg-gray-800 rounded-lg mt-4">
           <input
             type="text"
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
             className="flex-1 bg-gray-900 text-white border-none rounded p-2 outline-none"
             placeholder={replyView ? 'Reply to comment...' : 'Add a comment...'}
+            required // Makes the input field required
           />
-          <button className="bg-blue-500 text-white rounded px-4 ml-2">
+          <button type="submit" className="bg-blue-500 text-white rounded px-4 ml-2">
             Send
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
