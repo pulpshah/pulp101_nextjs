@@ -15,7 +15,7 @@ export default function Threads({
     "Ok, as an Italian American, here’s the thing. Olive Garden isn’t  authentic and it’s also not what a lot of us grew up eating. So we don’t like it. Now, would I eat Gordon Ramsey’s carbonara? Yea. Of course. It’s probably delicious. It’s not authentic. There is nothing wrong with loving any food, but also recognizing that authentic has a meaning.",
     "Ok, as an Italian American, here’s the thing. Olive Garden isn’t  authentic and it’s also not what a lot of us grew up eating. So we don’t like it. Now, would I eat Gordon Ramsey’s carbonara? Yea. Of course. It’s probably delicious. It’s not authentic. There is nothing wrong with loving any food, but also recognizing that authentic has a meaning.",
     "From the screen to the ring, to the pen, to the king, Where's my crown? That's my bling, always drama when I ring. See, I believe that if I see it in my heart. Smash through the ceiling 'cause I'm reaching for the stars",
-    "idk"
+    "( ͡° ͜ʖ ͡°）"
   ];
 
   const [userComments, setUserComments] = useState<string[]>([]); // State to track user comments
