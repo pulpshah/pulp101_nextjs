@@ -7,7 +7,6 @@ import Anchor from "./anchor";
 import { SheetLeftbar } from "./leftbar";
 import { page_routes } from "@/lib/routes-config";
 import { SheetClose } from "@/components/ui/sheet";
-import { getSession } from "@/lib/session";
 
 export const NAVLINKS = [
   {
@@ -21,14 +20,10 @@ export const NAVLINKS = [
   {
     title: "Authors",
     href: "/authors",
-  }
+  },
 ];
 
-export async function Navbar() 
-{
-  const session = await getSession();
-  const user = session?.user.name;
-  
+export function Navbar() {
   return (
     <nav className="w-full border-b h-16 sticky top-0 z-50 bg-background">
       <div className="sm:container mx-auto w-[95vw] h-full flex items-center justify-between md:gap-2">
@@ -49,10 +44,9 @@ export async function Navbar()
             <Search />
             <div className="flex ml-2.5 sm:ml-0">
               <ModeToggle />
-              {user ? 
-                (<p className="text-primary mt-1 ml-2">Hello, {user}</p>)
-                :(<a href="/auth/login"><button className="bg-zinc-1000 w-28 h-8 hover:bg-zinc-900">Log in</button></a>)
-              }
+              <button className="bg-zinc-1000 w-28 hover:bg-zinc-900">
+                <a href="/login">Log in</a>
+              </button>
             </div>
           </div>
         </div>
@@ -64,8 +58,7 @@ export async function Navbar()
 export function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <CommandIcon className="w-6 h-6 text-muted-foreground" strokeWidth={2} />
-      <h2 className="text-md font-bold font-code">Pulp</h2>
+      <img src={"/images/logo.svg"} alt="Logo" />
     </Link>
   );
 }
