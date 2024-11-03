@@ -1,7 +1,7 @@
 'use client';
 
 import { debounce } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type VoteState = 'default' | 'invalid-1' | 'invalid-2' | 'invalid-3' | 'abstain' | 'valid-1' | 'valid-2' | 'valid-3';
 
@@ -44,19 +44,23 @@ export default function VotingSystem({ email, commentId }: { email: string | nul
     }
   }, 1000);
 
-  const handleValidClick = () => {
-    setVoteState((prev) => (prev === 'valid-3' ? 'default' : prev === 'valid-2' ? 'valid-3' : prev === 'valid-1' ? 'valid-2' : 'valid-1'));
+  useEffect(() => {
     handleVoteChange(voteState);
+  }, [voteState]);
+
+  const handleValidClick = () => {
+    if (!email) return;
+    setVoteState((prev) => (prev === 'valid-3' ? 'default' : prev === 'valid-2' ? 'valid-3' : prev === 'valid-1' ? 'valid-2' : 'valid-1'));
   };
 
   const handleInvalidClick = () => {
+    if (!email) return;
     setVoteState((prev) => (prev === 'invalid-3' ? 'default' : prev === 'invalid-2' ? 'invalid-3' : prev === 'invalid-1' ? 'invalid-2' : 'invalid-1'));
-    handleVoteChange(voteState);
   };
 
   const handleAbstainClick = () => {
+    if (!email) return;
     setVoteState((prev) => (prev === 'abstain' ? 'default' : 'abstain'));
-    handleVoteChange(voteState);
   };
 
   const getTopColor = () => (['valid-1', 'valid-2', 'valid-3'].includes(voteState) ? 'bg-green-300' : voteState === 'invalid-3' ? 'bg-red-700' : 'bg-gray-700');
