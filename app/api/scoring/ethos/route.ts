@@ -11,13 +11,14 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, // Make sure this is set in your .env file
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: [
           {
             role: 'user',
             content: `Analyze the following text in terms of ethos and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10.: "${inputText}"`,
           },
         ],
+        response_format: { type: "json_object" },
         max_tokens: 100,
       }),
     });
