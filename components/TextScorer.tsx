@@ -58,7 +58,7 @@ const TextScorer: React.FC<TextScorerProps> = ({ category }) =>
     {
       setLoading(true); // Set loading to true when the request starts
       try {
-        const response = await fetch(`/api/scoring/${category}`, {
+        const response = await fetch(`/api/scoring`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

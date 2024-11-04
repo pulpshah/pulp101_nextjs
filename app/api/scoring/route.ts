@@ -2,6 +2,20 @@ import { NextResponse } from 'next/server';
 import { getQuoteScore, addQuoteScore, addUserScoreToQuote } from '@/lib/neo4j';
 import { getSession } from '@/lib/session';
 
+const prompts: { [key in 'appeal' | 'ethos']: string } = {
+  appeal: `Analyze the following text in terms of appeal and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10: `,
+  ethos: `Evaluate the following text based on its ethos and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10: `
+};
+
+type Category = keyof typeof prompts;
+
+interface RequestBody {
+  inputText: string;
+  category: Category;
+  userScore: number;
+}
+
+
 export async function POST(request: Request) {
   try {
     const session = await getSession();
@@ -13,7 +27,7 @@ export async function POST(request: Request) {
       console.log('User not logged in');
     }
 
-    const { inputText, category, userScore } = await request.json();
+    const { inputText, category, userScore }:RequestBody = await request.json();
 
     // Check if the quote already exists in the database
     const existingScore = await getQuoteScore(inputText,category);
@@ -36,7 +50,7 @@ export async function POST(request: Request) {
         messages: [
           {
             role: 'user',
-            content: `Analyze the following text in terms of appeal and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10.: "${inputText}"`,
+            content: `${prompts[category]}: "${inputText}"`,
           },
         ],
         response_format: { type: "json_object" },
