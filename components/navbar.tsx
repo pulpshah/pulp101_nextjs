@@ -7,6 +7,7 @@ import Anchor from "./anchor";
 import { SheetLeftbar } from "./leftbar";
 import { page_routes } from "@/lib/routes-config";
 import { SheetClose } from "@/components/ui/sheet";
+import { getSession } from "@/lib/session";
 
 export const NAVLINKS = [
   {
@@ -23,7 +24,10 @@ export const NAVLINKS = [
   },
 ];
 
-export function Navbar() {
+export async function Navbar() 
+{
+  const session = await getSession();
+  const name = session?.user.name;
   return (
     <nav className="w-full border-b h-16 sticky top-0 z-50 bg-background">
       <div className="sm:container mx-auto w-[95vw] h-full flex items-center justify-between md:gap-2">
@@ -44,9 +48,14 @@ export function Navbar() {
             <Search />
             <div className="flex ml-2.5 sm:ml-0">
               <ModeToggle />
-              <button className="bg-zinc-1000 w-28 hover:bg-zinc-900">
+              {
+                name &&<p>Hello, {name}</p>
+              }
+              {
+                !name && <button className="bg-zinc-1000 w-28 hover:bg-zinc-900">
                 <a href="/auth/login">Log in</a>
               </button>
+              }
             </div>
           </div>
         </div>

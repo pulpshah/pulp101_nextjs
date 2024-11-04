@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 
 const quotes = [
@@ -47,28 +46,10 @@ const TextScorer: React.FC<TextScorerProps> = ({ category }) =>
   const [gptResponse, setGptResponse] = useState<{ score: string; explanation: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [randomQuote, setRandomQuote] = useState<string>('');
-  const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
     // Generate the random quote on the client side
     setRandomQuote(quotes[Math.floor(Math.random() * quotes.length)]);
-
-    const fetchSession = async () => {
-      try {
-        const response = await fetch('/api/session'); // Create an endpoint to fetch the session
-        if (response.ok) {
-          const sessionData = await response.json();
-          setEmail(sessionData.user?.email ?? null);
-        } else {
-          setEmail(null); // No session found
-        }
-      } catch (error) {
-        console.error('Error fetching session:', error);
-        setEmail(null);
-      }
-    };
-
-    fetchSession();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,6 +65,7 @@ const TextScorer: React.FC<TextScorerProps> = ({ category }) =>
           },
           body: JSON.stringify({
             inputText: randomQuote,
+            userScore: userScore,
             category: category,
           }),
         });
