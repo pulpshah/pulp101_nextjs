@@ -9,7 +9,7 @@ type Comment = {
 };
 
 // Use environment variables to get the Neo4j Aura connection details
-const NEO4J_URI = process.env.NEO4J_URI ?? ''; // Replace with your Aura's URI
+const NEO4J_URI = process.env.NEO4J_URI ?? '';
 const NEO4J_USERNAME = process.env.NEO4J_USERNAME ?? 'neo4j';
 const NEO4J_PASSWORD = process.env.NEO4J_PASSWORD ?? '';
 
