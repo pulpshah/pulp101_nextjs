@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         messages: [
           {
             role: 'user',
-            content: `Analyze the following text and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10.: "${inputText}"`,
+            content: `Analyze the following text in terms of ethos and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10.: "${inputText}"`,
           },
         ],
         max_tokens: 100,
