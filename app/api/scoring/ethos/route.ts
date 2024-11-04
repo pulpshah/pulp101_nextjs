@@ -19,7 +19,7 @@ export async function POST(request: Request) {
           },
         ],
         response_format: { type: "json_object" },
-        max_tokens: 100,
+        max_tokens: 200,
       }),
     });
 
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
     if (data.choices && data.choices[0] && data.choices[0].message) {
       const messageContent = data.choices[0].message.content.trim();
       try {
+        console.log(messageContent)
         const parsedResponse = JSON.parse(messageContent);
         return NextResponse.json(parsedResponse);
       } catch {

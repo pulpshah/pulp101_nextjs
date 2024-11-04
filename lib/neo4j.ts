@@ -148,3 +148,69 @@ export async function voteOnComment(email: string, commentId: string, level: num
     await session.close();
   }
 }
+
+// Function to check if a quote exists in the database and return its score
+export async function getQuoteScore(quote: string, category: string): Promise<{ score: string, explanation: string } | null> {
+  const session: Session = driver.session();
+
+  const query = `
+    MATCH (q:Quote {text: $quote})
+    RETURN q.${category}_score AS score, q.${category}_explanation AS explanation
+  `;
+
+  try {
+    const result = await session.run(query, { quote });
+    if (result.records.length > 0) {
+      return {
+        score: result.records[0].get('score'),
+        explanation: result.records[0].get('explanation')
+      };
+    } else {
+      return null;
+    }
+  } finally {
+    await session.close();
+  }
+}
+
+// Function to add a quote and its score to the database
+export async function addQuoteScore(quote: string, score: string, explanation: string,category:string): Promise<void> {
+  const session: Session = driver.session();
+
+  const query = `
+    CREATE (q:Quote {text: $quote, ${category}_score: $score, ${category}_explanation: $explanation})
+  `;
+
+  try {
+    await session.run(query, { quote, score, explanation });
+  } catch (error) {
+    console.error('Error adding quote score:', error);
+    throw new Error('Failed to add quote score to the database');
+  } finally {
+    await session.close();
+  }
+}
+
+export async function addUserScoreToQuote(userEmail: string, quoteText: string, userScore: number, category: string): Promise<void> {
+  const session: Session = driver.session();
+  const query = `
+    MATCH (u:User {email: $email})
+    MERGE (q:Quote {text: $quoteText}) // Ensure the quote node exists
+    MERGE (u)-[s:SCORED]->(q)
+    ON CREATE SET s.${category}_score = $userScore
+    ON MATCH SET s.${category}_score = $userScore
+  `;
+
+  try {
+    await session.run(query, {
+      email: userEmail,
+      quoteText: quoteText,
+      userScore: userScore,
+    });
+  } catch (error) {
+    console.error('Error adding user score to quote:', error);
+    throw new Error('Failed to add user score to the quote');
+  } finally {
+    await session.close();
+  }
+}
