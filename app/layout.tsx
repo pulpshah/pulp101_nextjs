@@ -6,6 +6,7 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import ClientApplication from "@/components/ClientApplication";
 import Script from "next/script";
+import { CSPostHogProvider } from './providers'
 
 export const metadata: Metadata = {
   title: "Pulp101",
@@ -26,6 +27,7 @@ export default function RootLayout({
           {/* Add Poppins font from Google Fonts */}
           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
         </head>
+        <CSPostHogProvider>
         <body
           className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
           suppressHydrationWarning
@@ -74,6 +76,7 @@ export default function RootLayout({
             </main>
           </ThemeProvider>
         </body>
+        </CSPostHogProvider>
       </html>
     </ClientApplication>
   );

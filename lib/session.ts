@@ -62,5 +62,12 @@ export async function getSession()
     if(!session) return null;
     return await decrypt(session);
 }
+
+export async function getClarityID() 
+{
+    const session = cookies().get('_clck')?.value;
+    if(!session) return null;
+    return session.split('|')[0];
+}
       
       
