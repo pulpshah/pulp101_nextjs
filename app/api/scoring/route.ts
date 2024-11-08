@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getQuoteScore, addQuoteScore, addUserScoreToQuote } from '@/lib/neo4j';
-import { getSession } from '@/lib/session';
+import { getQuoteScore, addQuoteScore, addUserScoreToQuote, addClarityIDScoreToQuote } from '@/lib/neo4j';
+import { getClarityID, getSession } from '@/lib/session';
 
 const prompts: { [key in 'appeal' | 'ethos']: string } = {
   appeal: `Analyze the following text in terms of appeal and provide a response in JSON format as {score: float, explanation: String}. The range of score is from 1-10: `,
@@ -20,21 +20,31 @@ export async function POST(request: Request) {
   try {
     const session = await getSession();
     let userEmail = null;
+    const clarityID = await getClarityID();;
 
     if (session && session.user && session.user.email) {
       userEmail = session.user.email;
     } else {
       console.log('User not logged in');
+      if(!clarityID) 
+      {
+        console.log('Clarity ID was not found');
+      }
     }
 
     const { inputText, category, userScore }:RequestBody = await request.json();
-
     // Check if the quote already exists in the database
     const existingScore = await getQuoteScore(inputText,category);
-    if (existingScore) {
+    console.log(existingScore)
+    if (existingScore && existingScore.score) {
       if (userEmail) {
         await addUserScoreToQuote(userEmail, inputText, userScore, category);
       }
+      else if(clarityID)
+      {
+        await addClarityIDScoreToQuote(clarityID, inputText, userScore, category); 
+      }
+
       return NextResponse.json(existingScore);
     }
 
@@ -74,6 +84,9 @@ export async function POST(request: Request) {
         if (userEmail) {
           // If user is logged in, store user score to the database
           await addUserScoreToQuote(userEmail, inputText, userScore, category);
+        } 
+        else if (clarityID){
+          await addClarityIDScoreToQuote(clarityID, inputText, userScore, category);
         }
 
         // Return the new score and explanation

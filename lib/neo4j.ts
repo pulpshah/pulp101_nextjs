@@ -214,3 +214,28 @@ export async function addUserScoreToQuote(userEmail: string, quoteText: string, 
     await session.close();
   }
 }
+
+export async function addClarityIDScoreToQuote(clarityID: string, quoteText: string, userScore: number, category: string): Promise<void> {
+  const session: Session = driver.session();
+  const query = `
+    MERGE (c:ClarityID {id: $clarityID})
+    ON CREATE SET c.id = $clarityID
+    MERGE (q:Quote {text: $quoteText})
+    MERGE (c)-[s:SCORED]->(q)
+    ON CREATE SET s.${category}_score = $userScore
+    ON MATCH SET s.${category}_score = $userScore
+  `;
+
+  try {
+    await session.run(query, {
+      clarityID: clarityID,
+      quoteText: quoteText,
+      userScore: userScore,
+    });
+  } catch (error) {
+    console.error('Error adding user score to quote:', error);
+    throw new Error('Failed to add user score to the quote');
+  } finally {
+    await session.close();
+  }
+}

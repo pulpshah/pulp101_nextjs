@@ -4,9 +4,10 @@ import { useState } from 'react';
 import ChatWindow from './ChatWindow';
 import React from 'react';
 
-export default function ChatPill({ slug, email }: { slug: string, email:string }) {
+export default function ChatPill({ slug, email, hoveredText }: { slug: string, email:string|null, hoveredText:string|null }) {
   const [isOpen, setIsOpen] = useState(false);
 
+  console.log(hoveredText);
   // Toggle the visibility of the chat window
   const toggleChat = () => setIsOpen(!isOpen);
 

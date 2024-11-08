@@ -1,3 +1,4 @@
+import React from "react";
 import { Typography } from "@/components/typography";
 import { buttonVariants } from "@/components/ui/button";
 import { Author, getAllBlogStaticPaths, getBlogForSlug } from "@/lib/markdown";
@@ -8,9 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
 import CommentsSection from "@/components/comments-section";
-import ChatPill from "@/components/CommentBox/ChatPill";
 import { getSession } from "@/lib/session";
-import React from "react";
+import HoverableContent from "@/components/HoverableContent";
 
 type PageProps = {
   params: { slug: string };
@@ -32,8 +32,7 @@ export async function generateStaticParams() {
   return val.map((it) => ({ slug: it }));
 }
 
-export default async function BlogPage({ params: { slug } }: PageProps) 
-{
+export default async function BlogPage({ params: { slug } }: PageProps) {
   const session = await getSession();
   const email = session?.user.email;
 
@@ -42,7 +41,6 @@ export default async function BlogPage({ params: { slug } }: PageProps)
 
   return (
     <div className="lg:w-[60%] sm:w-[95%] md:w-[75%] mx-auto relative">
-      {/* Position TopPill at the top center */}
       <div className="flex justify-center">
         <CommentsSection />
       </div>
@@ -68,19 +66,18 @@ export default async function BlogPage({ params: { slug } }: PageProps)
           <Authors authors={res.frontmatter.authors} />
         </div>
       </div>
-      <div className="!w-full">
-        <div className="w-full mb-7">
-          <Image
-            src={res.frontmatter.cover}
-            alt="cover"
-            width={700}
-            height={400}
-            className="w-full h-[400px] rounded-md border object-cover"
-          />
-        </div>
-        <Typography>{res.content}</Typography>
+      <div className="w-full mb-7">
+        <Image
+          src={res.frontmatter.cover}
+          alt="cover"
+          width={700}
+          height={400}
+          className="w-full h-[400px] rounded-md border object-cover"
+        />
       </div>
-      <ChatPill slug={slug} email={email}/>
+      
+      {/* Use the HoverableContent component here */}
+      <HoverableContent content={res.content} slug={slug} email={email} />
     </div>
   );
 }
@@ -88,28 +85,20 @@ export default async function BlogPage({ params: { slug } }: PageProps)
 function Authors({ authors }: { authors: Author[] }) {
   return (
     <div className="flex items-center gap-8 flex-wrap">
-      {authors.map((author) => {
-        return (
-          <Link
-            href={author.handleUrl}
-            className="flex items-center gap-2"
-            key={author.username}
-          >
-            <Avatar className="w-10 h-10">
-              <AvatarImage src={author.avatar} />
-              <AvatarFallback>
-                {author.username.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="">
-              <p className="text-sm font-medium">{author.username}</p>
-              <p className="font-code text-[13px] text-muted-foreground">
-                @{author.handle}
-              </p>
-            </div>
-          </Link>
-        );
-      })}
+      {authors.map((author) => (
+        <Link href={author.handleUrl} className="flex items-center gap-2" key={author.username}>
+          <Avatar className="w-10 h-10">
+            <AvatarImage src={author.avatar} />
+            <AvatarFallback>
+              {author.username.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="text-sm font-medium">{author.username}</p>
+            <p className="font-code text-[13px] text-muted-foreground">@{author.handle}</p>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 }

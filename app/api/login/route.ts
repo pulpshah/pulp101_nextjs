@@ -27,6 +27,7 @@ export async function POST(req: Request) {
         // Successfully authenticated, now add the session
         const sessionResponse = await addSession(name, email);
 
+        
         console.log('Login successful:', user);
 
         // Return the session response with cookie set
@@ -46,3 +47,7 @@ export async function POST(req: Request) {
     await session.close();
   }
 }
+function PostHogClient() {
+  throw new Error('Function not implemented.');
+}
+

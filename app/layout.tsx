@@ -6,6 +6,8 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import ClientApplication from "@/components/ClientApplication";
 import Script from "next/script";
+import { PHProvider } from './providers'
+import dynamic from 'next/dynamic'
 
 export const metadata: Metadata = {
   title: "Pulp101",
@@ -13,6 +15,11 @@ export const metadata: Metadata = {
   description:
     "This comprehensive documentation template, crafted with Next.js and available as open-source, delivers a sleek and responsive design, tailored to meet all your project documentation requirements.",
 };
+
+const PostHogPageView = dynamic(() => import('./PostHogPageView'), {
+  ssr: false,
+})
+
 
 export default function RootLayout({
   children,
@@ -26,10 +33,12 @@ export default function RootLayout({
           {/* Add Poppins font from Google Fonts */}
           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
         </head>
+        <PHProvider>
         <body
           className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
           suppressHydrationWarning
         >
+          <PostHogPageView /> 
           <Script id="reb2b-script" strategy="lazyOnload">
           {`
             !function () {
@@ -74,6 +83,7 @@ export default function RootLayout({
             </main>
           </ThemeProvider>
         </body>
+        </PHProvider>
       </html>
     </ClientApplication>
   );
