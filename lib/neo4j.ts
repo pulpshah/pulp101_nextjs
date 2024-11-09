@@ -6,6 +6,7 @@ type Comment = {
   createdAt: string;
   author: string;
   parentId: string | null;
+  userVoteLevel: Number | null;
 };
 
 // Use environment variables to get the Neo4j Aura connection details
@@ -54,7 +55,54 @@ export async function getCommentsData(slug: string): Promise<Comment[] | null> {
           text: comment.text,
           createdAt: comment.createdAt,
           author: comment.author,
-          parentId: comment.parentId ?? null
+          parentId: comment.parentId ?? null,
+          userVoteLevel: null
+        };
+      });
+      return comments;
+    } else {
+      return null;
+    }
+  } finally {
+    await session.close();
+  }
+}
+
+// Function to fetch comments data for a blog with voting information for a specific user
+export async function getCommentsDataWithVotes(slug: string, userEmail: string): Promise<Comment[] | null> {
+  const session: Session = driver.session();
+
+  const query = `
+    MATCH (blog:Blog {slug: $slug})-[:HAS_COMMENT]->(root:Comment) // Get all root comments for the blog
+    OPTIONAL MATCH (root)-[:HAS_REPLY*0..]->(reply:Comment) // Recursively match all replies
+    OPTIONAL MATCH (reply)<-[:HAS_REPLY]-(parent:Comment) // Get the parent of each reply
+    OPTIONAL MATCH (u:User)-[:WROTE]->(reply) // Match the user who wrote the reply
+    OPTIONAL MATCH (voter:User {email: $userEmail})-[vote:VOTED]->(reply) // Check if the specific user voted on the reply
+    WITH reply, parent, u, voter, vote.level AS voteLevel, reply.id AS replyId, parent.id AS parentId
+    ORDER BY reply.createdAt
+    RETURN {
+      id: replyId,
+      text: reply.text,
+      createdAt: reply.createdAt,
+      author: u.name,
+      parentId: parentId,
+      userVoteLevel: voteLevel
+    } AS comment
+  `;
+
+  try {
+    const result = await session.run(query, { slug, userEmail });
+
+    if (result.records.length > 0) {
+      const comments: Comment[] = result.records.map((record: Record) => {
+        const comment = record.get('comment');
+        return {
+          id: comment.id,
+          text: comment.text,
+          createdAt: comment.createdAt,
+          author: comment.author,
+          parentId: comment.parentId ?? null,
+          userVoteLevel: comment.userVoteLevel ?? null
         };
       });
       return comments;

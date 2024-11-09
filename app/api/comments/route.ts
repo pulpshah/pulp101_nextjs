@@ -1,13 +1,20 @@
-import { getCommentsData } from '@/lib/neo4j';
+import { getCommentsData, getCommentsDataWithVotes } from '@/lib/neo4j';
 import { NextResponse } from 'next/server';
 
 // The `slug` is extracted from the URL params
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
-  const { slug } = params;
+export async function POST(request: Request) {
+  const { slug, userEmail } = await request.json();
 
   try {
-    // Call the getCommentsData function to fetch data from Neo4j
-    const commentsData = await getCommentsData(slug);
+    let commentsData;
+    if(userEmail)
+    {
+      commentsData = await getCommentsDataWithVotes(slug,userEmail); 
+    }else
+    {
+      commentsData = await getCommentsData(slug);
+    }
+    
 
     if (!commentsData) {
       return NextResponse.json({ error: 'No comments found' }, { status: 404 });

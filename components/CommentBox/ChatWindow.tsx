@@ -12,15 +12,40 @@ type Comment = {
   text: string;
   createdAt: string;
   replies: Comment[];
+  userVoteLevel: number|null;
+  isTopLevel: boolean,
 };
 
 // Function to format the date object into a human-readable string
-const formatDate = (createdAt: any): string => {
-  const { day, month, year, hour, minute, second } = createdAt;
-  return `${year.low}-${month.low}-${day.low} ${hour.low}:${minute.low}:${second.low}`;
+const formatDate = (createdAt: { day: any, month: any, year: any, hour: any, minute: any, second: any }): string => {
+  const currentDate = new Date();
+  const date = new Date(
+    createdAt.year.low,
+    createdAt.month.low - 1, // Month is 0-based
+    createdAt.day.low,
+    createdAt.hour.low,
+    createdAt.minute.low,
+    createdAt.second.low
+  );
+
+  const secondsAgo = Math.floor((currentDate.getTime() - date.getTime()) / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+  if (secondsAgo < 60) return rtf.format(-secondsAgo, "second");
+  const minutesAgo = Math.floor(secondsAgo / 60);
+  if (minutesAgo < 60) return rtf.format(-minutesAgo, "minute");
+  const hoursAgo = Math.floor(minutesAgo / 60);
+  if (hoursAgo < 24) return rtf.format(-hoursAgo, "hour");
+  const daysAgo = Math.floor(hoursAgo / 24);
+  if (daysAgo < 30) return rtf.format(-daysAgo, "day");
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
 };
 
-// Recursive function to build the comment structure
 const convertComments = (array: any[]): Comment[] => {
   const commentMap: { [key: string]: Comment } = {};
   const topLevelComments: Comment[] = [];
@@ -31,7 +56,9 @@ const convertComments = (array: any[]): Comment[] => {
       author: item.author,
       text: item.text,
       createdAt: formatDate(item.createdAt),
-      replies: []
+      replies: [],
+      userVoteLevel: item.userVoteLevel,
+      isTopLevel: !item.parentId  // Set to true if no parentId, otherwise false
     };
 
     commentMap[item.id] = comment;
@@ -68,9 +95,21 @@ export default function ChatWindow({ slug, email }: { slug: string, email: strin
     async function fetchData() {
       try {
         setLoading(true);
-        const response = await fetch(`/api/comments/${slug}`);
+        
+        const response = await fetch('/api/comments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            slug: slug,
+            userEmail: email,
+          }),
+        });
+
         const data = await response.json();
         if (response.ok) {
+          console.log(data)
           setComments(convertComments(data));
         } else {
           console.error('Error fetching comments:', data.error);
@@ -85,10 +124,18 @@ export default function ChatWindow({ slug, email }: { slug: string, email: strin
     fetchData();
   }, [slug]);
 
-  const handleViewReplies = (comment: Comment) => {
-    setBreadcrumb([...breadcrumb, comment]);
-    setReplyView(comment);
-    setIsParentCollapsed(true);
+  const handleViewReplies = (comment: Comment) => 
+  {
+    if (comment.isTopLevel && comment.userVoteLevel == null) 
+    {
+      toast.info("You need to vote before seeing the replies");
+    } 
+    else
+    {
+      setBreadcrumb([...breadcrumb, comment]);
+      setReplyView(comment);
+      setIsParentCollapsed(true);
+    }
   };
 
   const handleBreadcrumbClick = (index: number) => {
@@ -143,7 +190,16 @@ export default function ChatWindow({ slug, email }: { slug: string, email: strin
 
       // Fetch updated comments
       try {
-        const fetchResponse = await fetch(`/api/comments/${slug}`);
+        const fetchResponse = await fetch('/api/comments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            slug: slug,
+            userEmail: email,
+          }),
+        });
         const data = await fetchResponse.json();
         
         if (fetchResponse.ok && Array.isArray(data)) {
@@ -185,6 +241,16 @@ export default function ChatWindow({ slug, email }: { slug: string, email: strin
   if (loading) {
     return <div>Loading comments...</div>;
   }
+
+  const updateVoteLevel = (commentId:string, newVoteLevel:number|null) => {
+    setComments(prevComments =>
+      prevComments.map(comment =>
+        String(comment.id) === commentId
+          ? { ...comment, userVoteLevel: newVoteLevel }
+          : comment
+      )
+    );
+  };
 
   return (
     <div className="flex flex-col h-full bg-gray-900 text-white p-4 max-w-lg mx-auto rounded-lg shadow-lg">
@@ -237,7 +303,11 @@ export default function ChatWindow({ slug, email }: { slug: string, email: strin
                     Replying to: {replyView.author}
                   </div>
                 )}
-                <div className="font-bold mb-1">{comment.author}</div>
+                { (comment.isTopLevel && comment.userVoteLevel==null)? 
+                  <div className="font-bold mb-1 blur">{comment.author}</div> : 
+                  <div className="font-bold mb-1">{comment.author}</div>
+                }
+                
                 <div className="text-sm text-gray-500">{comment.createdAt}</div>
                 <div className="my-2">{comment.text}</div>
 
@@ -260,7 +330,7 @@ export default function ChatWindow({ slug, email }: { slug: string, email: strin
               
               {/* Right section: voting system, vertically centered */}
               <div className="flex items-center justify-center">
-                <VotingSystem email={email} commentId={String(comment.id)} />
+                <VotingSystem email={email} commentId={String(comment.id)} startingVoteState={comment.userVoteLevel} onVoteChange={updateVoteLevel}/>
               </div>
             </div>
           ))}

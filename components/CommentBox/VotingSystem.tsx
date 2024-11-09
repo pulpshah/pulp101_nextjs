@@ -5,9 +5,30 @@ import { useState, useEffect } from 'react';
 
 type VoteState = 'default' | 'invalid-1' | 'invalid-2' | 'invalid-3' | 'abstain' | 'valid-1' | 'valid-2' | 'valid-3';
 
-export default function VotingSystem({ email, commentId }: { email: string | null, commentId: string }) {
-  const [voteState, setVoteState] = useState<VoteState>('default');
+const getVoteState = (level: number | null): VoteState => {
+  switch (level) {
+    case 1: return 'valid-1';
+    case 2: return 'valid-2';
+    case 3: return 'valid-3';
+    case -1: return 'invalid-1';
+    case -2: return 'invalid-2';
+    case -3: return 'invalid-3';
+    case 0: return 'abstain';
+    default: return 'default';
+  }
+};
+
+
+
+
+export default function VotingSystem({ email, commentId, startingVoteState, onVoteChange  }: { email: string | null, commentId: string, startingVoteState: number|null, onVoteChange: (commentId: string ,newVoteLevel: number|null) => void }) {
+  
+  const [voteState, setVoteState] = useState<VoteState>(getVoteState(startingVoteState));
   const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    handleVoteChange(voteState);
+  }, [voteState]);
 
   const getVoteLevel = (state: VoteState): number | null => {
     switch (state) {
@@ -39,6 +60,7 @@ export default function VotingSystem({ email, commentId }: { email: string | nul
           body: JSON.stringify({ email, commentId, level }),
         });
       }
+      onVoteChange(commentId, level);
     } catch (error) {
       console.error('Failed to submit vote:', error);
     }
@@ -50,17 +72,17 @@ export default function VotingSystem({ email, commentId }: { email: string | nul
 
   const handleValidClick = () => {
     if (!email) return;
-    setVoteState((prev) => (prev === 'valid-3' ? 'default' : prev === 'valid-2' ? 'valid-3' : prev === 'valid-1' ? 'valid-2' : 'valid-1'));
+    setVoteState((prev) => (prev === 'valid-3' ? 'abstain' : prev === 'valid-2' ? 'valid-3' : prev === 'valid-1' ? 'valid-2' : 'valid-1'));
   };
 
   const handleInvalidClick = () => {
     if (!email) return;
-    setVoteState((prev) => (prev === 'invalid-3' ? 'default' : prev === 'invalid-2' ? 'invalid-3' : prev === 'invalid-1' ? 'invalid-2' : 'invalid-1'));
+    setVoteState((prev) => (prev === 'invalid-3' ? 'abstain' : prev === 'invalid-2' ? 'invalid-3' : prev === 'invalid-1' ? 'invalid-2' : 'invalid-1'));
   };
 
   const handleAbstainClick = () => {
     if (!email) return;
-    setVoteState((prev) => (prev === 'abstain' ? 'default' : 'abstain'));
+    setVoteState((prev) => ('abstain'));
   };
 
   const getTopColor = () => (['valid-1', 'valid-2', 'valid-3'].includes(voteState) ? 'bg-green-300' : voteState === 'invalid-3' ? 'bg-red-700' : 'bg-gray-700');
