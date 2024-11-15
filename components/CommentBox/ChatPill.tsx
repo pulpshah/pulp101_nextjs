@@ -5,6 +5,7 @@ import ChatWindow from './ChatWindow';
 import React from 'react';
 
 export default function ChatPill({ slug, email, hoveredText }: { slug: string, email:string|null, hoveredText:string|null }) {
+  console.log(slug);
   const [isOpen, setIsOpen] = useState(false);
 
   console.log(hoveredText);

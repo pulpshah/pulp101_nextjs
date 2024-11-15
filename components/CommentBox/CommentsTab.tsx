@@ -104,7 +104,7 @@ export default function CommentsTab({ slug, email }: { slug: string, email: stri
           body: JSON.stringify({
             slug: slug,
             userEmail: email,
-          }),
+          }), 
         });
 
         const data = await response.json();
