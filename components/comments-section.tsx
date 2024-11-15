@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import TopPill from "./TopPill/top-pill";
 import Threads from "./TopPill/Threads";
 import { usePathname } from "next/navigation";
-import { Comment } from "./types";
+import { Comment } from "../lib/types";
 
 type CommentProps = {
   id: number;
@@ -60,7 +60,7 @@ export default function CommentsSection() {
 
     fetchData();
   }, [showComments, slug]);
-  console.log(comments);
+  
 
   return (
     <>
