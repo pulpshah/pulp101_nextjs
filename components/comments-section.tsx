@@ -6,7 +6,7 @@ import Threads from "./TopPill/Threads";
 import { usePathname } from "next/navigation";
 import { Comment } from "../lib/types";
 interface CommentSectionProperties {
-  email: string | null;
+  email: string;
 }
 
 type CommentProps = {

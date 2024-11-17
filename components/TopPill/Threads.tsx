@@ -22,7 +22,7 @@ export default function Threads({
   onDisableScroll,
 }: {
   comments: CommentProps[];
-  email: String;
+  email: string;
   onDockLineClick: () => void;
   isExpanded: boolean;
   disableScroll: boolean;
@@ -31,9 +31,17 @@ export default function Threads({
   console.log(email);
   const [userComments, setUserComments] = useState<CommentProps[]>([]);
 
-  const handleAddComment = (newComment: CommentProps) => {
+  const handleAddComment = (commentText: string) => {
+    const newComment: CommentProps = {
+      id: userComments.length + 1, // Generate a unique ID
+      author: email, // Use the email as the author
+      text: commentText,
+      createdAt: new Date().toISOString(), // Use the current time
+      replies: [], // Initialize as an empty array
+    };
     setUserComments((prevComments) => [...prevComments, newComment]);
   };
+  
   const pathname = usePathname();
   const slug = pathname?.split("/").pop();
 

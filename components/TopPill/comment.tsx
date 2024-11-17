@@ -3,7 +3,7 @@ import { useState } from "react";
 import EmojiCarousel from "./emoji-carousel";
 import CommentLoadingScreen from "./comment-loading";
 import ConfidenceLevelModal from "./ConfidenceLevelModal";
-import { CommentProps } from "../lib/types";
+import { CommentProps } from "@/lib/types";
 
 export default function Comment({
   commentText,

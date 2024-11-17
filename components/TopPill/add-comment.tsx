@@ -36,7 +36,7 @@ export default function AddCommentPill({
         const newComment = await response.json();
 
         // Update the UI with the new comment
-        onAddComment(newComment);
+        onAddComment(commentText);
         setCommentText("");
       } catch (error) {
         console.error("Error adding comment:", error);
