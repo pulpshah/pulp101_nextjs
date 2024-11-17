@@ -2,13 +2,24 @@ import Image from "next/image";
 import { useState } from "react";
 import EmojiCarousel from "./emoji-carousel"; // Import the shared EmojiCarousel
 
-export default function SelfComment({
-  commentText,
-  isExpanded,
-}: {
-  commentText: string;
+type SelfCommentProps = {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
   isExpanded: boolean;
-}) {
+  initialReplies?: { id: number; author: string; text: string; createdAt: string }[];
+};
+
+export default function SelfComment({
+  id,
+  author,
+  text,
+  createdAt,
+  isExpanded,
+  initialReplies = [], // Initialize with empty array if no replies
+}: SelfCommentProps) {
+  const [replies, setReplies] = useState(initialReplies);
   const [reactions, setReactions] = useState<{ [key: string]: number }>({});
   const [isEmojiCarouselOpen, setIsEmojiCarouselOpen] = useState<boolean>(false);
 
@@ -55,7 +66,7 @@ export default function SelfComment({
       </div>
 
       {/* Comment Text */}
-      <p>{commentText}</p>
+      <p>{text}</p>
 
       {/* Reactions */}
       {isExpanded && (
@@ -68,7 +79,7 @@ export default function SelfComment({
             ))}
           </div>
           <div className="flex items-center gap-[8px] ml-auto min-w-[150px]">
-            <div className="font-bold">102 replies</div>
+            <div className="font-bold">{replies.length} {replies.length === 1 ? "reply" : "replies"}</div>
             <div className="flex -space-x-[7px]">
               <Image src="/profiles/profile_pic_1.png" alt="Profile" width={24} height={24} className="rounded-full border-[2px] border-white" />
               <Image src="/profiles/profile_pic_2.png" alt="Profile" width={24} height={24} className="rounded-full border-[2px] border-white" />

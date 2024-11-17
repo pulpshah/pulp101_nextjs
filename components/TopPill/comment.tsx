@@ -3,20 +3,26 @@ import { useState } from "react";
 import EmojiCarousel from "./emoji-carousel";
 import CommentLoadingScreen from "./comment-loading";
 import ConfidenceLevelModal from "./ConfidenceLevelModal";
+import { CommentProps } from "../lib/types";
 
 export default function Comment({
   commentText,
   commentIndex,
   isExpanded,
   isMinimized,
+  author,
+  replies = [],
   onDisableScroll,
 }: {
   commentText: string;
+  author: string;
   commentIndex: number;
   isExpanded: boolean;
   isMinimized: boolean;
+  replies: CommentProps[];
   onDisableScroll: (disable: boolean) => void;
 }) {
+  console.log(replies);
   const [isVotingOpen, setIsVotingOpen] = useState<boolean>(false);
   const [hasVoted, setHasVoted] = useState<"valid" | "invalid" | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -25,8 +31,14 @@ export default function Comment({
   const [voteLevel, setVoteLevel] = useState<number | null>(null);
   const [shadowColor, setShadowColor] = useState<string>("");
   const [reactions, setReactions] = useState<{ [key: string]: number }>({});
+  const [showReplies, setShowReplies] = useState<boolean>(false);
   const [isEmojiCarouselOpen, setIsEmojiCarouselOpen] =
     useState<boolean>(false);
+
+    const toggleReplies = () => {
+      setShowReplies((prev) => !prev);
+    };
+    
 
   const emojiList = ["👍", "👎", "❤️", "😂", "😢", "🤓", "🙉"];
 
@@ -144,7 +156,7 @@ export default function Comment({
               {/* Username and Icons Only if Expanded */}
               {isExpanded && hasVoted && (
                 <div className="flex items-center gap-[4px]">
-                  <p className="font-bold">Username</p>
+                  <p className="font-bold">{author}</p>
                   <Image
                     src={`/icons/${hasVoted}-colored-icon.svg`}
                     alt={hasVoted === "valid" ? "Valid" : "Invalid"}
@@ -190,6 +202,13 @@ export default function Comment({
             {/* Reactions and Replies - Hidden in Minimized View */}
             {isExpanded && hasVoted && (
               <div className="flex items-center mt-[8px]">
+                <button
+                onClick={toggleReplies}
+                className="text-blue-500 text-sm hover:underline"
+              >
+                {showReplies ? "Hide Replies" : `${replies.length} Replies`}
+                
+              </button>
                 <div className="flex flex-wrap gap-[10px]">
                   {Object.entries(reactions).map(([emoji, count]) => (
                     <button
@@ -202,7 +221,7 @@ export default function Comment({
                   ))}
                 </div>
                 <div className="flex items-center gap-[8px] ml-auto min-w-[150px]">
-                  <div className="font-bold">102 replies</div>
+                  <div className="font-bold">{replies.length} replies</div>
                   <div className="flex -space-x-[7px]">
                     <Image
                       src="/profiles/profile_pic_1.png"
@@ -230,6 +249,31 @@ export default function Comment({
               </div>
             )}
           </div>
+          {showReplies && (
+            <div className="ml-8 mt-4">
+              {replies.map((reply) => (
+                <div
+                  key={reply.id}
+                  className="border-l-[2px] border-gray-200 pl-4 mb-4"
+                >
+                  <div className="flex items-start gap-2">
+                    <Image
+                      src="/profiles/profile_pic_1.png"
+                      alt="Profile"
+                      width={32}
+                      height={32}
+                      className="rounded-full"
+                    />
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">{reply.author}</p>
+                      <p className="text-sm text-gray-600">{reply.text}</p>
+                      <span className="text-xs text-gray-400">{reply.createdAt}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Voting Section */}
           {!hasVoted &&

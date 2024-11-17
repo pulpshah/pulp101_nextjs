@@ -3,7 +3,8 @@ import AddCommentPill from "./add-comment";
 import Image from "next/image";
 import { useState } from "react";
 import SelfComment from "./self-comment";
-
+import { usePathname } from "next/navigation";
+// import { Comment } from "postcss";
 type CommentProps = {
   id: number;
   author: string;
@@ -15,21 +16,26 @@ type CommentProps = {
 export default function Threads({
   comments,
   onDockLineClick,
+  email,
   isExpanded,
   disableScroll,
   onDisableScroll,
 }: {
   comments: CommentProps[];
+  email: String;
   onDockLineClick: () => void;
   isExpanded: boolean;
   disableScroll: boolean;
   onDisableScroll: (disable: boolean) => void;
 }) {
-  const [userComments, setUserComments] = useState<string[]>([]);
+  console.log(email);
+  const [userComments, setUserComments] = useState<CommentProps[]>([]);
 
-  const handleAddComment = (commentText: string) => {
-    setUserComments((prev) => [...prev, commentText]);
+  const handleAddComment = (newComment: CommentProps) => {
+    setUserComments((prevComments) => [...prevComments, newComment]);
   };
+  const pathname = usePathname();
+  const slug = pathname?.split("/").pop();
 
   // Total comment count
   const commentCount = comments.length + userComments.length;
@@ -70,20 +76,28 @@ export default function Threads({
             key={comment.id}
             commentIndex={index}
             commentText={comment.text}
+            author={comment.author}
             isExpanded={isExpanded}
+            replies={comment.replies}
             isMinimized={!isExpanded}
             onDisableScroll={onDisableScroll}
           />
         ))}
 
         {userComments.map((comment, index) => (
-          <SelfComment key={index} commentText={comment} isExpanded={isExpanded} />
+          <SelfComment 
+          key={comment.id}
+          id={comment.id}
+          text={comment.text}
+          author={comment.author}
+          createdAt={comment.createdAt}
+          isExpanded={isExpanded} />
         ))}
       </div>
 
       {isExpanded && (
         <div className="sticky bottom-0 w-full px-[10px] pb-[10px] bg-transparent">
-          <AddCommentPill onAddComment={handleAddComment} />
+          <AddCommentPill onAddComment={handleAddComment} slug = {slug || ""} email={email} />
         </div>
       )}
     </div>

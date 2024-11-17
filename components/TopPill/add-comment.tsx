@@ -1,13 +1,46 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function AddCommentPill({ onAddComment }: { onAddComment: (commentText: string) => void }) {
+export default function AddCommentPill({
+  onAddComment,
+  slug,
+  email,
+}: {
+  onAddComment: (commentText: string) => void;
+  slug: string;
+  email: string | null;
+}) {
+  console.log(email);
+  console.log(slug);
   const [commentText, setCommentText] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (commentText.trim()) {
-      onAddComment(commentText);
-      setCommentText("");
+      try {
+        const response = await fetch("/api/addReplyToBlog", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: commentText,
+            slug,
+            email,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add comment");
+        }
+
+        const newComment = await response.json();
+
+        // Update the UI with the new comment
+        onAddComment(newComment);
+        setCommentText("");
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      } 
     }
   };
 

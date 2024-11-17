@@ -5,6 +5,9 @@ import TopPill from "./TopPill/top-pill";
 import Threads from "./TopPill/Threads";
 import { usePathname } from "next/navigation";
 import { Comment } from "../lib/types";
+interface CommentSectionProperties {
+  email: string | null;
+}
 
 type CommentProps = {
   id: number;
@@ -14,12 +17,68 @@ type CommentProps = {
   replies: CommentProps[];
 };
 
-export default function CommentsSection() {
+export default function CommentsSection({email }: CommentSectionProperties) {
   const [showComments, setShowComments] = useState(false);
   const [expandComments, setExpandComments] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [comments, setComments] = useState<CommentProps[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const formatDate = (createdAt: { day: any, month: any, year: any, hour: any, minute: any, second: any }): string => {
+    const currentDate = new Date();
+    const date = new Date(
+      createdAt.year.low,
+      createdAt.month.low - 1, // Month is 0-based
+      createdAt.day.low,
+      createdAt.hour.low,
+      createdAt.minute.low,
+      createdAt.second.low
+    );
+    const secondsAgo = Math.floor((currentDate.getTime() - date.getTime()) / 1000);
+
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+  if (secondsAgo < 60) return rtf.format(-secondsAgo, "second");
+  const minutesAgo = Math.floor(secondsAgo / 60);
+  if (minutesAgo < 60) return rtf.format(-minutesAgo, "minute");
+  const hoursAgo = Math.floor(minutesAgo / 60);
+  if (hoursAgo < 24) return rtf.format(-hoursAgo, "hour");
+  const daysAgo = Math.floor(hoursAgo / 24);
+  if (daysAgo < 30) return rtf.format(-daysAgo, "day");
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+};
+
+const convertComments = (array: any[]): Comment[] => {
+  const commentMap: { [key: string]: Comment } = {};
+  const topLevelComments: Comment[] = [];
+
+  array.forEach((item) => {
+    const comment: Comment = {
+      id: item.id,
+      author: item.author,
+      text: item.text,
+      createdAt: formatDate(item.createdAt),
+      replies: [],
+      userVoteLevel: item.userVoteLevel,
+      isTopLevel: !item.parentId  // Set to true if no parentId, otherwise false
+    };
+
+    commentMap[item.id] = comment;
+
+    if (item.parentId) {
+      // This is a reply, push it to the parent comment's replies
+      commentMap[item.parentId]?.replies.push(comment);
+    } else {
+      // Top-level comment
+      topLevelComments.push(comment);
+    }
+  });
+  return topLevelComments;
+};
 
   const handleCommentsClick = () => {
     setShowComments((prevState) => !prevState);
@@ -41,12 +100,13 @@ export default function CommentsSection() {
           const response = await fetch("/api/comments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ slug }),
+            body: JSON.stringify({ slug: slug,
+            userEmail: email, }),
           });
 
           const data = await response.json();
           if (response.ok) {
-            setComments(data as Comment[]); // Ensure the response matches the `Comment` type
+            setComments(convertComments(data)); // Ensure the response matches the `Comment` type
           } else {
             console.error("Error fetching comments:", data.error);
           }
@@ -60,7 +120,7 @@ export default function CommentsSection() {
 
     fetchData();
   }, [showComments, slug]);
-  
+  console.log(comments);
 
   return (
     <>
@@ -80,6 +140,7 @@ export default function CommentsSection() {
               isExpanded={expandComments}
               disableScroll={disableScroll}
               onDisableScroll={handleDisableScroll}
+              email={email}
             />
         </div>
       )}

@@ -42,7 +42,7 @@ export default async function BlogPage({ params: { slug } }: PageProps) {
   return (
     <div className="lg:w-[60%] sm:w-[95%] md:w-[75%] mx-auto relative">
       <div className="flex justify-center">
-        <CommentsSection />
+        <CommentsSection email={email}/>
       </div>
 
       <Link
