@@ -8,6 +8,8 @@ import ClientApplication from "@/components/ClientApplication";
 import Script from "next/script";
 import { PHProvider } from './providers'
 import dynamic from 'next/dynamic'
+import { UserProvider } from '@auth0/nextjs-auth0/client';
+
 
 export const metadata: Metadata = {
   title: "Pulp101",
@@ -29,11 +31,13 @@ export default function RootLayout({
   return (
     <ClientApplication>
       <html lang="en" suppressHydrationWarning>
+        
         <head>
           {/* Add Poppins font from Google Fonts */}
           <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet" />
         </head>
         <PHProvider>
+        <UserProvider>
         <body
           className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
           suppressHydrationWarning
@@ -83,6 +87,7 @@ export default function RootLayout({
             </main>
           </ThemeProvider>
         </body>
+        </UserProvider>
         </PHProvider>
       </html>
     </ClientApplication>

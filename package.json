@@ -11,6 +11,7 @@
   "dependencies": {
     "@ai-sdk/openai": "^0.0.72",
     "@auth/neo4j-adapter": "^2.7.1",
+    "@auth0/nextjs-auth0": "3.5.x",
     "@huggingface/inference": "^2.8.1",
     "@huggingface/transformers": "^3.0.1",
     "@mdx-js/loader": "^3.0.1",

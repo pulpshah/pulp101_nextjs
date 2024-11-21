@@ -7,7 +7,7 @@ import Anchor from "./anchor";
 import { SheetLeftbar } from "./leftbar";
 import { page_routes } from "@/lib/routes-config";
 import { SheetClose } from "@/components/ui/sheet";
-import { getSession } from "@/lib/session";
+import { getSession } from '@auth0/nextjs-auth0';
 
 export const NAVLINKS = [
   {
@@ -27,7 +27,9 @@ export const NAVLINKS = [
 export async function Navbar() 
 {
   const session = await getSession();
-  const name = session?.user.name;
+  const user = session?.user;
+  const name = user?.name
+
   return (
     <nav className="w-full border-b h-16 sticky top-0 z-50 bg-background">
       <div className="sm:container mx-auto w-[95vw] h-full flex items-center justify-between md:gap-2">
@@ -49,12 +51,22 @@ export async function Navbar()
             <div className="flex ml-2.5 sm:ml-0">
               <ModeToggle />
               {
-                name &&<p>Hello, {name}</p>
+                user &&
+                <>
+                  <div className="w-12">
+                    <img src={user.picture} alt={user.name} />
+                    {/* <h2>{user.name}</h2>
+                    <p>{user.email}</p> */}
+                  </div>
+                  <button className="bg-zinc-1000 w-28 hover:bg-zinc-900 ml-3">
+                    <a href="/api/auth/logout">Log out</a>
+                  </button>
+                </>
               }
               {
-                !name && <button className="bg-zinc-1000 w-28 hover:bg-zinc-900">
-                <a href="/auth/login">Log in</a>
-              </button>
+                !name && <a href="/api/auth/login"> <button className="bg-zinc-1000 w-28 hover:bg-zinc-900">
+                Login
+              </button></a>
               }
             </div>
           </div>
