@@ -17,10 +17,9 @@ export default function ConfidenceLevelModal({
 
   const [selectedLevel, setSelectedLevel] = useState(0);
 
-  // Function to handle level selection
   const handleLevelSelect = (level: number) => {
     setSelectedLevel(level);
-    setTimeout(() => onSelectLevel(level, levels[levels.length - level]), 300); // Pass color to onSelectLevel
+    setTimeout(() => onSelectLevel(level, levels[levels.length - level]), 300);
   };
 
   const selectLevelFromPosition = (clientY: number, rectTop: number, rectHeight: number) => {
@@ -66,6 +65,7 @@ export default function ConfidenceLevelModal({
     document.addEventListener("touchmove", handleTouchMove);
     document.addEventListener("touchend", handleTouchEnd);
   };
+  
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-md z-[200]" onClick={onClose}>

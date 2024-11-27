@@ -1,51 +1,69 @@
 import Image from "next/image";
+import NoWorkResult from "postcss/lib/no-work-result";
 import { useState } from "react";
+
+type CommentProps = {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
+  replies: CommentProps[];
+};
 
 export default function AddCommentPill({
   onAddComment,
   slug,
   email,
 }: {
-  onAddComment: (commentText: string) => void;
+  onAddComment: (newComment: CommentProps) => void; // Correct type here
   slug: string;
-  email: string | null;
+  email: string;
 }) {
-  console.log(email);
-  console.log(slug);
   const [commentText, setCommentText] = useState("");
 
   const handleSend = async () => {
     if (commentText.trim()) {
       try {
+        // Send request to backend
         const response = await fetch("/api/addReplyToBlog", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            text: commentText,
             slug,
+            text: commentText,
             email,
           }),
         });
 
+        // Check if response is OK
         if (!response.ok) {
           throw new Error("Failed to add comment");
         }
 
+        // Parse the backend response
         const newComment = await response.json();
 
-        // Update the UI with the new comment
-        onAddComment(commentText);
+        // Use the backend-provided data to update the UI
+        onAddComment({
+          id: newComment.id, // Backend-generated ID
+          author: email, // Current user
+          text: newComment.text, // Backend-confirmed text
+          createdAt: newComment.createdAt || new Date().toISOString(), // Use backend timestamp or fallback
+          replies: [], // Initialize replies as empty
+        });
+
+        // Clear the input field
         setCommentText("");
       } catch (error) {
         console.error("Error adding comment:", error);
-      } 
+      }
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSend();
     }
   };
@@ -61,12 +79,7 @@ export default function AddCommentPill({
       />
       <div>
         <button onClick={handleSend}>
-          <Image
-            src="/icons/send-icon.svg"
-            alt="Send"
-            width={29}
-            height={29}
-          />
+          <Image src="/icons/send-icon.svg" alt="Send" width={29} height={29} />
         </button>
       </div>
     </div>

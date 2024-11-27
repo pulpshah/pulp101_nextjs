@@ -152,6 +152,7 @@ export default function CommentsTab({ slug, email }: { slug: string, email: stri
 
   // Submit reply function
   const handleReplySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    console.log(replyView?.id);
     event.preventDefault();
 
     if (!email) {

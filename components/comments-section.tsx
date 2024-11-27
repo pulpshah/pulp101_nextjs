@@ -4,17 +4,29 @@ import { useEffect, useState } from "react";
 import TopPill from "./TopPill/top-pill";
 import Threads from "./TopPill/Threads";
 import { usePathname } from "next/navigation";
-import { Comment } from "../lib/types";
+// import { Comment } from "../lib/types";
+
 interface CommentSectionProperties {
   email: string;
 }
+type Comment= {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
+  replies: Comment[];
+  userVoteLevel: number|null;
+  isTopLevel: boolean,
+  }
 
 type CommentProps = {
   id: number;
   author: string;
   text: string;
   createdAt: string;
-  replies: CommentProps[];
+  replies: Comment[];
+  userVoteLevel: number|null;
+  isTopLevel: boolean,
 };
 
 export default function CommentsSection({email }: CommentSectionProperties) {
@@ -59,21 +71,19 @@ const convertComments = (array: any[]): Comment[] => {
   array.forEach((item) => {
     const comment: Comment = {
       id: item.id,
-      author: item.author,
+      author: item.author,         // Keep the author/username
       text: item.text,
       createdAt: formatDate(item.createdAt),
       replies: [],
       userVoteLevel: item.userVoteLevel,
-      isTopLevel: !item.parentId  // Set to true if no parentId, otherwise false
+      isTopLevel: !item.parentId  
     };
 
     commentMap[item.id] = comment;
 
     if (item.parentId) {
-      // This is a reply, push it to the parent comment's replies
       commentMap[item.parentId]?.replies.push(comment);
     } else {
-      // Top-level comment
       topLevelComments.push(comment);
     }
   });
@@ -106,7 +116,7 @@ const convertComments = (array: any[]): Comment[] => {
 
           const data = await response.json();
           if (response.ok) {
-            setComments(convertComments(data)); // Ensure the response matches the `Comment` type
+            setComments(convertComments(data));
           } else {
             console.error("Error fetching comments:", data.error);
           }
@@ -120,7 +130,7 @@ const convertComments = (array: any[]): Comment[] => {
 
     fetchData();
   }, [showComments, slug]);
-  console.log(comments);
+
 
   return (
     <>
