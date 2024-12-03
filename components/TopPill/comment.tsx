@@ -8,6 +8,13 @@ import { comment } from "postcss";
 
 
 /////////////////////
+type ReplyType = {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
+  replies?: ReplyType[];
+};
 
 export default function Comment({
   commentText,
@@ -27,7 +34,7 @@ export default function Comment({
   commentIndex: number;
   isExpanded: boolean;
   isMinimized: boolean;
-  replies: CommentProps[];
+  replies: ReplyType[];
   commentId: String;
   email:string;
   onDisableScroll: (disable: boolean) => void;
@@ -51,6 +58,16 @@ export default function Comment({
   const [isEmojiCarouselOpen, setIsEmojiCarouselOpen] = useState<boolean>(false);
   const [replyText, setReplyText] = useState<string>(""); 
   const [isReplying, setIsReplying] = useState<boolean>(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+const handleVoteClick = (type: "valid" | "invalid") => {
+  if (!email) {
+    setShowTooltip(true);
+    setTimeout(() => setShowTooltip(false), 3000); // Hide after 3 seconds
+    return;
+  }
+  handleVote(type);
+};
 
   console.log(author);
 
@@ -393,40 +410,86 @@ export default function Comment({
             {/* Voting Section */}
             {!hasVoted && isExpanded && (
               <div className={`min-w-[40px] flex flex-col items-center justify-center transition-all duration-300 ${isVotingOpen ? "gap-[3px]" : "gap-0"}`}>
-                <button
-                  onClick={() => handleVote("invalid")}
-                  className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
-                >
-                  <Image
-                    src="/icons/invalid-icon.svg"
-                    alt="Invalid"
-                    width={24}
-                    height={24}
-                  />
-                </button>
-                <button
-                  onClick={() => handleVote("valid")}
-                  className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
-                >
-                  <Image
-                    src="/icons/valid-icon.svg"
-                    alt="Valid"
-                    width={24}
-                    height={24}
-                  />
-                </button>
-                <button
-                  onClick={toggleVotingIcons}
-                  className="transition-transform duration-300"
-                >
-                  <Image
-                    src="/icons/gavel-icon.svg"
-                    alt="Gavel"
-                    width={24}
-                    height={24}
-                  />
-                </button>
-              </div>
+              <button
+                onClick={() => handleVoteClick("invalid")}
+                className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+              >
+                <Image
+                  src="/icons/invalid-icon.svg"
+                  alt="Invalid"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <button
+                onClick={() => handleVoteClick("valid")}
+                className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+              >
+                <Image
+                  src="/icons/valid-icon.svg"
+                  alt="Valid"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <button
+                onClick={toggleVotingIcons}
+                className="transition-transform duration-300"
+              >
+                <Image
+                  src="/icons/gavel-icon.svg"
+                  alt="Gavel"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              {/* Tooltip for login */}
+              {showTooltip && !email && (
+                <div className="ml-2 bg-black text-white text-xs rounded-md p-2 shadow-md z-10">
+                  <button
+                    onClick={() => (window.location.href = '/auth/login')}
+                    className="bg-blue-500 text-white text-xs py-1 px-2 rounded shadow hover:bg-blue-600"
+                  >
+                    Login to vote
+                  </button>
+                </div>
+              )}
+            </div>
+              // <div className={`min-w-[40px] flex flex-col items-center justify-center transition-all duration-300 ${isVotingOpen ? "gap-[3px]" : "gap-0"}`}>
+              //   <button
+              //     onClick={() => handleVote("invalid")}
+              //     className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+              //   >
+              //     <Image
+              //       src="/icons/invalid-icon.svg"
+              //       alt="Invalid"
+              //       width={24}
+              //       height={24}
+              //     />
+              //   </button>
+              //   <button
+              //     onClick={() => handleVote("valid")}
+              //     className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+              //   >
+              //     <Image
+              //       src="/icons/valid-icon.svg"
+              //       alt="Valid"
+              //       width={24}
+              //       height={24}
+              //     />
+              //   </button>
+              //   <button
+              //     onClick={toggleVotingIcons}
+              //     className="transition-transform duration-300"
+              //   >
+              //     <Image
+              //       src="/icons/gavel-icon.svg"
+              //       alt="Gavel"
+              //       width={24}
+              //       height={24}
+              //     />
+              //   </button>
+              // </div>
             )}
           </div>
 

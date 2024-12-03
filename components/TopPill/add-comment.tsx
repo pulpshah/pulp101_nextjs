@@ -2,12 +2,22 @@ import Image from "next/image";
 import NoWorkResult from "postcss/lib/no-work-result";
 import { useState } from "react";
 
+type ReplyType = {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
+  replies?: ReplyType[];
+};
+
 type CommentProps = {
   id: number;
   author: string;
   text: string;
   createdAt: string;
-  replies: CommentProps[];
+  replies: ReplyType[];  // Keep this as Comment[] to match Threads
+  userVoteLevel: number | null;  // Remove optional
+  isTopLevel: boolean;  // Remove optional
 };
 
 export default function AddCommentPill({
@@ -24,7 +34,6 @@ export default function AddCommentPill({
   const handleSend = async () => {
     if (commentText.trim()) {
       try {
-        // Send request to backend
         const response = await fetch("/api/addReplyToBlog", {
           method: "POST",
           headers: {
@@ -36,25 +45,26 @@ export default function AddCommentPill({
             email,
           }),
         });
-
-        // Check if response is OK
+  
         if (!response.ok) {
           throw new Error("Failed to add comment");
         }
-
-        // Parse the backend response
+  
         const newComment = await response.json();
-
-        // Use the backend-provided data to update the UI
-        onAddComment({
-          id: newComment.id, // Backend-generated ID
-          author: email, // Current user
-          text: newComment.text, // Backend-confirmed text
-          createdAt: newComment.createdAt || new Date().toISOString(), // Use backend timestamp or fallback
-          replies: [], // Initialize replies as empty
-        });
-
-        // Clear the input field
+  
+        // Create a complete comment object
+        const completeComment: CommentProps = {
+          id: newComment.id,
+          author: email,
+          text: commentText,
+          createdAt: new Date().toISOString(),
+          replies: [],
+          userVoteLevel: 3,
+          isTopLevel: true
+        };
+  
+        // Pass the complete comment object to parent
+        onAddComment(completeComment);
         setCommentText("");
       } catch (error) {
         console.error("Error adding comment:", error);

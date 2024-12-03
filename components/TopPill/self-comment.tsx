@@ -7,6 +7,7 @@
     author: string;
     text: string;
     createdAt: string;
+    email:string;
     isExpanded: boolean;
     initialReplies?: { id: number; author: string; text: string; createdAt: string }[];
   };
@@ -14,6 +15,7 @@
   export default function SelfComment({
     id,
     author,
+    email,
     text,
     createdAt,
     isExpanded,
@@ -28,7 +30,7 @@
 
     const handleReplySubmit = async () => {
       console.log(id);
-      console.log(author);
+      console.log(email);
       console.log(replyText);
       if (!replyText.trim()) return;
     
@@ -42,7 +44,7 @@
           body: JSON.stringify({
             commentId: id, // Use the current comment's ID
             text: replyText,
-            email: author, // Assume the current user's email or username
+            email: email, // Assume the current user's email or username
           }),
         });
     

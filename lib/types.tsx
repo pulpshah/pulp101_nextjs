@@ -14,3 +14,10 @@ export interface Comment {
     createdAt: string;
     replies: CommentProps[];
 }
+export interface ReplyType {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
+  replies?: ReplyType[];
+};

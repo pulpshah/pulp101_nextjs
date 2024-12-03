@@ -10,13 +10,19 @@ import { usePathname } from "next/navigation";
 ///////////
 
 //
-
+type ReplyType = {
+  id: number;
+  author: string;
+  text: string;
+  createdAt: string;
+  replies?: ReplyType[];
+};
 type CommentProps = {
   id: number;
   author: string;
   text: string;
   createdAt: string;
-  replies: Comment[];
+  replies: ReplyType[]; 
   userVoteLevel: number|null;
   isTopLevel: boolean,
 };
@@ -39,12 +45,29 @@ export default function Threads({
   const [userComments, setUserComments] = useState<CommentProps[]>([]);
   const [votes, setVotes] = useState<{ [key: number]: number | null }>({});
   const [fetchedComments, setFetchedComments] = useState<CommentProps[]>([]); 
+  const [userName, setUserName] = useState<string>("");
 
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const response = await fetch("/api/username", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+        const data = await response.json();
+        setUserName(data.name);
+      } catch (error) {
+        console.error("Error fetching username:", error);
+      }
+    };
+    fetchUserName();
+  }, [email]);
 
   const handleAddComment = (newComment: CommentProps) => {
     setUserComments((prevComments) => [
       ...prevComments,
-      { ...newComment, author: email }, // Ensure author matches the logged-in user's email
+      { ...newComment, author: userName }, // Ensure author matches the logged-in user's email
     ]);
   };
 
@@ -73,6 +96,9 @@ export default function Threads({
   const visibleComments = isExpanded ? comments : comments.slice(0, 1);
 
   const allComments = [...comments, ...userComments];
+  const sortedComments = allComments.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
   
 
   return (
@@ -103,35 +129,34 @@ export default function Threads({
           maxHeight: "60vh",
         }}
       >
-        {comments.map((comment) =>
-          comment.author !== email ? (
+        {sortedComments.map((comment) => (
+          comment.author === userName ? (
+            <SelfComment
+              key={comment.id}
+              id={comment.id}
+              text={comment.text}
+              author={comment.author}
+              createdAt={comment.createdAt}
+              isExpanded={isExpanded}
+              initialReplies={comment.replies as ReplyType[]}
+              email = {email}
+            />
+          ) : (
             <Comment
               key={comment.id}
               commentIndex={comment.id}
               commentText={comment.text}
               author={comment.author}
               isExpanded={isExpanded}
-              replies={comment.replies}
+              replies={comment.replies as ReplyType[]}
               isMinimized={!isExpanded}
               onDisableScroll={onDisableScroll}
               email={email}
               commentId={String(comment.id)}
               startingVoteLevel={comment.userVoteLevel}
-              onVoteChange={updateVoteLevel}
+              onVoteChange={(id: number, level: number | null) => updateVoteLevel(String(id), level)}
             />
-          ) : null
-        )}
-
-        {/* Render Self-Comments */}
-        {userComments.map((comment) => (
-          <SelfComment
-            key={comment.id}
-            id={comment.id}
-            text={comment.text}
-            author={comment.author}
-            createdAt={comment.createdAt}
-            isExpanded={isExpanded}
-          />
+          )
         ))}
       </div>
 

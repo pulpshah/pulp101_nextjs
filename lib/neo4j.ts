@@ -143,6 +143,26 @@ export async function addReplyToComment(commentId: string, text: string, email: 
   }
 }
 
+//Getting userName through email
+export async function getUserName(email: string): Promise<string | null> {
+  const session: Session = driver.session();
+
+  const query = `
+    MATCH (u:User {email: $email})
+    RETURN u.name as name
+  `;
+
+  try {
+    const result = await session.run(query, { email });
+    if (result.records.length > 0) {
+      return result.records[0].get('name');
+    }
+    return null;
+  } finally {
+    await session.close();
+  }
+}
+
 // Function to add a top-level comment (reply to the blog)
 export async function addReplyToBlog(slug: string, text: string, email: string) {
   const session: Session = driver.session();
