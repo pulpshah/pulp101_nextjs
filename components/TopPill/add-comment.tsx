@@ -79,18 +79,28 @@ export default function AddCommentPill({
   };
 
   return (
-    <div className="flex flex-row w-full h-auto gap-[10px] px-[10px] py-[10px] items-center justify-center rounded-[10px] bg-[#2E2E2E]/80 backdrop-blur-[20px]">
-      <input
-        className="flex flex-row gap-[10px] px-[10px] py-[10px] rounded-[5px] bg-black w-full h-auto items-start justify-start text-white"
-        placeholder="Add a comment"
-        value={commentText}
-        onChange={(e) => setCommentText(e.target.value)}
-        onKeyPress={handleKeyPress}
-      />
-      <div>
-        <button onClick={handleSend}>
-          <Image src="/icons/send-icon.svg" alt="Send" width={29} height={29} />
-        </button>
+    <div className="flex items-center gap-2 p-1 rounded-lg bg-neutral-800">
+      <button 
+        className="p-2 rounded-md bg-neutral-800 hover:bg-neutral-700 transition-colors"
+        onClick={handleSend}
+      >
+        <Image
+          src="/images/plus-square.png"
+          alt="Add"
+          width={30}
+          height={35}
+          className="opacity-90"
+        />
+      </button>
+      <div className="flex-1 bg-black rounded-md">
+        <input
+          type="text"
+          placeholder="Write a comment.."
+          className="w-full px-3 py-2 bg-transparent text-white placeholder-neutral-500 focus:outline-none text-sm"
+          value={commentText}
+          onChange={(e) => setCommentText(e.target.value)}
+          onKeyPress={handleKeyPress}
+        />
       </div>
     </div>
   );
