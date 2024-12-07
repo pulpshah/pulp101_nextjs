@@ -8,6 +8,7 @@ import ClientApplication from "@/components/ClientApplication";
 import Script from "next/script";
 import { PHProvider } from './providers'
 import dynamic from 'next/dynamic'
+import ToolbarOverlay from "@/components/Overlay/ToolbarOverlay";
 
 export const metadata: Metadata = {
   title: "Pulp101",
@@ -38,6 +39,7 @@ export default function RootLayout({
           className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
           suppressHydrationWarning
         >
+          <ToolbarOverlay>
           <PostHogPageView /> 
           <Script id="reb2b-script" strategy="lazyOnload">
           {`
@@ -82,6 +84,7 @@ export default function RootLayout({
               {children}
             </main>
           </ThemeProvider>
+          </ToolbarOverlay>
         </body>
         </PHProvider>
       </html>
