@@ -188,7 +188,10 @@ export default function ToolbarOverlay({ children }: { children: React.ReactNode
 
     if (isDragging) {
         const closest = findClosestSnappoint({top: e.clientY, left: e.clientX });
-        setToolbarPosition({ top: closest.top, left: closest.left }); // Snap to the closest point
+        setToolbarPosition({ 
+          top: parseInt(closest.top as string), 
+          left: parseInt(closest.left as string) 
+      });
         setRotation(closest.rotation); // Rotate toolbar based on snappoint
         setIsDragging(false);
         dragStartRef.current = null;
@@ -211,9 +214,10 @@ export default function ToolbarOverlay({ children }: { children: React.ReactNode
     setCart((prev) => {
       const updatedCart = prev.filter((item) => item.id !== id);
       const highlight = document.querySelector(`span[data-id='${id}']`);
-      if (highlight) {
-        highlight.style.backgroundColor = ''; // Remove highlight color
+      if (highlight instanceof HTMLElement) {
+          highlight.style.backgroundColor = ''; // Remove highlight color
       }
+
       return updatedCart;
     });
   };
