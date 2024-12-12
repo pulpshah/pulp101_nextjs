@@ -1,4 +1,3 @@
-// ChatWindow.tsx
 'use client';
 
 import { useState } from 'react';
@@ -7,11 +6,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import CommentsTab from './CommentsTab';
 import AIAssistantTab from './AIAssistantTab';
 import FactCheckerTab from './FactCheckerTab';
+import ChatBot from './ChatBot'; // Importing the new ChatBot component
 
 enum Tab {
   COMMENTS = 'COMMENTS',
   AI_ASSISTANT = 'AI_ASSISTANT',
   FACT_CHECKER = 'FACT_CHECKER',
+  CHAT_BOT = 'CHAT_BOT', // New tab for ChatBot
 }
 
 export default function ChatWindow({ slug, email }: { slug: string; email: string | null }) {
@@ -25,6 +26,7 @@ export default function ChatWindow({ slug, email }: { slug: string; email: strin
     <div className="flex flex-col h-full bg-gray-900 text-white p-4 max-w-lg mx-auto rounded-lg shadow-lg">
       <ToastContainer />
 
+      {/* Tab Navigation */}
       <div className="flex justify-center mb-4">
         <button
           onClick={() => handleTabChange(Tab.COMMENTS)}
@@ -44,12 +46,20 @@ export default function ChatWindow({ slug, email }: { slug: string; email: strin
         >
           Fact Checker
         </button>
+        <button
+          onClick={() => handleTabChange(Tab.CHAT_BOT)}
+          className={`px-4 py-2 ${selectedTab === Tab.CHAT_BOT ? 'bg-blue-500' : 'bg-gray-700'} text-white rounded-lg mx-1`}
+        >
+          ChatBot
+        </button>
       </div>
 
+      {/* Tab Content */}
       <div className="flex-1 overflow-y-auto">
         {selectedTab === Tab.COMMENTS && <CommentsTab slug={slug} email={email} />}
         {selectedTab === Tab.AI_ASSISTANT && <AIAssistantTab />}
         {selectedTab === Tab.FACT_CHECKER && <FactCheckerTab />}
+        {selectedTab === Tab.CHAT_BOT && <ChatBot />}
       </div>
     </div>
   );

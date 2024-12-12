@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.72",
+    "@ai-sdk/react": "^1.0.5",
     "@auth/neo4j-adapter": "^2.7.1",
     "@huggingface/inference": "^2.8.1",
     "@huggingface/transformers": "^3.0.1",
@@ -24,6 +25,7 @@
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
+    "@shadcn/ui": "^0.0.4",
     "@tavily/core": "^0.0.2",
     "ai": "^3.4.33",
     "bcrypt": "^5.1.1",
