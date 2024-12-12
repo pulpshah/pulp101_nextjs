@@ -260,269 +260,416 @@ const handleVoteClick = (type: "valid" | "invalid") => {
       console.error("Error submitting reply:", error);
     }
   };
-    
   return (
-    <div className="comment-wrapper relative w-full flex flex-col transition-all duration-300">
-      {isConfidenceModalOpen && (
-        <ConfidenceLevelModal
-          onClose={handleConfidenceModalClose}
-          onSelectLevel={handleConfidenceLevelSelect}
-          isAgreement={hasVoted === "valid"}
-        />
-      )}
-
-      {!isLoading && (
+    <div className="relative mb-4">
+      <div className="flex gap-3">
+        <div className="flex flex-col justify-end pb-2">
+        {replies.length >= 0 && (
         <>
-          <div className="flex flex-row items-start gap-[8px] text-black transition-all duration-300 w-full">
-            {/* Profile Picture */}
-            {hasVoted && !isLoading && !isMinimized && (
-              <div>
-                <Image
-                  src="/profiles/profile_pic_1.png"
-                  alt="Profile"
-                  width={34}
-                  height={34}
-                />
-              </div>
-            )}
-
-            {/* Comment Box */}
-            <div
-              className="flex-grow flex flex-col p-[16px] bg-white border-[0.5px] border-[#7D7B7C] rounded-[10px] transition-all duration-300"
-              style={getShadowStyle()}
-            >
-              <div className="flex justify-between items-start">
-                {isExpanded && hasVoted && (
-                  <div className="flex items-center gap-[4px]">
-                    <p className="font-bold">{author}</p>
-                    <Image
-                      src={`/icons/${hasVoted}-colored-icon.svg`}
-                      alt={hasVoted === "valid" ? "Valid" : "Invalid"}
-                      width={24}
-                      height={24}
-                    />
-                  </div>
-                )}
-                {isExpanded && hasVoted && (
-                  <div className="flex gap-[10px]">
-                    <button onClick={() => setIsEmojiCarouselOpen((prev) => !prev)}>
-                      <Image
-                        src="/icons/reaction-icon.svg"
-                        alt="Reaction"
-                        width={19}
-                        height={19}
-                      />
-                    </button>
-                    <Image
-                      src="/icons/reply-icon.svg"
-                      alt="Reply"
-                      width={19}
-                      height={19}
-                    />
-                  </div>
-                )}
-              </div>
-
-              <p className={`${isMinimized ? "whitespace-nowrap overflow-hidden text-ellipsis" : ""} transition-all duration-300`}>
-                {commentText}
-              </p>
-
-              {isExpanded && hasVoted && (
-                <div className="flex items-center mt-[8px]">
-                  <div className="flex flex-wrap gap-[10px]">
-                    {Object.entries(reactions).map(([emoji, count]) => (
-                      <button
-                        key={emoji}
-                        onClick={() => handleReactionClick(emoji)}
-                        className="flex items-center px-[7px] py-[1px] border-[0.5px] rounded-[5px] shadow-sm"
-                      >
-                        {count} {emoji}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-[8px] ml-auto">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={toggleReplies}
-                        className="font-bold text-blue-500 text-sm hover:underline"
-                      >
-                        {showReplies ? "Hide Replies" : `${replies.length} Replies`}
-                      </button>
-
-                      <button
-                        onClick={() => setIsReplying((prev) => !prev)}
-                        className="font-bold text-blue-500 text-sm hover:underline"
-                      >
-                        {isReplying ? "Cancel" : "Reply"}
-                      </button>
-                    </div>
-
-                    {isReplying && (
-                      <div className="mt-4 w-full">
-                        <div className="flex flex-col md:flex-row items-center w-full gap-2">
-                        <input
-                          type="text"
-                          value={replyText}
-                          onChange={(e) => setReplyText(e.target.value)}
-                          placeholder="Write your reply..."
-                          className="flex-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-gray-800"
-                        />
-                          <div className="flex gap-2 w-full md:w-auto justify-end">
-                          <button
-                            onClick={handleReplySubmit}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
-                          >
-                            Submit
-                          </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-  
-                    <div className="flex -space-x-[7px]">
-                      <Image
-                        src="/profiles/profile_pic_1.png"
-                        alt="Profile"
-                        width={24}
-                        height={24}
-                        className="rounded-full border-[2px] border-white"
-                      />
-                      <Image
-                        src="/profiles/profile_pic_2.png"
-                        alt="Profile"
-                        width={24}
-                        height={24}
-                        className="rounded-full border-[2px] border-white"
-                      />
-                      <Image
-                        src="/profiles/profile_pic_3.png"
-                        alt="Profile"
-                        width={24}
-                        height={24}
-                        className="rounded-full border-[2px] border-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Voting Section */}
-            {!hasVoted && isExpanded && (
-              <div className={`min-w-[40px] flex flex-col items-center justify-center transition-all duration-300 ${isVotingOpen ? "gap-[3px]" : "gap-0"}`}>
-              <button
-                onClick={() => handleVoteClick("invalid")}
-                className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
-              >
-                <Image
-                  src="/icons/invalid-icon.svg"
-                  alt="Invalid"
-                  width={24}
-                  height={24}
-                />
-              </button>
-              <button
-                onClick={() => handleVoteClick("valid")}
-                className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
-              >
-                <Image
-                  src="/icons/valid-icon.svg"
-                  alt="Valid"
-                  width={24}
-                  height={24}
-                />
-              </button>
-              <button
-                onClick={toggleVotingIcons}
-                className="transition-transform duration-300"
-              >
-                <Image
-                  src="/icons/gavel-icon.svg"
-                  alt="Gavel"
-                  width={24}
-                  height={24}
-                />
-              </button>
-              {/* Tooltip for login */}
-              {showTooltip && !email && (
-                <div className="ml-2 bg-black text-white text-xs rounded-md p-2 shadow-md z-10">
-                  <button
-                    onClick={() => (window.location.href = '/auth/login')}
-                    className="bg-blue-500 text-white text-xs py-1 px-2 rounded shadow hover:bg-blue-600"
-                  >
-                    Login to vote
-                  </button>
-                </div>
-              )}
-            </div>
-              // <div className={`min-w-[40px] flex flex-col items-center justify-center transition-all duration-300 ${isVotingOpen ? "gap-[3px]" : "gap-0"}`}>
-              //   <button
-              //     onClick={() => handleVote("invalid")}
-              //     className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
-              //   >
-              //     <Image
-              //       src="/icons/invalid-icon.svg"
-              //       alt="Invalid"
-              //       width={24}
-              //       height={24}
-              //     />
-              //   </button>
-              //   <button
-              //     onClick={() => handleVote("valid")}
-              //     className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
-              //   >
-              //     <Image
-              //       src="/icons/valid-icon.svg"
-              //       alt="Valid"
-              //       width={24}
-              //       height={24}
-              //     />
-              //   </button>
-              //   <button
-              //     onClick={toggleVotingIcons}
-              //     className="transition-transform duration-300"
-              //   >
-              //     <Image
-              //       src="/icons/gavel-icon.svg"
-              //       alt="Gavel"
-              //       width={24}
-              //       height={24}
-              //     />
-              //   </button>
-              // </div>
-            )}
-          </div>
-
-          {/* Emoji Carousel */}
-          {isExpanded && isEmojiCarouselOpen && (
-            <div className="flex justify-end mt-[5px]">
-              <EmojiCarousel emojiList={emojiList} onReaction={handleReaction} />
-            </div>
-          )}
-
-          {/* Replies Section - Now directly below the comment */}
-          {showReplies && replies.length > 0 && (
-            <div className="mt-4 ml-[42px] space-y-4">
-              {replies.map((reply) => (
-                <div key={reply.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Image
-                    src="/profiles/profile_pic_1.png"
-                    alt="Profile"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm font-bold text-gray-900">{reply.author}</p>
-                    <p className="text-sm text-gray-600 mt-1">{reply.text}</p>
-                    <span className="text-xs text-gray-400 mt-2 block">{reply.createdAt}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <Image
+            src="/profiles/profile_pic_1.png"
+            alt="Profile"
+            width={25}
+            height={25}
+            className="rounded-full"
+          />
+          {replies.length > 1 && (
+            <Image
+              src="/profiles/profile_pic_2.png"
+              alt="Profile"
+              width={25}
+              height={25}
+              className="rounded-full -mt-4 ml-4"  // Added negative margin-top and margin-left for overlap
+            />
           )}
         </>
+  )}
+        </div>
+
+        <div className="flex-1 flex flex-col gap-4 bg-white rounded-xl p-4 border border-gray-300 shadow-md">
+          <div className="flex justify-between items-start">
+            <div>
+              <span className="text-black font-medium">{author}</span>
+              <p className="text-black text-[15px] mt-3">{commentText}</p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button onClick={() => setIsEmojiCarouselOpen(!isEmojiCarouselOpen)}>
+                <Image
+                  src="/icons/reaction-icon.svg"
+                  alt="Reaction"
+                  width={20}
+                  height={20}
+                  className="opacity-80"
+                />
+              </button>
+              <button onClick={() => setIsReplying(!isReplying)}>
+                <Image
+                  src="/icons/reply-icon.svg"
+                  alt="Reply"
+                  width={20}
+                  height={20}
+                  className="opacity-80"
+                />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex justify-end items-center">
+            <button
+              onClick={() => setShowReplies(!showReplies)}
+              className="text-black xt-sm hover:text-black text-sm"
+            >
+              {replies.length} {replies.length === 1 ? "reply" : "replies"}
+            </button>
+          </div>
+
+          {isEmojiCarouselOpen && (
+            <div className="mt-2">
+              <div className="flex gap-2">
+                {emojiList.map((emoji) => (
+                  <button
+                    key={emoji}
+                    onClick={() => handleReaction(emoji)}
+                    className="bg-black-700 rounded-full p-2 text-black"
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Updated Reply UI */}
+      {isReplying && (
+        <div className="mt-2 ml-3 mr-8 max-w-3xl">
+          <div className="bg-white rounded-xl p-3 border border-gray-200">
+            <input
+              type="text"
+              value={replyText}
+              onChange={(e) => setReplyText(e.target.value)}
+              placeholder="Write your reply..."
+              className="w-full bg-transparent text-gray-700 border-none outline-none text-sm placeholder-gray-400"
+            />
+            <div className="flex justify-end mt-2">
+              <button
+                onClick={handleReplySubmit}
+                className="px-4 py-1 bg-blue-500 text-white text-sm rounded-full hover:bg-blue-600 transition-colors"
+              >
+                Reply
+              </button>
+            </div>
+          </div>
+        </div>
       )}
+
+      {/* Replies section */}
+      {/* {showReplies && replies.length > 0 && (
+        <div className="mt-4 ml-4 space-y-2 max-w-2xl pr-12">
+          {replies.map((reply) => (
+            <div
+              key={reply.id}
+              className="bg-gray-100 rounded-xl px-4 py-3 border border-gray-200 shadow"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-black font-medium">{reply.author}</span>
+              </div>
+              <p className="text-black text-sm">{reply.text}</p>
+            </div>
+          ))}
+        </div>
+      )} */}
+      {showReplies && replies.length > 0 && (
+  <div className="mt-4 ml-4 space-y-2 max-w-2xl pr-12">
+    {replies.map((reply) => (
+      <div key={reply.id} className="flex gap-3">
+        <div className="flex-1 bg-gray-100 rounded-xl px-4 py-3 border border-gray-200 shadow">
+          <div className="mb-1">
+            <span className="text-black font-medium">{reply.author}</span>
+          </div>
+          <p className="text-black text-sm">{reply.text}</p>
+        </div>
+        <div className="flex flex-col justify-end pb-2">
+          <Image
+            src="/profiles/profile_pic_1.png"
+            alt="Profile"
+            width={25}
+            height={25}
+            className="rounded-full"
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+)}
     </div>
   );
+  
+    
+  // return (
+  //   <div className="comment-wrapper relative w-full flex flex-col transition-all duration-300">
+  //     {isConfidenceModalOpen && (
+  //       <ConfidenceLevelModal
+  //         onClose={handleConfidenceModalClose}
+  //         onSelectLevel={handleConfidenceLevelSelect}
+  //         isAgreement={hasVoted === "valid"}
+  //       />
+  //     )}
+
+  //     {!isLoading && (
+  //       <>
+  //         <div className="flex flex-row items-start gap-[8px] text-black transition-all duration-300 w-full">
+  //           {/* Profile Picture */}
+  //           {hasVoted && !isLoading && !isMinimized && (
+  //             <div>
+  //               <Image
+  //                 src="/profiles/profile_pic_1.png"
+  //                 alt="Profile"
+  //                 width={34}
+  //                 height={34}
+  //               />
+  //             </div>
+  //           )}
+
+  //           {/* Comment Box */}
+  //           <div
+  //             className="flex-grow flex flex-col p-[16px] bg-white border-[0.5px] border-[#7D7B7C] rounded-[10px] transition-all duration-300"
+  //             style={getShadowStyle()}
+  //           >
+  //             <div className="flex justify-between items-start">
+  //               {isExpanded && hasVoted && (
+  //                 <div className="flex items-center gap-[4px]">
+  //                   <p className="font-bold">{author}</p>
+  //                   <Image
+  //                     src={`/icons/${hasVoted}-colored-icon.svg`}
+  //                     alt={hasVoted === "valid" ? "Valid" : "Invalid"}
+  //                     width={24}
+  //                     height={24}
+  //                   />
+  //                 </div>
+  //               )}
+  //               {isExpanded && hasVoted && (
+  //                 <div className="flex gap-[10px]">
+  //                   <button onClick={() => setIsEmojiCarouselOpen((prev) => !prev)}>
+  //                     <Image
+  //                       src="/icons/reaction-icon.svg"
+  //                       alt="Reaction"
+  //                       width={19}
+  //                       height={19}
+  //                     />
+  //                   </button>
+  //                   <Image
+  //                     src="/icons/reply-icon.svg"
+  //                     alt="Reply"
+  //                     width={19}
+  //                     height={19}
+  //                   />
+  //                 </div>
+  //               )}
+  //             </div>
+
+  //             <p className={`${isMinimized ? "whitespace-nowrap overflow-hidden text-ellipsis" : ""} transition-all duration-300`}>
+  //               {commentText}
+  //             </p>
+
+  //             {isExpanded && hasVoted && (
+  //               <div className="flex items-center mt-[8px]">
+  //                 <div className="flex flex-wrap gap-[10px]">
+  //                   {Object.entries(reactions).map(([emoji, count]) => (
+  //                     <button
+  //                       key={emoji}
+  //                       onClick={() => handleReactionClick(emoji)}
+  //                       className="flex items-center px-[7px] py-[1px] border-[0.5px] rounded-[5px] shadow-sm"
+  //                     >
+  //                       {count} {emoji}
+  //                     </button>
+  //                   ))}
+  //                 </div>
+  //                 <div className="flex items-center gap-[8px] ml-auto">
+  //                   <div className="flex items-center gap-2">
+  //                     <button
+  //                       onClick={toggleReplies}
+  //                       className="font-bold text-blue-500 text-sm hover:underline"
+  //                     >
+  //                       {showReplies ? "Hide Replies" : `${replies.length} Replies`}
+  //                     </button>
+
+  //                     <button
+  //                       onClick={() => setIsReplying((prev) => !prev)}
+  //                       className="font-bold text-blue-500 text-sm hover:underline"
+  //                     >
+  //                       {isReplying ? "Cancel" : "Reply"}
+  //                     </button>
+  //                   </div>
+
+  //                   {isReplying && (
+  //                     <div className="mt-4 w-full">
+  //                       <div className="flex flex-col md:flex-row items-center w-full gap-2">
+  //                       <input
+  //                         type="text"
+  //                         value={replyText}
+  //                         onChange={(e) => setReplyText(e.target.value)}
+  //                         placeholder="Write your reply..."
+  //                         className="flex-1 w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white text-gray-800"
+  //                       />
+  //                         <div className="flex gap-2 w-full md:w-auto justify-end">
+  //                         <button
+  //                           onClick={handleReplySubmit}
+  //                           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+  //                         >
+  //                           Submit
+  //                         </button>
+  //                         </div>
+  //                       </div>
+  //                     </div>
+  //                   )}
+  
+  //                   <div className="flex -space-x-[7px]">
+  //                     <Image
+  //                       src="/profiles/profile_pic_1.png"
+  //                       alt="Profile"
+  //                       width={24}
+  //                       height={24}
+  //                       className="rounded-full border-[2px] border-white"
+  //                     />
+  //                     <Image
+  //                       src="/profiles/profile_pic_2.png"
+  //                       alt="Profile"
+  //                       width={24}
+  //                       height={24}
+  //                       className="rounded-full border-[2px] border-white"
+  //                     />
+  //                     <Image
+  //                       src="/profiles/profile_pic_3.png"
+  //                       alt="Profile"
+  //                       width={24}
+  //                       height={24}
+  //                       className="rounded-full border-[2px] border-white"
+  //                     />
+  //                   </div>
+  //                 </div>
+  //               </div>
+  //             )}
+  //           </div>
+
+  //           {/* Voting Section */}
+  //           {!hasVoted && isExpanded && (
+  //             <div className={`min-w-[40px] flex flex-col items-center justify-center transition-all duration-300 ${isVotingOpen ? "gap-[3px]" : "gap-0"}`}>
+  //             <button
+  //               onClick={() => handleVoteClick("invalid")}
+  //               className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+  //             >
+  //               <Image
+  //                 src="/icons/invalid-icon.svg"
+  //                 alt="Invalid"
+  //                 width={24}
+  //                 height={24}
+  //               />
+  //             </button>
+  //             <button
+  //               onClick={() => handleVoteClick("valid")}
+  //               className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+  //             >
+  //               <Image
+  //                 src="/icons/valid-icon.svg"
+  //                 alt="Valid"
+  //                 width={24}
+  //                 height={24}
+  //               />
+  //             </button>
+  //             <button
+  //               onClick={toggleVotingIcons}
+  //               className="transition-transform duration-300"
+  //             >
+  //               <Image
+  //                 src="/icons/gavel-icon.svg"
+  //                 alt="Gavel"
+  //                 width={24}
+  //                 height={24}
+  //               />
+  //             </button>
+  //             {/* Tooltip for login */}
+  //             {showTooltip && !email && (
+  //               <div className="ml-2 bg-black text-white text-xs rounded-md p-2 shadow-md z-10">
+  //                 <button
+  //                   onClick={() => (window.location.href = '/auth/login')}
+  //                   className="bg-blue-500 text-white text-xs py-1 px-2 rounded shadow hover:bg-blue-600"
+  //                 >
+  //                   Login to vote
+  //                 </button>
+  //               </div>
+  //             )}
+  //           </div>
+  //             // <div className={`min-w-[40px] flex flex-col items-center justify-center transition-all duration-300 ${isVotingOpen ? "gap-[3px]" : "gap-0"}`}>
+  //             //   <button
+  //             //     onClick={() => handleVote("invalid")}
+  //             //     className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+  //             //   >
+  //             //     <Image
+  //             //       src="/icons/invalid-icon.svg"
+  //             //       alt="Invalid"
+  //             //       width={24}
+  //             //       height={24}
+  //             //     />
+  //             //   </button>
+  //             //   <button
+  //             //     onClick={() => handleVote("valid")}
+  //             //     className={`transition-opacity duration-300 ${isVotingOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+  //             //   >
+  //             //     <Image
+  //             //       src="/icons/valid-icon.svg"
+  //             //       alt="Valid"
+  //             //       width={24}
+  //             //       height={24}
+  //             //     />
+  //             //   </button>
+  //             //   <button
+  //             //     onClick={toggleVotingIcons}
+  //             //     className="transition-transform duration-300"
+  //             //   >
+  //             //     <Image
+  //             //       src="/icons/gavel-icon.svg"
+  //             //       alt="Gavel"
+  //             //       width={24}
+  //             //       height={24}
+  //             //     />
+  //             //   </button>
+  //             // </div>
+  //           )}
+  //         </div>
+
+  //         {/* Emoji Carousel */}
+  //         {isExpanded && isEmojiCarouselOpen && (
+  //           <div className="flex justify-end mt-[5px]">
+  //             <EmojiCarousel emojiList={emojiList} onReaction={handleReaction} />
+  //           </div>
+  //         )}
+
+  //         {/* Replies Section - Now directly below the comment */}
+  //         {showReplies && replies.length > 0 && (
+  //           <div className="mt-4 ml-[42px] space-y-4">
+  //             {replies.map((reply) => (
+  //               <div key={reply.id} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+  //                 <Image
+  //                   src="/profiles/profile_pic_1.png"
+  //                   alt="Profile"
+  //                   width={32}
+  //                   height={32}
+  //                   className="rounded-full"
+  //                 />
+  //                 <div className="flex-1">
+  //                   <p className="text-sm font-bold text-gray-900">{reply.author}</p>
+  //                   <p className="text-sm text-gray-600 mt-1">{reply.text}</p>
+  //                   <span className="text-xs text-gray-400 mt-2 block">{reply.createdAt}</span>
+  //                 </div>
+  //               </div>
+  //             ))}
+  //           </div>
+  //         )}
+  //       </>
+  //     )}
+  //   </div>
+  // );
 }

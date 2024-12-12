@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import TopPill from "./TopPill/top-pill";
 import Threads from "./TopPill/Threads";
 import { usePathname } from "next/navigation";
+import CommentsButton from "./TopPill/CommentsButton";
+import ArrowButton from "./TopPill/ArrowButton";
 // import { Comment } from "../lib/types";
 
 interface CommentSectionProperties {
@@ -100,6 +102,10 @@ const convertComments = (array: any[]): Comment[] => {
     setExpandComments((prevState) => !prevState);
   };
 
+  const handleArrowClick = () => {
+    setShowComments((prevState) => !prevState);
+  };
+
   const handleDisableScroll = (disable: boolean) => setDisableScroll(disable);
 
   useEffect(() => {
@@ -136,13 +142,21 @@ const convertComments = (array: any[]): Comment[] => {
       <div className="fixed top-15 left-1/2 transform -translate-x-1/2 z-[50]">
         <TopPill onCommentsClick={handleCommentsClick} commentsOpen={showComments} />
       </div>
+      <div className="fixed top-1/2 right-4 z-[50]">
+        <CommentsButton onClick={handleCommentsClick} isOpen={showComments} />
+      </div>
+      {showComments && <ArrowButton isOpen={showComments} onClick={handleArrowClick} />}
 
       {showComments && (
+        // <div
+        //   className={`fixed bottom-0 left-0 w-full transition-transform z-[100] bg-[#FFFFFF]/80 backdrop-blur-[60px] shadow-threads ${
+        //     expandComments ? "max-h-[80vh]" : "max-h-[20vh]"
+        //   }`}
+        // >
         <div
-          className={`fixed bottom-0 left-0 w-full transition-transform z-[100] bg-[#FFFFFF]/80 backdrop-blur-[60px] shadow-threads ${
-            expandComments ? "max-h-[80vh]" : "max-h-[20vh]"
-          }`}
-        >
+        className="fixed top-0 right-2 h-full w-[27%] bg-white shadow-lg z-[100] transition-transform transform translate-x-0 overflow-y-auto border-4 border-gray-300 rounded-lg"
+
+        > 
             <Threads
               comments={comments}
               onDockLineClick={handleDockLineClick}
