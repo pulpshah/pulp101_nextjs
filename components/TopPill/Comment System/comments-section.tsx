@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TopPill from "./TopPill/top-pill";
-import Threads from "./TopPill/Threads";
+import TopPill from "../top-pill";
+import Threads from "./Threads";
 import { usePathname } from "next/navigation";
-import CommentsButton from "./TopPill/CommentsButton";
-import ArrowButton from "./TopPill/ArrowButton";
+import CommentsButton from "./CommentsButton";
+import ArrowButton from "../ArrowButton";
 // import { Comment } from "../lib/types";
 
 interface CommentSectionProperties {
   email: string;
+  onClose: () => void;
 }
 type Comment= {
   id: number;
@@ -31,8 +32,8 @@ type CommentProps = {
   isTopLevel: boolean,
 };
 
-export default function CommentsSection({email }: CommentSectionProperties) {
-  const [showComments, setShowComments] = useState(false);
+export default function CommentsSection({email,onClose }: CommentSectionProperties) {
+  const [showComments, setShowComments] = useState(true);
   const [expandComments, setExpandComments] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [comments, setComments] = useState<CommentProps[]>([]);
@@ -104,6 +105,7 @@ const convertComments = (array: any[]): Comment[] => {
 
   const handleArrowClick = () => {
     setShowComments((prevState) => !prevState);
+    onClose()
   };
 
   const handleDisableScroll = (disable: boolean) => setDisableScroll(disable);
@@ -139,12 +141,6 @@ const convertComments = (array: any[]): Comment[] => {
 
   return (
     <>
-      <div className="fixed top-15 left-1/2 transform -translate-x-1/2 z-[50]">
-        <TopPill onCommentsClick={handleCommentsClick} commentsOpen={showComments} />
-      </div>
-      <div className="fixed top-1/2 right-4 z-[50]">
-        <CommentsButton onClick={handleCommentsClick} isOpen={showComments} />
-      </div>
       {showComments && <ArrowButton isOpen={showComments} onClick={handleArrowClick} />}
 
       {showComments && (

@@ -8,7 +8,7 @@ import ClientApplication from "@/components/ClientApplication";
 import Script from "next/script";
 import { PHProvider } from './providers'
 import dynamic from 'next/dynamic'
-import ToolbarOverlay from "@/components/Overlay/ToolbarOverlay";
+import ToolbarOverlay from "@/components/Overlay/ToolbarOverlayV2";
 
 export const metadata: Metadata = {
   title: "Pulp101",
