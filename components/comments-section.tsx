@@ -155,7 +155,6 @@ const convertComments = (array: any[]): Comment[] => {
         // >
         <div
         className="fixed top-0 right-2 h-full w-[27%] bg-white shadow-lg z-[100] transition-transform transform translate-x-0 overflow-y-auto border-4 border-gray-300 rounded-lg"
-
         > 
             <Threads
               comments={comments}

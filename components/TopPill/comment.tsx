@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import EmojiCarousel from "./emoji-carousel";
 import CommentLoadingScreen from "./comment-loading";
 import ConfidenceLevelModal from "./ConfidenceLevelModal";
 import { CommentProps } from "@/lib/types";
 import { comment } from "postcss";
-
+import { Check } from "lucide-react";
+import {X} from "lucide-react";
 
 /////////////////////
 type ReplyType = {
@@ -36,7 +37,7 @@ export default function Comment({
   isMinimized: boolean;
   replies: ReplyType[];
   commentId: String;
-  email:string;
+  email: string;
   onDisableScroll: (disable: boolean) => void;
   startingVoteLevel: number | null;
   onVoteChange: (commentId: number, newVoteLevel: number | null) => void;
@@ -56,20 +57,18 @@ export default function Comment({
   const [reactions, setReactions] = useState<{ [key: string]: number }>({});
   const [showReplies, setShowReplies] = useState<boolean>(false);
   const [isEmojiCarouselOpen, setIsEmojiCarouselOpen] = useState<boolean>(false);
-  const [replyText, setReplyText] = useState<string>(""); 
+  const [replyText, setReplyText] = useState<string>("");
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
-const handleVoteClick = (type: "valid" | "invalid") => {
-  if (!email) {
-    setShowTooltip(true);
-    setTimeout(() => setShowTooltip(false), 3000); // Hide after 3 seconds
-    return;
-  }
-  handleVote(type);
-};
-
-  console.log(author);
+  const handleVoteClick = (type: "valid" | "invalid") => {
+    if (!email) {
+      setShowTooltip(true);
+      setTimeout(() => setShowTooltip(false), 3000); // Hide after 3 seconds
+      return;
+    }
+    handleVote(type);
+  };
 
   useEffect(() => {
     const levels = [
@@ -82,22 +81,21 @@ const handleVoteClick = (type: "valid" | "invalid") => {
       "#A1FF83CC", // Valid Level 3
       "#83FF5ACC", // Valid Level 4
     ];
-  
+
     if (startingVoteLevel !== null) {
       setVoteLevel(startingVoteLevel);
-  
+
       // Determine the shadow color based on vote level
       const levelIndex =
         startingVoteLevel < 0
           ? Math.min(Math.abs(startingVoteLevel) - 1, 3) // Invalid levels
           : Math.min(startingVoteLevel - 1 + 4, 7); // Valid levels (offset for index)
-  
+
       setShadowColor(levels[levelIndex]);
-  
+
       setHasVoted(startingVoteLevel !== null ? (startingVoteLevel > 0 ? "valid" : "invalid") : null);
     }
   }, [startingVoteLevel]);
-  
 
   const toggleReplies = () => {
     setShowReplies((prev) => !prev);
@@ -109,12 +107,22 @@ const handleVoteClick = (type: "valid" | "invalid") => {
     if (!hasVoted) setIsVotingOpen((prev) => !prev);
   };
 
-  const handleVote = (type: "valid" | "invalid") => 
-  {
-    setHasVoted(type);
-    setIsVotingOpen(false);
-    setIsConfidenceModalOpen(true);
-    onDisableScroll(true);
+  const handleVote = async (type: "valid" | "invalid") => {
+    const level = type === "valid" ? 1 : -1;
+    try {
+      await fetch("/api/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, commentId, level })
+      });
+
+      setHasVoted(type);
+      setVoteLevel(level);
+      onVoteChange(commentIndex, level);
+      setIsVotingOpen(false);
+    } catch (error) {
+      console.error("Error submitting vote:", error);
+    }
   };
   // const handleVote = async (level: number) => {
   //   try {
@@ -160,42 +168,46 @@ const handleVoteClick = (type: "valid" | "invalid") => {
     });
   };
 
-  const handleConfidenceLevelSelect = async(level: number, color: string) =>
-    {
-    setIsConfidenceModalOpen(false);
-    onDisableScroll(false);
-    setVoteLevel(level);
-    setShadowColor(color);
-    setIsLoading(true);
+  const handleConfidenceLevelSelect = async (level: number, color: string) => {
     try {
-    await fetch("/api/vote", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, commentId: commentId, level }),
-    });
-    setVoteLevel(level);
-    onVoteChange(commentIndex, level);
-    setIsConfidenceModalOpen(false);
-    onDisableScroll(false);
-  } catch (error) {
-    console.error("Error submitting vote:", error);
-  }
+      await fetch("/api/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, commentId, level })
+      });
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+      setVoteLevel(level);
+      onVoteChange(commentIndex, level); // This updates parent's state
+      setIsConfidenceModalOpen(false);
+      onDisableScroll(false);
+    } catch (error) {
+      console.error("Error submitting vote:", error);
+    }
   };
 
+  // const getShadowStyle = () => {
+  //   if (voteLevel === null) {
+  //     return {};
+  //   }
+  //   const hex = shadowColor.replace("#", "");
+  //   const r = parseInt(hex.substring(0, 2), 16);
+  //   const g = parseInt(hex.substring(2, 4), 16);
+  //   const b = parseInt(hex.substring(4, 6), 16);
+  //   return {
+  //     boxShadow: `0px 0px 16px 0px rgba(${r}, ${g}, ${b}, 0.5)`,
+  //   };
+  // };
   const getShadowStyle = () => {
-    if (voteLevel === null) {
-      return {};
-    }
+    if (!hasVoted) return {};
+
+    const shadowColor = hasVoted === "valid" ? "#A1FF83CC" : "#FF5A5ACC";
     const hex = shadowColor.replace("#", "");
     const r = parseInt(hex.substring(0, 2), 16);
     const g = parseInt(hex.substring(2, 4), 16);
     const b = parseInt(hex.substring(4, 6), 16);
+
     return {
-      boxShadow: `0px 0px 16px 0px rgba(${r}, ${g}, ${b}, 0.5)`,
+      boxShadow: `0px 0px 16px 0px rgba(${r}, ${g}, ${b}, 0.5)`
     };
   };
 
@@ -206,19 +218,19 @@ const handleVoteClick = (type: "valid" | "invalid") => {
     onDisableScroll(false);
   };
   const handleReplySubmit = async () => {
-     console.log(commentIndex);
+    console.log(commentIndex);
     if (!replyText.trim()) {
       console.log("Empty reply text");
       return;
     }
-  
+
     try {
       console.log("Submitting reply:", {
         commentId: commentIndex,
         text: replyText,
         email: email
       });
-  
+
       const response = await fetch("/api/addReplyToComment", {
         method: "POST",
         headers: {
@@ -230,14 +242,14 @@ const handleVoteClick = (type: "valid" | "invalid") => {
           email: email,
         }),
       });
-  
+
       const responseData = await response.json();
       console.log("API Response:", responseData);
-  
+
       if (!response.ok) {
         throw new Error(responseData.error || "Failed to submit reply");
       }
-  
+
       // Update the local state with the new reply
       const newReply = {
         id: responseData.id || Date.now(), // Fallback to timestamp if no ID returned
@@ -246,103 +258,161 @@ const handleVoteClick = (type: "valid" | "invalid") => {
         createdAt: new Date().toISOString(),
         replies: [],
       };
-  
+
       // Update replies array immutably
       const updatedReplies = [...replies, newReply];
       replies.length = 0;  // Clear the array
       replies.push(...updatedReplies);  // Add new items
-  
+
       setReplyText("");
       setIsReplying(false);
       setShowReplies(true);  // Show replies after adding new one
-  
+
     } catch (error) {
       console.error("Error submitting reply:", error);
     }
   };
   return (
-    <div className="relative mb-4">
-      <div className="flex gap-3">
+    <div className="relative mb-4 w-full">
+  <div className="flex gap-3 w-full">
         <div className="flex flex-col justify-end pb-2">
-        {replies.length >= 0 && (
-        <>
-          <Image
-            src="/profiles/profile_pic_1.png"
-            alt="Profile"
-            width={25}
-            height={25}
-            className="rounded-full"
-          />
-          {replies.length > 1 && (
-            <Image
-              src="/profiles/profile_pic_2.png"
-              alt="Profile"
-              width={25}
-              height={25}
-              className="rounded-full -mt-4 ml-4"  // Added negative margin-top and margin-left for overlap
-            />
+          {replies.length >= 0 && (
+            <>
+              <Image
+                src="/profiles/profile_pic_1.png"
+                alt="Profile"
+                width={25}
+                height={25}
+                className="rounded-full"
+              />
+              {replies.length > 1 && (
+                <Image
+                  src="/profiles/profile_pic_2.png"
+                  alt="Profile"
+                  width={25}
+                  height={25}
+                  className="rounded-full -mt-4 ml-4"
+                />
+              )}
+            </>
           )}
-        </>
-  )}
         </div>
-
-        <div className="flex-1 flex flex-col gap-4 bg-white rounded-xl p-4 border border-gray-300 shadow-md">
-          <div className="flex justify-between items-start">
-            <div>
-              <span className="text-black font-medium">{author}</span>
-              <p className="text-black text-[15px] mt-3">{commentText}</p>
+  
+        {hasVoted ? (
+          <div
+            className="flex-1 flex flex-col gap-4 bg-white rounded-xl p-4 border border-gray-300 shadow-md relative"
+            style={{
+              background: hasVoted === "valid"
+                ? "linear-gradient(to right, white 70%, #D4FCD6)"
+                : "linear-gradient(to right, white 70%, #FCD4D4)",
+            }}
+          >
+            <div className="flex justify-between items-start">
+              {/* <div>
+                <span className="text-black font-medium">{author}</span>
+                <p className="text-black text-base mt-3">{commentText}</p>
+              </div> */}
+              <div>
+              <div className="flex items-center gap-2">
+                <span className="text-black font-medium">{author}</span>
+                {hasVoted && (
+                  <div className={`flex items-center justify-center w-5 h-5 rounded-full ${hasVoted === "valid" ? "bg-green-100" : "bg-red-100"}`}>
+                    {hasVoted === "valid" ? (
+                      <Check className="w-3 h-3 text-green-600" />
+                    ) : (
+                      <X className="w-3 h-3 text-red-600" />
+                    )}
+                  </div>
+                )}
+              </div>
+              <p className="text-black text-base mt-3">{commentText}</p>
             </div>
-
-            <div className="flex items-center gap-2">
-              <button onClick={() => setIsEmojiCarouselOpen(!isEmojiCarouselOpen)}>
-                <Image
-                  src="/icons/reaction-icon.svg"
-                  alt="Reaction"
-                  width={20}
-                  height={20}
-                  className="opacity-80"
-                />
-              </button>
-              <button onClick={() => setIsReplying(!isReplying)}>
-                <Image
-                  src="/icons/reply-icon.svg"
-                  alt="Reply"
-                  width={20}
-                  height={20}
-                  className="opacity-80"
-                />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-end items-center">
-            <button
-              onClick={() => setShowReplies(!showReplies)}
-              className="text-black xt-sm hover:text-black text-sm"
-            >
-              {replies.length} {replies.length === 1 ? "reply" : "replies"}
-            </button>
-          </div>
-
-          {isEmojiCarouselOpen && (
-            <div className="mt-2">
-              <div className="flex gap-2">
-                {emojiList.map((emoji) => (
-                  <button
-                    key={emoji}
-                    onClick={() => handleReaction(emoji)}
-                    className="bg-black-700 rounded-full p-2 text-black"
-                  >
-                    {emoji}
-                  </button>
-                ))}
+  
+              <div className="flex items-center gap-2">
+                {hasVoted === "valid" && (
+                  <div className="absolute" style={{ top: "60px", right: "20px" }}>
+                    <Image src="/images/Tick.png" alt="Valid" width={24} height={24} className="bg-gray-700 rounded" />
+                  </div>
+                )}
+                {hasVoted === "invalid" && (
+                  <div className="absolute" style={{ top: "50px", right: "20px" }}>
+                    <Image src="/images/x-circle.png" alt="Invalid" width={24} height={24} className="bg-gray-700 rounded" />
+                  </div>
+                )}
+              </div>
+  
+              <div className="flex items-center gap-2">
+                <button onClick={() => setIsEmojiCarouselOpen(!isEmojiCarouselOpen)}>
+                  <Image src="/icons/reaction-icon.svg" alt="Reaction" width={20} height={20} className="opacity-80" />
+                </button>
+                <button onClick={() => setIsReplying(!isReplying)}>
+                  <Image src="/icons/reply-icon.svg" alt="Reply" width={20} height={20} className="opacity-80" />
+                </button>
               </div>
             </div>
-          )}
-        </div>
+  
+            <div className="flex justify-end items-center">
+              <button onClick={() => setShowReplies(!showReplies)} className="text-black text-sm hover:text-black">
+                {replies.length} {replies.length === 1 ? "reply" : "replies"}
+              </button>
+            </div>
+  
+            {isEmojiCarouselOpen && (
+              <div className="mt-2">
+                <div className="flex gap-2">
+                  {emojiList.map((emoji) => (
+                    <button key={emoji} onClick={() => handleReaction(emoji)} className="bg-black-700 rounded-full p-2 text-black">
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex-1 w-full">
+            <div className="flex-1 w-full flex bg-white rounded-xl p-4 border border-gray-300 shadow-md relative">
+              <div className="flex justify-between items-center w-full">
+                <div className="flex-1 mr-4">
+                  <p className="text-black text-base">{commentText}</p>
+                </div>
+                <div className="flex flex-col items-center justify-center">
+                  {!isVotingOpen ? (
+                    <button onClick={() => setIsVotingOpen(!isVotingOpen)} className="bg-gray-500 rounded-full p-1 transition-transform duration-300">
+                      <Image src="/images/lock.png" alt="Locked" width={24} height={24} className="bg-gray-700 rounded" />
+                    </button>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center gap-4 transition-all duration-300">
+                      <button onClick={() => handleVoteClick("valid")} className="bg-gray-600 rounded-full p-2 transition-transform duration-300">
+                        <Image src="/images/Tick.png" alt="Valid" width={24} height={24} className="bg-gray-700 rounded" />
+                      </button>
+                      <button onClick={() => { setHasVoted(null); setIsVotingOpen(false); }} className="bg-gray-600 rounded-full p-2 transition-transform duration-300">
+                        <Image src="/images/loading-01.png" alt="Loading" width={24} height={24} className="bg-gray-700 rounded" />
+                      </button>
+                      <button onClick={() => handleVoteClick("invalid")} className="bg-gray-800 rounded-full p-2 transition-transform duration-300">
+                        <Image src="/images/x-circle.png" alt="Invalid" width={24} height={24} className="bg-gray-700 rounded" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {showTooltip && !email && (
+                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-[blue] text-white text-xs py-1 px-3 rounded">
+                  <button
+            onClick={() => (window.location.href = '/auth/login')}
+            
+          >
+                    Please sign in to vote
+                    </button>
+                  </div>
+                  
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Updated Reply UI */}
+  
+      {/* Reply Input Section */}
       {isReplying && (
         <div className="mt-2 ml-3 mr-8 max-w-3xl">
           <div className="bg-white rounded-xl p-3 border border-gray-200">
@@ -364,50 +434,29 @@ const handleVoteClick = (type: "valid" | "invalid") => {
           </div>
         </div>
       )}
-
-      {/* Replies section */}
-      {/* {showReplies && replies.length > 0 && (
+  
+      {/* Replies List Section */}
+      {showReplies && replies.length > 0 && (
         <div className="mt-4 ml-4 space-y-2 max-w-2xl pr-12">
           {replies.map((reply) => (
-            <div
-              key={reply.id}
-              className="bg-gray-100 rounded-xl px-4 py-3 border border-gray-200 shadow"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-black font-medium">{reply.author}</span>
+            <div key={reply.id} className="flex gap-3">
+              <div className="flex-1 bg-gray-100 rounded-xl px-4 py-3 border border-gray-200 shadow">
+                <div className="mb-1">
+                  <span className="text-black font-medium">{reply.author}</span>
+                </div>
+                <p className="text-black text-sm">{reply.text}</p>
               </div>
-              <p className="text-black text-sm">{reply.text}</p>
+              <div className="flex flex-col justify-end pb-2">
+                <Image src="/profiles/profile_pic_1.png" alt="Profile" width={25} height={25} className="rounded-full" />
+              </div>
             </div>
           ))}
         </div>
-      )} */}
-      {showReplies && replies.length > 0 && (
-  <div className="mt-4 ml-4 space-y-2 max-w-2xl pr-12">
-    {replies.map((reply) => (
-      <div key={reply.id} className="flex gap-3">
-        <div className="flex-1 bg-gray-100 rounded-xl px-4 py-3 border border-gray-200 shadow">
-          <div className="mb-1">
-            <span className="text-black font-medium">{reply.author}</span>
-          </div>
-          <p className="text-black text-sm">{reply.text}</p>
-        </div>
-        <div className="flex flex-col justify-end pb-2">
-          <Image
-            src="/profiles/profile_pic_1.png"
-            alt="Profile"
-            width={25}
-            height={25}
-            className="rounded-full"
-          />
-        </div>
-      </div>
-    ))}
-  </div>
-)}
+      )}
     </div>
   );
-  
-    
+
+
   // return (
   //   <div className="comment-wrapper relative w-full flex flex-col transition-all duration-300">
   //     {isConfidenceModalOpen && (
@@ -525,7 +574,7 @@ const handleVoteClick = (type: "valid" | "invalid") => {
   //                       </div>
   //                     </div>
   //                   )}
-  
+
   //                   <div className="flex -space-x-[7px]">
   //                     <Image
   //                       src="/profiles/profile_pic_1.png"
