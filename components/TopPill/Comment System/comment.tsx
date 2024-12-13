@@ -61,14 +61,14 @@ export default function Comment({
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
-  const handleVoteClick = (type: "valid" | "invalid") => {
-    if (!email) {
-      setShowTooltip(true);
-      setTimeout(() => setShowTooltip(false), 3000); // Hide after 3 seconds
-      return;
-    }
-    handleVote(type);
-  };
+const handleVoteClick = (type: "valid" | "invalid") => {
+  if (!email) {
+    setShowTooltip(true);
+    setTimeout(() => setShowTooltip(false), 3000); // Hide after 3 seconds
+    return;
+  }
+  handleVote(type);
+};
 
   useEffect(() => {
     const levels = [

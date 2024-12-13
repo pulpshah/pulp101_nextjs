@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 import Image from "next/image";
-import CommentsSection from "@/components/comments-section";
+import CommentsSection from "@/components/TopPill/Comment System/comments-section";
 import { getSession } from "@/lib/session";
 import HoverableContent from "@/components/HoverableContent";
 
@@ -41,9 +41,9 @@ export default async function BlogPage({ params: { slug } }: PageProps) {
 
   return (
     <div className="lg:w-[60%] sm:w-[95%] md:w-[75%] mx-auto relative">
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <CommentsSection email={email}/>
-      </div>
+      </div> */}
 
       <Link
         className={buttonVariants({
