@@ -69,8 +69,6 @@ const handleVoteClick = (type: "valid" | "invalid") => {
   handleVote(type);
 };
 
-  console.log(author);
-
   useEffect(() => {
     const levels = [
       "#FF5A5ACC", // Invalid Level 1

@@ -10,6 +10,8 @@ export async function POST(req: Request) {
       throw new Error('Invalid messages: must be a non-empty array');
     }
 
+    console.log(messages)
+
     const openai = createOpenAI({
       baseURL: 'https://api.groq.com/openai/v1',
       apiKey: process.env.GROQ_API_KEY!,
