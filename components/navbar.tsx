@@ -11,6 +11,28 @@ import { getSession } from "@/lib/session";
 
 export const NAVLINKS = [
   {
+    title: "Home",
+    href: `/`,
+  },
+  {
+    title: "Products",
+    href: `/`,
+    isDropDown: true,
+    dropdownItems: [
+      {title: "Product 1", href: `/`},
+      {title: "Product 2", href: `/`},
+    ],
+  },
+  {
+    title: "Resources",
+    href: `/`,
+    isDropDown: true,
+    dropdownItems: [
+      {title: "Resource 1", href: `/`},
+      {title: "Resource 2", href: `/`},
+    ],
+  },
+  {
     title: "How It Works",
     href: `/docs${page_routes[0].href}`,
   },
@@ -56,6 +78,11 @@ export async function Navbar()
                 <a href="/auth/login">Log in</a>
               </button>
               }
+              {
+                !name && <button className="bg-gray-700 w-28 hover: bg-gray-900 rounded-md">
+                  <a href="/auth/signup">Sign up</a>
+                </button>
+              }
             </div>
           </div>
         </div>
@@ -76,6 +103,34 @@ export function NavMenu({ isSheet = false }) {
   return (
     <>
       {NAVLINKS.map((item) => {
+        if(item.isDropDown){
+          return (
+            <div key={item.title}>
+              <div className="relative group">
+                <Anchor
+                  activeClassName="!text-primary md:font-semibold font-medium"
+                  absolute
+                  className="flex items-center gap-1 dark:text-stone-300/85 text-stone-800 underline"
+                  href={item.href}
+                >
+                  {item.title}
+                </Anchor>
+                <div className="absolute left-0 hidden group-hover:block mt-2 bg-black shadow-lg rounded-md w-48">
+                  {item.dropdownItems.map((dropdownItem) => (
+                    <Anchor
+                      key={dropdownItem.title}
+                      activeClassName="!text-primary font-semibold"
+                      className="block px-4 py-2 text-sm text-stone-800"
+                      href={dropdownItem.href}
+                    >
+                      {dropdownItem.title}
+                    </Anchor>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        }
         const Comp = (
           <Anchor
             key={item.title + item.href}

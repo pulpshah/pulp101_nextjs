@@ -18,6 +18,9 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        aurora: "background: #0D090A backdrop-filter: blur(32px) px-6 py-3 bg-black text-white rounded-full shadow-[0_0_15px_rgba(128,90,213,0.6)]"
+
+        /* Added new variant called aurora*/
       },
       size: {
         default: "h-10 px-4 py-2",
