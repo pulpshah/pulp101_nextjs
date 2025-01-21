@@ -24,80 +24,31 @@ export default function Home() {
     //Parent div containing all sections
     <div>
       <div className="flex sm:min-h-[91vh] min-h-[88vh] flex-col items-center justify-center text-center px-2 py-8">
-        <h1 className="text-3xl font-bold mb-4 sm:text-7xl">
-          Pulp101: A Student-run Developer Community & NLP/ML Playground 
-        </h1>
-        <p className="mb-8 sm:text-xl max-w-[800px] text-muted-foreground">
-          Everything you need to confidently learn, test, and build Pulp software
-        </p>
-        <div className="flex flex-row items-center gap-5">
-          <Link 
-            href={`/docs${page_routes[0].href}`}
-            className={buttonVariants({ variant: "aurora", className: "px-6", size: "lg"})}
-            style={{ textShadow: "0px 1.5px 4px rgba(31, 31, 31, 0.2)" }} /*Added style*/
+        <header className="mt-14">
+          <div className="bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white rounded-full px-6 py-3 inline-block mb-4 shadow-md">
+            Check out our community guideline!
+          </div>
+          <h1 className="text-4xl font-semibold mb-4 sm:text-6xl leading-[72px]">
+            Pulp101: A Student-run Developer Community & NLP/ML Playground
+          </h1>
+          <p className="mb-8 text-lg sm:text-xl max-w-2xl mx-auto">
+            Everything you need to confidently learn, test, and build Pulp
+            software.
+          </p>
+          <Link
+            href="/get-started"
+            className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg hover:bg-gray-800 relative"
           >
+            <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
             Get Started
           </Link>
-
-        {/* Previous Buttons -> Explore Pulp and Research-Driven 
-          <Link
-            href={`/docs${page_routes[0].href}`}
-            className={buttonVariants({ className: "px-6", size: "lg" })}
-          >
-            Explore Pulp
-          </Link>
-          <Link
-            href="/blog"
-            className={buttonVariants({
-              variant: "secondary",
-              className: "px-6",
-              size: "lg",
-            })}
-          >
-            Research-Driven
-          </Link>
-          */}
-        </div>
-        <div className="flex flex-row items-center gap-5">
-          <div className="relative w-[916px] h-[516px] bg-center bg-cover rounded-lg shadow-3xl" style={{ backgroundImage: "url('video-placeholder-01.png')" }}>
-            {/* Shadow overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent"></div>
-
-            {/* Play button */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 rounded-full backdrop-blur-md bg-white/30 flex items-center justify-center">
-                <div className="w-6 h-6 text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3l14 9-14 9V3z" />
-                    circle
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Progress bar */}
-            <div className="absolute bottom-2 left-3 right-5 flex flex-col space-y-1">
-              <div className="relative w-full h-2 bg-white/30 rounded">
-                <div className="absolute left-0 top-0 h-2 bg-white/50 rounded" style={{ width: "16%" }}></div>
-                <div className="absolute left-[4%] top-0 w-2 h-2 bg-white rounded-full"></div>
-              </div>
-              <div className="flex justify-between text-xs font-semibold text-white">
-                <span>0:00</span>
-                <span>8:24</span>
-              </div>
-            </div>
-
-            {/* Hidden badge and text */}
-            <div className="absolute left-8 top-1/2 -translate-y-1/2 hidden flex-col space-y-1">
-              <div className="flex items-center space-x-2 px-2 py-1 rounded-full bg-white/30 border border-white">
-                <span className="text-sm font-medium text-white">LIVE</span>
-              </div>
-              <h2 className="text-white font-semibold text-3xl tracking-tight">Video Title</h2>
-            </div>
-          </div>
-
-                
-        </div>
+        </header>
+        <section className="mt-12 w-full max-w-4xl px-4">
+          <video controls className="rounded-lg w-full shadow">
+            <source src="/videos/introduction.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </section>
       </div>
 
       {/*Features Section*/}

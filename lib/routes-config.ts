@@ -287,6 +287,14 @@ export const ROUTES: EachRoute[] = [
       { title: "Collabsible Bar Chart", href: "/collab-bar-chart" }
     ],
   },
+  {
+    title: "Glossary",
+    href: "/glossary",
+    noLink: true,
+    items: [
+      { title: "Information & Language Basics", href: "/information-and-language-basics" },
+    ],
+  },
 ];
 
 export const RESEARCH_ROUTE: EachRoute[] = [
