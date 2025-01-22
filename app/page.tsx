@@ -51,7 +51,7 @@ const SLIDES = [
 export default function Home() {
   return (
     <div>
-      <div className="flex flex-col items-center justify-center text-center px-4 py-8 min-h-[80vh]">
+      <div className="flex flex-col items-center justify-center text-center px-4 mt-8 min-h-[80vh]">
         <header className="mt-16">
           <div className="relative inline-block mb-4">
             <div
@@ -116,7 +116,7 @@ export default function Home() {
           </Link>
         </header>
 
-        <section className="mt-12 w-full max-w-4xl px-4">
+        <section className="mt-12 mb-24 w-full max-w-4xl px-4">
           <video controls className="rounded-lg w-full shadow">
             <source src="/videos/introduction.mp4" type="video/mp4" />
             Your browser does not support the video tag.
@@ -125,58 +125,102 @@ export default function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="flex py-24 flex-col items-center gap-16 self-stretch">
+      <div
+        className="flex flex-col items-center py-24 self-stretch"
+        style={{
+          backgroundImage: "url('/images/temporary-brain-img.png')",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      >
         <Pheaders
           text="Full-stack Information & FAQs"
           supporting="Explore our tech stack from every angle"
           fontSize="36px"
           supportingFontSize="20px"
+          letterSpacing={`calc(48px * -0.02)`} // -2% of the font size
+          supportingLetterSpacing="0px" // 0% letter spacing
         />
-        <div className="flex m-w-screen-xl items-center self-stretch">
-          <div className="flex flex-col justify-center items-center flex-1">
-            <div className="flex justify-between items-center w-full">
-              <div className="flex-1 text-left">
-                <FAQ
-                  text="Everything Front End"
-                  supporting="Everything about Front-end"
-                  fontSize="20px"
-                  supportingFontSize="16px"
-                ></FAQ>
-                <FAQ
-                  text="Everything Back End"
-                  supporting="Everything about Back-end"
-                  fontSize="20px"
-                  supportingFontSize="16px"
-                ></FAQ>
-                <FAQ
-                  text="Everything Design"
-                  supporting="Everything about Design"
-                  fontSize="20px"
-                  supportingFontSize="16px"
-                ></FAQ>
+
+        <div className="flex flex-wrap justify-between w-full max-w-7xl mt-8 gap-25">
+          {/* Left Column */}
+          <div className="flex-1">
+            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-gray-500">
+              <div className="pl-4">
+                <h3 className="text-white text-xl font-semibold">
+                  Everything Front End
+                </h3>
+                <p className="text-gray-400">Everything about Front-end</p>
+                <Link
+                  href="/frontend"
+                  className="text-[#94969C] hover:underline"
+                >
+                  Learn more →
+                </Link>
               </div>
-              <div className="flex-1 text-right">
-                <FAQ
-                  text="Everything Front End"
-                  supporting="Everything about Front-end"
-                  fontSize="20px"
-                  supportingFontSize="16px"
-                ></FAQ>
-                <FAQ
-                  text="Everything Back End"
-                  supporting="Everything about Back-end"
-                  fontSize="20px"
-                  supportingFontSize="16px"
-                ></FAQ>
-                <FAQ
-                  text="Everything Design"
-                  supporting="Everything about Design"
-                  fontSize="20px"
-                  supportingFontSize="16px"
-                ></FAQ>
+              <div className="pl-4">
+                <h3 className="text-white text-xl font-semibold">
+                  Everything Back End
+                </h3>
+                <p className="text-gray-400">Everything about Back-end</p>
+                <Link
+                  href="/backend"
+                  className="text-[#94969C] hover:underline"
+                >
+                  Learn more →
+                </Link>
+              </div>
+              <div className="pl-4">
+                <h3 className="text-white text-xl font-semibold">
+                  Everything Design
+                </h3>
+                <p className="text-gray-400">Everything about Design</p>
+                <Link href="/design" className="text-[#94969C] hover:underline">
+                  Learn more →
+                </Link>
               </div>
             </div>
           </div>
+
+          {/* Middle Column */}
+          <div className="flex-1">
+            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-[#94969C]">
+              <div className="pl-4">
+                <h3 className="text-white text-xl font-semibold">
+                  Everything Data Science
+                </h3>
+                <p className="text-gray-400">Everything about Data Science</p>
+                <Link
+                  href="/datascience"
+                  className="text-[#94969C] hover:underline"
+                >
+                  Learn more →
+                </Link>
+              </div>
+              <div className="pl-4">
+                <h3 className="text-white text-xl font-semibold">
+                  Everything NLP
+                </h3>
+                <p className="text-gray-400">Everything about NLP</p>
+                <Link href="/nlp" className="text-[#94969C] hover:underline">
+                  Learn more →
+                </Link>
+              </div>
+              <div className="pl-4">
+                <h3 className="text-white text-xl font-semibold">
+                  Everything ML/AI
+                </h3>
+                <p className="text-gray-400">Everything about ML/AI</p>
+                <Link href="/ml-ai" className="text-[#94969C] hover:underline">
+                  Learn more →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Empty Column */}
+          <div className="flex-1"></div>
         </div>
       </div>
 
