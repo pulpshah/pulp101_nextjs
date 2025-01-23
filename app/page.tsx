@@ -146,37 +146,40 @@ export default function Home() {
         <div className="flex flex-wrap justify-between w-full max-w-7xl mt-8 gap-25">
           {/* Left Column */}
           <div className="flex-1">
-            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-gray-500">
-              <div className="pl-4">
+            <div className="">
+              <div className="pl-4 relative group">
+              <div className="absolute top-0 left-0 w-0.5 h-full bg-gray-600 group-hover:bg-white transition-all"></div>
                 <h3 className="text-white text-xl font-semibold">
                   Everything Front End
                 </h3>
-                <p className="text-gray-400">Everything about Front-end</p>
+                <p className="text-gray-400 mt-2">Everything about Front-end</p>
                 <Link
                   href="/frontend"
-                  className="text-[#94969C] hover:underline"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
                 >
                   Learn more →
                 </Link>
               </div>
-              <div className="pl-4">
+              <div className="pl-4 relative group">
+              <div className="absolute top-0 left-0 w-0.5 h-full bg-gray-600 group-hover:bg-white transition-all"></div>
                 <h3 className="text-white text-xl font-semibold">
                   Everything Back End
                 </h3>
-                <p className="text-gray-400">Everything about Back-end</p>
+                <p className="text-gray-400 mt-2">Everything about Back-end</p>
                 <Link
                   href="/backend"
-                  className="text-[#94969C] hover:underline"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
                 >
                   Learn more →
                 </Link>
               </div>
-              <div className="pl-4">
+              <div className="pl-4 relative group">
+              <div className="absolute top-0 left-0 w-0.5 h-full bg-gray-600 group-hover:bg-white transition-all"></div>
                 <h3 className="text-white text-xl font-semibold">
                   Everything Design
                 </h3>
-                <p className="text-gray-400">Everything about Design</p>
-                <Link href="/design" className="text-[#94969C] hover:underline">
+                <p className="text-gray-400 mt-2">Everything about Design</p>
+                <Link href="/design" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
                   Learn more →
                 </Link>
               </div>
@@ -190,10 +193,10 @@ export default function Home() {
                 <h3 className="text-white text-xl font-semibold">
                   Everything Data Science
                 </h3>
-                <p className="text-gray-400">Everything about Data Science</p>
+                <p className="text-gray-400 mt-2">Everything about Data Science</p>
                 <Link
                   href="/datascience"
-                  className="text-[#94969C] hover:underline"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
                 >
                   Learn more →
                 </Link>
@@ -202,8 +205,8 @@ export default function Home() {
                 <h3 className="text-white text-xl font-semibold">
                   Everything NLP
                 </h3>
-                <p className="text-gray-400">Everything about NLP</p>
-                <Link href="/nlp" className="text-[#94969C] hover:underline">
+                <p className="text-gray-400 mt-2">Everything about NLP</p>
+                <Link href="/nlp" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
                   Learn more →
                 </Link>
               </div>
@@ -211,8 +214,8 @@ export default function Home() {
                 <h3 className="text-white text-xl font-semibold">
                   Everything ML/AI
                 </h3>
-                <p className="text-gray-400">Everything about ML/AI</p>
-                <Link href="/ml-ai" className="text-[#94969C] hover:underline">
+                <p className="text-gray-400 mt-2">Everything about ML/AI</p>
+                <Link href="/ml-ai" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
                   Learn more →
                 </Link>
               </div>
