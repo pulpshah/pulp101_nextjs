@@ -11,40 +11,67 @@ const OPTIONS: EmblaOptionsType = { align: "start" };
 
 const SLIDES = [
   {
-    title: "Card 1",
+    logo: "/images/api-logo.png",
+    title: "PulpAPI",
     status: "Active",
-    description: "This is the first card.",
+    description:
+      "Everything needed to build and deploy amazing NLP-focused tools and micro-services.",
+    productType: "Dev Tool",
     version: "1.0",
   },
   {
-    title: "Card 2",
+    logo: "/images/suade-logo.png",
+    title: "Suade",
+    status: "Active",
+    description:
+      "The ultimate discussion platform with a focus on interaction design, information literacy, and competitive conversations.",
+    productType: "Infrastructure",
+    version: "1.3",
+  },
+  {
+    logo: "/images/speakeasy-logo.png",
+    title: "SpeakEasy",
     status: "Inactive",
-    description: "This is the second card.",
+    description:
+      "A multipurpose widget meant to instantly enhance website engagement with dynamic comments, AI chatbot, and more.",
+    productType: "Toolkit",
+    version: "2.0",
+  },
+  {
+    logo: "/images/pulp101-logo.png",
+    title: "Pulp101",
+    status: "Active",
+    description:
+      "This site didn’t build itself! We make Pulp101 to improve developer engagement and workflow efficiency.",
+    productType: "Management",
     version: "1.1",
   },
   {
-    title: "Card 3",
+    logo: "/images/pulpthink-logo.png",
+    title: "PulpThink",
     status: "Active",
-    description: "This is the third card.",
-    version: "1.2",
+    description:
+      "A place for the Pulp team to share engagement friendly content towards establishing Pulp’s domain expertise.",
+    productType: "AI Tool",
+    version: "0.9",
   },
   {
-    title: "Card 4",
+    logo: "/images/trendingrhetoric-logo.png",
+    title: "TrendingRhetoric",
     status: "Active",
-    description: "This is the third card.",
-    version: "1.2",
+    description:
+      "An interactive visualizer to track trending topics, rhetorical styles, and audience sentiment -- based on source and target locations.",
+    productType: "Analytics",
+    version: "3.2",
   },
   {
-    title: "Card 5",
+    logo: "/images/textmri-logo.png",
+    title: "TextMRI",
     status: "Active",
-    description: "This is the third card.",
-    version: "1.2",
-  },
-  {
-    title: "Card 6",
-    status: "Active",
-    description: "This is the third card.",
-    version: "1.2",
+    description:
+      "Automated Exploratory Data Analysis tool for objectives that center around natural language, reasoning, and decision-making.",
+    productType: "Analytics",
+    version: "3.2",
   },
 ]; // Add more slides as needed
 
@@ -143,7 +170,7 @@ export default function Home() {
           supportingLetterSpacing="0px" // 0% letter spacing
         />
 
-        <div className="flex flex-wrap justify-between w-full max-w-7xl mt-8 gap-25">
+        <div className="flex flex-wrap justify-between w-full max-w-7xl mt-8">
           {/* Left Column */}
           <div className="flex-1">
             <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-gray-500">
