@@ -183,7 +183,7 @@ export default function Home() {
                   href="/frontend"
                   className="text-[#94969C] hover:underline"
                 >
-                  Learn more →
+                  Learn more →  
                 </Link>
               </div>
               <div className="pl-4">
@@ -267,10 +267,63 @@ export default function Home() {
                   <InfoCarousel
                     slides={SLIDES}
                     options={OPTIONS}
+                    color= "default"
                   ></InfoCarousel>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Development Tools & Modules */}
+      <div className="flex py-24 flex-col items-center gap-16 self-stretch">
+        <div className="flex m-w-screen-xl px-0 py-8 flex-col items-start gap-16 self-stretch">
+          <div className="flex justify-between items-start content-start gap-8 self-stretch flex-wrap">
+            <div className="w-[480px] max-w-screen-xl flex-col items-start gap-5 flex-1">
+              <Pheaders
+              text="Development Tools & Modules"
+              supporting="Look through current Pulp Development Tools & Modules"
+              fontSize="36px"
+              supportingFontSize="20px"
+              align="left"
+              ></Pheaders>
+              <div className="flex flex-col items-start gap-8">
+                <div className="flex items-start gap-8">
+                  <InfoCarousel
+                    slides= {SLIDES}
+                    options= {OPTIONS}
+                    color= "randomColor"
+                  >
+                  </InfoCarousel>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {/*Footer Section */}
+      <div className="flex flex-col items-center gap-16 self-stretch pt-[64px] pb-[48px]">
+        <div className="flex flex-col items-start gap-8 self-stretch max-w-[1280px] px-[32px]">
+          <div className="flex flex-col items-center gap-12 self-stretch text-center">
+            <Pheaders text="Let's get started on something great!" supporting="Join our community" fontSize="30px" supportingFontSize="20px" align="center"></Pheaders>
+            <Link
+            href="/get-started"
+            className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg hover:bg-gray-800 relative"
+            >
+            <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
+            Get Started
+            </Link>
+          </div>
+        </div>
+        <div className="flex max-w-[1280px] px-8 flex-col items-start gap-8 self-stretch">
+          <div className="flex pt-8 justify-between items-center content-center gap-6 self-stretch flex-wrap">
+            <img src="/images/logo.svg" alt="Logo" className="w-24 h-auto" />
+            <footer className="text-[#94969C] font-inter text-base font-normal leading-6">© 2025 Pulp Internet Corporation</footer>
           </div>
         </div>
       </div>

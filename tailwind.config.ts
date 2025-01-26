@@ -62,7 +62,7 @@ const config = {
         code: ["var(--font-geist-mono)"],
         regular: ["var(--font-geist-sans)"],
         RG: ['Roc Grotesk', 'sans-serif'],
-        inter: ['Inter'],
+        inter: ['Inter'],   
       },
       keyframes: {
         "accordion-down": {

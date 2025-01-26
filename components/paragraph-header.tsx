@@ -9,6 +9,7 @@ const Pheaders = ({
   supportingFontSize = "20px",
   letterSpacing = "0px", // Default letter spacing for h1
   supportingLetterSpacing = "0px", // Default letter spacing for h2
+  align = "left",
 }: {
   text: string;
   supporting: string;
@@ -16,21 +17,23 @@ const Pheaders = ({
   supportingFontSize?: string;
   letterSpacing?: string; // Letter spacing for main header
   supportingLetterSpacing?: string; // Letter spacing for supporting text
+  align?: "left" | "center";
 }) => {
   return (
-    <div className="flex max-w-screen-xl px-0 py-8 flex-col items-start gap-8 self-stretch">
-      <div className="flex flex-col items-start gap-8 self-stretch">
+    <div className={`flex max-w-screen-xl px-0 py-8 flex-col items-${align === "center" ? "center" : "start"} gap-8 self-stretch`}>
+      <div className={`flex flex-col items-${align === "center" ? "center" : "start"} gap-8 self-stretch`}>
         {/* Supporting text here - mini header/teaser */}
-        <div className="flex max-w-screen-96 flex-col items-start gap-5 self-stretch">
-          <div className="flex flex-col items-start gap-3 self-stretch">
+        <div className={`flex max-w-screen-96 flex-col items-${align === "center" ? "center" : "start"} gap-5 self-stretch`}>
+        <div className={`flex flex-col items-${align === "center" ? "center" : "start"} gap-3 self-stretch`}> 
             <h1
-              className="font-normal inter"
+              className="font-normal inter "
               style={{
                 fontSize: fontSize,
                 fontWeight: 800,
                 lineHeight: "44px",
                 letterSpacing: letterSpacing, // Apply letter spacing
                 color: "var(--colors-text-text-primary-900, #F5F5F6)",
+                textAlign: align,
               }}
             >
               {text}
@@ -44,6 +47,7 @@ const Pheaders = ({
               lineHeight: "30px",
               letterSpacing: supportingLetterSpacing, // Apply letter spacing
               color: "var(--colors-text-text-tertiary-600, #94969C)",
+              textAlign: align,
             }}
           >
             {supporting}
