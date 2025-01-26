@@ -33,7 +33,6 @@ export default function TopPillManager({ email, aiInitialInput }: TopPillManager
     setActivePanel(null);
     setCurrentEmbeddedText(null); // Clear embedded text on close
   };
-
   return (
     <>
       {/* TopPill for toggling Comments and AI Chats */}

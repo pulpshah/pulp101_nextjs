@@ -22,6 +22,15 @@ type CommentProps = {
   userVoteLevel: number|null;
   isTopLevel: boolean;
 };
+type ThreadsProps = {
+  comments: CommentProps[];
+  onDockLineClick: () => void;
+  email: string;
+  isExpanded: boolean;
+  disableScroll: boolean;
+  onDisableScroll: (disable: boolean) => void;
+  onVoteUpdate: () => Promise<void>;  // Add this line
+};
 
 export default function Threads({
   comments,
@@ -30,26 +39,41 @@ export default function Threads({
   isExpanded,
   disableScroll,
   onDisableScroll,
-}: {
-  comments: CommentProps[];
-  email: string;
-  onDockLineClick: () => void;
-  isExpanded: boolean;
-  disableScroll: boolean;
-  onDisableScroll: (disable: boolean) => void;
-}) {
+  onVoteUpdate,
+}: 
+  ThreadsProps
+) {
   const [userComments, setUserComments] = useState<CommentProps[]>([]);
   const [votes, setVotes] = useState<{ [key: number]: number | null }>({});
   const [fetchedComments, setFetchedComments] = useState<CommentProps[]>([]);
   const [userName, setUserName] = useState<string>("");
+  console.log(comments);
+  // useEffect(() => {
+  //   const fetchUserSession = async () => {
+  //     try {
+  //       // Fetch session from the server-side API (which uses the `getSession` function)
+  //       const response = await fetch("/api/getSession");
+  //       const data = await response.json();
+  //       if (data.user?.email) {
+  //         setUserEmail(data.user.email);
+  //       } else {
+  //         console.error("Email not found in session.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching user session:", error);
+  //     }
+  //   };
 
+  //   fetchUserSession();
+  // }, []);
   useEffect(() => {
+    if (!email) return; // Only fetch username if userEmail is not empty
     const fetchUserName = async () => {
       try {
         const response = await fetch("/api/username", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email: email }),
         });
         const data = await response.json();
         setUserName(data.name);
@@ -59,6 +83,8 @@ export default function Threads({
     };
     fetchUserName();
   }, [email]);
+  
+  console.log(userName);
 
   const handleAddComment = (newComment: CommentProps) => {
     setUserComments((prevComments) => [
@@ -70,10 +96,7 @@ export default function Threads({
   const handleVoteChange = (commentId: string, newVoteLevel: number | null) => {
     updateVoteLevel(commentId, newVoteLevel);
   };
-
-  const pathname = usePathname();
-  const slug = pathname?.split("/").pop();
-
+  
   const updateVoteLevel = (commentId: string, newVoteLevel: number | null) => {
     setUserComments((prevComments) =>
       prevComments.map((comment) =>
@@ -83,89 +106,27 @@ export default function Threads({
       )
     );
   };
+  
 
+  const pathname = usePathname();
+  const slug = pathname?.split("/").pop();
+
+  // const updateVoteLevel = (commentId: string, newVoteLevel: number | null) => {
+  //   setUserComments((prevComments) =>
+  //     prevComments.map((comment) =>
+  //       String(comment.id) === commentId
+  //         ? { ...comment, userVoteLevel: newVoteLevel }
+  //         : comment
+  //     )
+  //   );
+  // };
   const commentCount = comments.length + userComments.length;
   const allComments = [...comments, ...userComments];
   const sortedComments = allComments.sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  // return (
-  //   <div className="flex flex-col w-full h-full bg-[#2D2D2D] text-white">
-  //     {/* Header */}
-  //     <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
-  //       <div className="flex items-center gap-2">
-  //         <Image 
-  //           src="/icons/search-icon.svg" 
-  //           alt="Search"
-  //           width={20}
-  //           height={20}
-  //         />
-  //         <span className="font-medium">Comments</span>
-  //         <span className="text-gray-400">{commentCount}</span>
-  //       </div>
-  //       <button className="p-1">
-  //         <Image 
-  //           src="/icons/search-icon.svg" 
-  //           alt="Search"
-  //           width={18}
-  //           height={18}
-  //         />
-  //       </button>
-  //     </div>
-
-  //     {/* Comments List */}
-  //     <div 
-  //       className={`flex-1 overflow-y-auto space-y-2 p-2 ${
-  //         disableScroll ? "overflow-hidden" : ""
-  //       }`}
-  //       style={{ maxHeight: "60vh" }}
-  //     >
-  //       {sortedComments.map((comment) => (
-  //         comment.author === userName ? (
-  //           <SelfComment
-  //             key={comment.id}
-  //             id={comment.id}
-  //             text={comment.text}
-  //             author={comment.author}
-  //             createdAt={comment.createdAt}
-  //             isExpanded={isExpanded}
-  //             initialReplies={comment.replies}
-  //             email={email}
-  //           />
-  //         ) : (
-  //           <Comment
-  //             key={comment.id}
-  //             commentIndex={comment.id}
-  //             commentText={comment.text}
-  //             author={comment.author}
-  //             isExpanded={isExpanded}
-  //             replies={comment.replies}
-  //             isMinimized={!isExpanded}
-  //             onDisableScroll={onDisableScroll}
-  //             email={email}
-  //             commentId={String(comment.id)}
-  //             startingVoteLevel={comment.userVoteLevel}
-  //             onVoteChange={(id: number, level: number | null) => 
-  //               updateVoteLevel(String(id), level)
-  //             }
-  //           />
-  //         )
-  //       ))}
-  //     </div>
-
-  //     {/* Comment Input */}
-  //     {isExpanded && (
-  //       <div className="sticky bottom-0 w-full px-2 py-2 bg-[#2D2D2D] border-t border-gray-700">
-  //         <AddCommentPill 
-  //           onAddComment={handleAddComment} 
-  //           slug={slug || ""} 
-  //           email={email} 
-  //         />
-  //       </div>
-  //     )}
-  //   </div>
-  // );
+  
   return (
     <div className="p-[1px] rounded-lg bg-gradient-to-b from-white/20 to-white/5">
       <div className="flex flex-col w-full h-screen bg-[#2E2E2E] overflow-hidden rounded-lg">
@@ -229,9 +190,10 @@ export default function Threads({
                   email={email}
                   commentId={String(comment.id)}
                   startingVoteLevel={comment.userVoteLevel}
-                  onVoteChange={(id: number, level: number | null) => 
-                    updateVoteLevel(String(id), level)
-                  }
+                  onVoteChange={async (id: number, level: number | null) => {
+                    updateVoteLevel(String(id), level);
+                    await onVoteUpdate(); // Add this line
+                  }}
                 />
               )
             ))}
