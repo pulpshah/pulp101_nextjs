@@ -151,7 +151,7 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Features Section */}
+      {/* Features Section  */}
       <div
         className="flex flex-col items-center py-24 self-stretch"
         style={{

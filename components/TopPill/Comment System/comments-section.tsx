@@ -92,7 +92,6 @@ const convertComments = (array: any[]): Comment[] => {
   });
   return topLevelComments;
 };
-
   const handleCommentsClick = () => {
     setShowComments((prevState) => !prevState);
   };
@@ -137,7 +136,29 @@ const convertComments = (array: any[]): Comment[] => {
     };
 
     fetchData();
-  }, [showComments, slug]);
+  }, [showComments, slug, email]);
+
+  const refetchComments = async () => {
+    if (!slug) return;
+    
+    try {
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          slug: slug,
+          userEmail: email 
+        }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setComments(convertComments(data));
+      }
+    } catch (error) {
+      console.error("Error refetching comments:", error);
+    }
+  };
 
   return (
     <>
@@ -159,6 +180,7 @@ const convertComments = (array: any[]): Comment[] => {
               disableScroll={disableScroll}
               onDisableScroll={handleDisableScroll}
               email={email}
+              onVoteUpdate={refetchComments}
             />
         </div>
       )}
