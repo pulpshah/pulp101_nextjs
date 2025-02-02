@@ -79,7 +79,7 @@ export async function Navbar()
               </button>
               }
               {
-                !name && <button className="bg-gray-700 w-28 hover: bg-gray-900 rounded-md">
+                !name && <button className="bg-gray-700 w-28 hover: bg-gray-900 rounded-md text-white">
                   <a href="/auth/signup">Sign up</a>
                 </button>
               }

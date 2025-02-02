@@ -26,13 +26,12 @@ const Pheaders = ({
         <div className={`flex max-w-screen-96 flex-col items-${align === "center" ? "center" : "start"} gap-5 self-stretch`}>
         <div className={`flex flex-col items-${align === "center" ? "center" : "start"} gap-3 self-stretch`}> 
             <h1
-              className="font-normal inter "
+              className="font-normal inter text-textColor"
               style={{
                 fontSize: fontSize,
                 fontWeight: 800,
                 lineHeight: "44px",
                 letterSpacing: letterSpacing, // Apply letter spacing
-                color: "var(--colors-text-text-primary-900, #F5F5F6)",
                 textAlign: align,
               }}
             >
@@ -40,13 +39,12 @@ const Pheaders = ({
             </h1>
           </div>
           <h2
-            className="font-normal inter"
+            className="font-normal inter text-textColor"
             style={{
               fontSize: supportingFontSize,
               fontWeight: 400,
               lineHeight: "30px",
               letterSpacing: supportingLetterSpacing, // Apply letter spacing
-              color: "var(--colors-text-text-tertiary-600, #94969C)",
               textAlign: align,
             }}
           >

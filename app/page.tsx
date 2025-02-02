@@ -75,10 +75,16 @@ const SLIDES = [
   },
 ]; // Add more slides as needed
 
+
+const TOGGLE_CLASSES =
+  "text-sm font-medium flex items-center gap-2 px-3 md:pl-3 md:pr-3.5 py-3 md:py-1.5 transition-colors relative z-10";
+
+
 export default function Home() {
   return (
     <div>
-      <div className="flex flex-col items-center justify-center text-center px-4 mt-8 min-h-[80vh]">
+      
+      <div className="flex flex-col items-center justify-center text-center px-4 mt-8 min-h-[80vh] text-textColor">
         <header className="mt-16">
           <div className="relative inline-block mb-4">
             <div
@@ -107,22 +113,21 @@ export default function Home() {
           </div>
 
           <h1
-            className="mb-6 sm:text-6xl leading-[72px] text-center"
+            className="mb-6 sm:text-6xl leading-[72px] text-center text-textColor"
             style={{
               fontFamily: "Inter",
               fontSize: "60px",
               fontWeight: 600,
               lineHeight: "72px",
               letterSpacing: "-0.02em",
-              color: "#FFFFFF",
+              
             }}
           >
             Pulp101: A Student-run Developer Community & NLP/ML Playground
           </h1>
           <p
-            className="mb-12 max-w-2xl mx-auto"
+            className="mb-12 max-w-2xl mx-auto text-textColor"
             style={{
-              color: "#EAF2EF",
               textAlign: "center",
               fontFamily: "Inter",
               fontSize: "20px",
@@ -137,7 +142,7 @@ export default function Home() {
           <Link
             href="/get-started"
             className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg hover:bg-gray-800 relative"
-          >
+            >
             <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
             Get Started
           </Link>
@@ -151,11 +156,11 @@ export default function Home() {
         </section>
       </div>
 
-      {/* Features Section  */}
+      {/* Features Section */}
       <div
         className="flex flex-col items-center py-24 self-stretch"
         style={{
-          backgroundImage: "url('/images/temporary-brain-img.png')",
+          backgroundImage: "url('/images/temporary_brain_pic_bg_removed.png')",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
@@ -166,44 +171,44 @@ export default function Home() {
           supporting="Explore our tech stack from every angle"
           fontSize="36px"
           supportingFontSize="20px"
-          letterSpacing={`calc(48px * -0.02)`} // -2% of the font size
+          letterSpacing={"calc(48px * -0.02)"} // -2% of the font size  
           supportingLetterSpacing="0px" // 0% letter spacing
         />
 
-        <div className="flex flex-wrap justify-between w-full max-w-7xl mt-8">
+        <div className="flex flex-wrap justify-between w-full max-w-7xl mt-8 gap-25">
           {/* Left Column */}
           <div className="flex-1">
-            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-gray-500">
+            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-white">
               <div className="pl-4">
-                <h3 className="text-white text-xl font-semibold">
+                <h3 className="text-textColor text-xl font-semibold">
                   Everything Front End
                 </h3>
-                <p className="text-gray-400">Everything about Front-end</p>
+                <p className="text-gray-400 mt-2">Everything about Front-end</p>
                 <Link
                   href="/frontend"
-                  className="text-[#94969C] hover:underline"
-                >
-                  Learn more →  
-                </Link>
-              </div>
-              <div className="pl-4">
-                <h3 className="text-white text-xl font-semibold">
-                  Everything Back End
-                </h3>
-                <p className="text-gray-400">Everything about Back-end</p>
-                <Link
-                  href="/backend"
-                  className="text-[#94969C] hover:underline"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
                 >
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-white text-xl font-semibold">
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything Back End
+                </h3>
+                <p className="text-gray-400 mt-2">Everything about Back-end</p>
+                <Link
+                  href="/backend"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
+                  Learn more →
+                </Link>
+              </div>
+              <div className="pl-4">
+                <h3 className="text-textColor text-xl font-semibold">
                   Everything Design
                 </h3>
-                <p className="text-gray-400">Everything about Design</p>
-                <Link href="/design" className="text-[#94969C] hover:underline">
+                <p className="text-gray-400 mt-2">Everything about Design</p>
+                <Link href="/design" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
                   Learn more →
                 </Link>
               </div>
@@ -212,34 +217,34 @@ export default function Home() {
 
           {/* Middle Column */}
           <div className="flex-1">
-            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-[#94969C]">
+            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-white">
               <div className="pl-4">
-                <h3 className="text-white text-xl font-semibold">
+                <h3 className="text-textColor text-xl font-semibold">
                   Everything Data Science
                 </h3>
-                <p className="text-gray-400">Everything about Data Science</p>
+                <p className="text-gray-400 mt-2">Everything about Data Science</p>
                 <Link
                   href="/datascience"
-                  className="text-[#94969C] hover:underline"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
                 >
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-white text-xl font-semibold">
+                <h3 className="text-textColor text-xl font-semibold">
                   Everything NLP
                 </h3>
-                <p className="text-gray-400">Everything about NLP</p>
-                <Link href="/nlp" className="text-[#94969C] hover:underline">
+                <p className="text-gray-400 mt-2">Everything about NLP</p>
+                <Link href="/nlp" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-white text-xl font-semibold">
+                <h3 className="text-textColor text-xl font-semibold">
                   Everything ML/AI
                 </h3>
-                <p className="text-gray-400">Everything about ML/AI</p>
-                <Link href="/ml-ai" className="text-[#94969C] hover:underline">
+                <p className="text-gray-400 mt-2">Everything about ML/AI</p>
+                <Link href="/ml-ai" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
                   Learn more →
                 </Link>
               </div>
@@ -251,11 +256,12 @@ export default function Home() {
         </div>
       </div>
 
+
       {/* Core Products Section */}
       <div className="flex py-24 flex-col items-center gap-16 self-stretch">
         <div className="flex m-w-screen-xl px-0 py-8 flex-col items-start gap-16 self-stretch">
           <div className="flex justify-between items-start content-start gap-8 self-stretch flex-wrap">
-            <div className="w-[480px] max-w-screen-xl flex-col items-start gap-5 flex-1">
+            <div className="w-full max-w-screen-xl flex-col items-start gap-5 flex-1 overflow-hidden">
               <Pheaders
                 text="Core Products & Websites "
                 supporting="Look through current Pulp projects, products, and pipelines"
@@ -280,7 +286,7 @@ export default function Home() {
       <div className="flex py-24 flex-col items-center gap-16 self-stretch">
         <div className="flex m-w-screen-xl px-0 py-8 flex-col items-start gap-16 self-stretch">
           <div className="flex justify-between items-start content-start gap-8 self-stretch flex-wrap">
-            <div className="w-[480px] max-w-screen-xl flex-col items-start gap-5 flex-1">
+            <div className="w-full max-w-screen-xl flex-col items-start gap-5 flex-1 overflow-hidden">
               <Pheaders
               text="Development Tools & Modules"
               supporting="Look through current Pulp Development Tools & Modules"
@@ -323,7 +329,7 @@ export default function Home() {
         <div className="flex max-w-[1280px] px-8 flex-col items-start gap-8 self-stretch">
           <div className="flex pt-8 justify-between items-center content-center gap-6 self-stretch flex-wrap">
             <img src="/images/logo.svg" alt="Logo" className="w-24 h-auto" />
-            <footer className="text-[#94969C] font-inter text-base font-normal leading-6">© 2025 Pulp Internet Corporation</footer>
+            <footer className="text-textColor font-inter text-base font-normal leading-6">© 2025 Pulp Internet Corporation</footer>
           </div>
         </div>
       </div>

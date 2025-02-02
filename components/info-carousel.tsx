@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import React from "react";
 import { EmblaOptionsType } from "embla-carousel";
@@ -16,7 +16,8 @@ import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils"; 
 
-let darkened = "#FFF";
+import { useCallback, useEffect, useState } from "react";
+
 
 const randomColors = () => {
   const colors = ["#00A676", "#007BFF", "#6F42C1"];
@@ -40,7 +41,7 @@ const darkenColor = (color: string): string => {
 
 
 const carouselVariant = cva(
-  "flex flex-col justify-end items-start p-6 gap-6 relative w-96 h-[504px] shadow-[inset_0px_0px_24px_rgba(255,255,255,0.4),-4.96575px_4.96575px_24.8287px_#282828] backdrop-blur-[14.8972px] rounded-[14px]",
+  "flex flex-col justify-end items-start p-6 gap-6 relative w-[11rem] h-[504px] shadow-[inset_0px_0px_24px_rgba(255,255,255,0.4),-4.96575px_4.96575px_24.8287px_#282828] backdrop-blur-[14.8972px] rounded-[14px] embla__slide",
   {
     variants: {
       color: {
@@ -66,12 +67,13 @@ type PropType = {
     description: string;
     productType: string;
     version: string;
-  }[];
-  options?: EmblaOptionsType;
-  color?: "default" | "randomColor";
+  }[]
+  options?: EmblaOptionsType
+  color?: "default" | "randomColor"
 };
 
-const InfoCarousel: React.FC<PropType> = ({ slides, options, color }) => {
+const InfoCarousel: React.FC<PropType> = ( props ) => {
+  const { slides, options, color } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -122,13 +124,13 @@ const InfoCarousel: React.FC<PropType> = ({ slides, options, color }) => {
                   {slide.title}
                 </h3>
                 {/* Description */}
-                <p className="text-white-400 mt-4 px-4 py-10">
+                <p className="text-gray-300 mt-4 px-4 py-10">
                   {slide.description}
                 </p>
                 {/* Learn More */}
                 <Link
                   href="/learn-more"
-                  className="text-white-400 hover:text-gray-500 mt-4 block px-4 py-2"
+                  className="text-gray-300 hover:text-gray-500 mt-4 block px-4 py-2"
                 >
                   Learn more →
                 </Link>
@@ -138,12 +140,12 @@ const InfoCarousel: React.FC<PropType> = ({ slides, options, color }) => {
               {/* Footer */}
               <div className="flex justify-between items-center mt-8 w-full">
                 {/* Product Type */}
-                <span className="text-white-500 text-sm">
+                <span className="text-gray-300 text-sm">
                   {slide.productType}
                 </span>
                 
                 {/* Version Number */}
-                <span className="text-white-500 text-sm">
+                <span className="text-gray-300 text-sm">
                   v{slide.version}
                 </span>
               </div>
