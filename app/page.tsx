@@ -7,26 +7,26 @@ import FAQ from "@/components/faq";
 import InfoCarousel from "@/components/info-carousel";
 import { EmblaOptionsType } from "embla-carousel";
 import AnimatedSection from "@/components/animate-section"; //For animation easing in content purposes
-import InfiniteScroll from "@/components/infinite-loop-scroll" //for the infinite logo sliding show
-
+import InfiniteScroll from "@/components/infinite-loop-scroll"; //for the infinite logo sliding show
 
 // Constants
 const OPTIONS: EmblaOptionsType = { align: "start" };
 const logos = [
-  { src: '/images/pulpapi-logo.svg', alt: 'API' },
-  { src: '/images/suade-logo.svg', alt: 'Suade' },
-  { src: '/images/speakeasy-logo.svg', alt: 'SpeakEasty' },
-  { src: '/images/textmri-logo.svg', alt: 'TextMRI' },
-  { src: '/images/pulpthink-logo.svg', alt: 'PulpThink' },
-  { src: '/images/pulp101-logo.svg', alt: 'Pulp101' },
-  { src: '/images/trendingrhetoric-logo.svg', alt: 'TrendingRhetoric' },
+  { src: "/images/pulpapi-logo.svg", alt: "API" },
+  { src: "/images/suade-logo.svg", alt: "Suade" },
+  { src: "/images/speakeasy-logo.svg", alt: "SpeakEasty" },
+  { src: "/images/textmri-logo.svg", alt: "TextMRI" },
+  { src: "/images/pulpthink-logo.svg", alt: "PulpThink" },
+  { src: "/images/pulp101-logo.svg", alt: "Pulp101" },
+  { src: "/images/trendingrhetoric-logo.svg", alt: "TrendingRhetoric" },
 ];
 const SLIDES = [
   {
     logo: "/images/pulpapi-logo.svg",
     title: "PulpAPI",
     status: "Active",
-    description: "Everything needed to build and deploy amazing NLP-focused tools and micro-services.",
+    description:
+      "Everything needed to build and deploy amazing NLP-focused tools and micro-services.",
     productType: "Dev Tool",
     version: "1.0",
   },
@@ -34,7 +34,8 @@ const SLIDES = [
     logo: "/images/suade-logo.svg",
     title: "Suade",
     status: "Active",
-    description: "The ultimate discussion platform with a focus on interaction design, information literacy, and competitive conversations.",
+    description:
+      "The ultimate discussion platform with a focus on interaction design, information literacy, and competitive conversations.",
     productType: "Infrastructure",
     version: "1.3",
   },
@@ -42,7 +43,8 @@ const SLIDES = [
     logo: "/images/speakeasy-logo.svg",
     title: "SpeakEasy",
     status: "Inactive",
-    description: "A multipurpose widget meant to instantly enhance website engagement with dynamic comments, AI chatbot, and more.",
+    description:
+      "A multipurpose widget meant to instantly enhance website engagement with dynamic comments, AI chatbot, and more.",
     productType: "Toolkit",
     version: "2.0",
   },
@@ -50,7 +52,8 @@ const SLIDES = [
     logo: "/images/pulp101-logo.svg",
     title: "Pulp101",
     status: "Active",
-    description: "This site didn’t build itself! We make Pulp101 to improve developer engagement and workflow efficiency.",
+    description:
+      "This site didn’t build itself! We make Pulp101 to improve developer engagement and workflow efficiency.",
     productType: "Management",
     version: "1.1",
   },
@@ -58,7 +61,8 @@ const SLIDES = [
     logo: "/images/pulpthink-logo.svg",
     title: "PulpThink",
     status: "Active",
-    description: "A place for the Pulp team to share engagement friendly content towards establishing Pulp’s domain expertise.",
+    description:
+      "A place for the Pulp team to share engagement friendly content towards establishing Pulp’s domain expertise.",
     productType: "AI Tool",
     version: "0.9",
   },
@@ -66,7 +70,8 @@ const SLIDES = [
     logo: "/images/trendingrhetoric-logo.svg",
     title: "TrendingRhetoric",
     status: "Active",
-    description: "An interactive visualizer to track trending topics, rhetorical styles, and audience sentiment -- based on source and target locations.",
+    description:
+      "An interactive visualizer to track trending topics, rhetorical styles, and audience sentiment -- based on source and target locations.",
     productType: "Analytics",
     version: "3.2",
   },
@@ -74,13 +79,15 @@ const SLIDES = [
     logo: "/images/textmri-logo.svg",
     title: "TextMRI",
     status: "Active",
-    description: "Automated Exploratory Data Analysis tool for objectives that center around natural language, reasoning, and decision-making.",
+    description:
+      "Automated Exploratory Data Analysis tool for objectives that center around natural language, reasoning, and decision-making.",
     productType: "Analytics",
     version: "3.2",
   },
 ];
 
-const TOGGLE_CLASSES = "text-sm font-medium flex items-center gap-2 px-3 md:pl-3 md:pr-3.5 py-3 md:py-1.5 transition-colors relative z-10";
+const TOGGLE_CLASSES =
+  "text-sm font-medium flex items-center gap-2 px-3 md:pl-3 md:pr-3.5 py-3 md:py-1.5 transition-colors relative z-10";
 
 // Main Component
 export default function Home() {
@@ -107,7 +114,9 @@ export default function Home() {
                     backgroundRepeat: "no-repeat",
                   }}
                 >
-                  <span className="text-white">Check out our community guideline!</span>
+                  <span className="text-white">
+                    Check out our community guideline!
+                  </span>
                 </div>
               </div>
             </div>
@@ -134,7 +143,8 @@ export default function Home() {
               lineHeight: "30px",
             }}
           >
-            Everything you need to confidently learn, test, and build Pulp software.
+            Everything you need to confidently learn, test, and build Pulp
+            software.
           </p>
           <Link
             href="/get-started"
@@ -147,7 +157,11 @@ export default function Home() {
 
         <AnimatedSection className="mt-12 mb-24 w-full max-w-4xl px-4">
           <video controls className="rounded-lg w-full shadow">
-            <source src="/videos/introduction.mp4" type="video/mp4" className="h-auto w-auto"/>
+            <source
+              src="/videos/introduction.mp4"
+              type="video/mp4"
+              className="h-auto w-auto"
+            />
             Your browser does not support the video tag.
           </video>
         </AnimatedSection>
@@ -177,23 +191,38 @@ export default function Home() {
           <div className="flex-1">
             <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-white">
               <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">Everything Front End</h3>
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything Front End
+                </h3>
                 <p className="text-gray-400 mt-2">Everything about Front-end</p>
-                <Link href="/frontend" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
+                <Link
+                  href="/frontend"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">Everything Back End</h3>
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything Back End
+                </h3>
                 <p className="text-gray-400 mt-2">Everything about Back-end</p>
-                <Link href="/backend" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
+                <Link
+                  href="/docs/backend"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">Everything Design</h3>
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything Design
+                </h3>
                 <p className="text-gray-400 mt-2">Everything about Design</p>
-                <Link href="/design" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
+                <Link
+                  href="/design"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
                   Learn more →
                 </Link>
               </div>
@@ -204,23 +233,40 @@ export default function Home() {
           <div className="flex-1">
             <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-white">
               <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">Everything Data Science</h3>
-                <p className="text-gray-400 mt-2">Everything about Data Science</p>
-                <Link href="/datascience" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything Data Science
+                </h3>
+                <p className="text-gray-400 mt-2">
+                  Everything about Data Science
+                </p>
+                <Link
+                  href="/datascience"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">Everything NLP</h3>
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything NLP
+                </h3>
                 <p className="text-gray-400 mt-2">Everything about NLP</p>
-                <Link href="/nlp" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
+                <Link
+                  href="/nlp"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
                   Learn more →
                 </Link>
               </div>
               <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">Everything ML/AI</h3>
+                <h3 className="text-textColor text-xl font-semibold">
+                  Everything ML/AI
+                </h3>
                 <p className="text-gray-400 mt-2">Everything about ML/AI</p>
-                <Link href="/ml-ai" className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block">
+                <Link
+                  href="/ml-ai"
+                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
+                >
                   Learn more →
                 </Link>
               </div>
@@ -245,7 +291,11 @@ export default function Home() {
               />
               <div className="flex flex-col items-start gap-8">
                 <div className="flex items-start gap-8">
-                  <InfoCarousel slides={SLIDES} options={OPTIONS} color="default" />
+                  <InfoCarousel
+                    slides={SLIDES}
+                    options={OPTIONS}
+                    color="default"
+                  />
                 </div>
               </div>
             </div>
@@ -267,7 +317,11 @@ export default function Home() {
               />
               <div className="flex flex-col items-start gap-8">
                 <div className="flex items-start gap-8">
-                  <InfoCarousel slides={SLIDES} options={OPTIONS} color="default" />
+                  <InfoCarousel
+                    slides={SLIDES}
+                    options={OPTIONS}
+                    color="default"
+                  />
                 </div>
               </div>
             </div>
@@ -295,19 +349,23 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      
+
         {/*Infinite Scroll of Logos Section*/}
         <div className="inline-flex flex-nowrap max-w-[600px] overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
           <InfiniteScroll logos={logos}></InfiniteScroll>
           <InfiniteScroll logos={logos} aria-hidden="true"></InfiniteScroll>
         </div>
-        
-        
 
         <div className="flex max-w-[1280px] px-8 flex-col items-start gap-8 self-stretch">
           <div className="flex pt-8 justify-between items-center content-center gap-6 self-stretch flex-wrap">
-            <img src="/images/pulp101-logo.svg" alt="Logo" className="w-24 h-auto" />
-            <footer className="text-textColor font-inter text-base font-normal leading-6">© 2025 Pulp Internet Corporation</footer>
+            <img
+              src="/images/pulp101-logo.svg"
+              alt="Logo"
+              className="w-24 h-auto"
+            />
+            <footer className="text-textColor font-inter text-base font-normal leading-6">
+              © 2025 Pulp Internet Corporation
+            </footer>
           </div>
         </div>
       </AnimatedSection>
