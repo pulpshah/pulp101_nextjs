@@ -10,7 +10,11 @@ interface HoverableContentProps {
   email: string | null;
 }
 
-export default function HoverableContent({ content, slug, email }: HoverableContentProps) {
+export default function HoverableContent({
+  content,
+  slug,
+  email,
+}: HoverableContentProps) {
   const [hoveredText, setHoveredText] = useState<string | null>(null);
 
   // Render content with hoverable-text applied to specific elements
@@ -24,18 +28,30 @@ export default function HoverableContent({ content, slug, email }: HoverableCont
     }
 
     if (React.isValidElement(node)) {
-      const element = node as ReactElement<{ className?: string; onMouseEnter?: () => void; children?: ReactNode }>;
+      const element = node as ReactElement<{
+        className?: string;
+        onMouseEnter?: () => void;
+        children?: ReactNode;
+      }>;
       const tagName = element.type;
 
       // Apply onMouseEnter directly to the elements of interest
-      if (tagName === "p" || tagName === "h1" || tagName === "h2" || tagName === "h3") {
+      if (
+        tagName === "p" ||
+        tagName === "h1" ||
+        tagName === "h2" ||
+        tagName === "h3"
+      ) {
         return React.cloneElement(element, {
           className: `${element.props.className || ""} hoverable-text`,
-          onMouseEnter: () => setHoveredText(element.props.children?.toString() || null),
+          onMouseEnter: () =>
+            setHoveredText(element.props.children?.toString() || null),
           key: element.key || Math.random().toString(36).substr(2, 9),
         });
       }
-      return React.cloneElement(element, { key: element.key || Math.random().toString(36).substr(2, 9) });
+      return React.cloneElement(element, {
+        key: element.key || Math.random().toString(36).substr(2, 9),
+      });
     }
 
     return node;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import Comment from "./comment";
 import AddCommentPill from "./add-comment";
 import Image from "next/image";
@@ -19,7 +19,7 @@ type CommentProps = {
   text: string;
   createdAt: string;
   replies: ReplyType[];
-  userVoteLevel: number|null;
+  userVoteLevel: number | null;
   isTopLevel: boolean;
 };
 type ThreadsProps = {
@@ -29,7 +29,7 @@ type ThreadsProps = {
   isExpanded: boolean;
   disableScroll: boolean;
   onDisableScroll: (disable: boolean) => void;
-  onVoteUpdate: () => Promise<void>;  // Add this line
+  onVoteUpdate: () => Promise<void>; // Add this line
 };
 
 export default function Threads({
@@ -40,9 +40,7 @@ export default function Threads({
   disableScroll,
   onDisableScroll,
   onVoteUpdate,
-}: 
-  ThreadsProps
-) {
+}: ThreadsProps) {
   const [userComments, setUserComments] = useState<CommentProps[]>([]);
   const [votes, setVotes] = useState<{ [key: number]: number | null }>({});
   const [fetchedComments, setFetchedComments] = useState<CommentProps[]>([]);
@@ -83,7 +81,7 @@ export default function Threads({
     };
     fetchUserName();
   }, [email]);
-  
+
   console.log(userName);
 
   const handleAddComment = (newComment: CommentProps) => {
@@ -96,7 +94,7 @@ export default function Threads({
   const handleVoteChange = (commentId: string, newVoteLevel: number | null) => {
     updateVoteLevel(commentId, newVoteLevel);
   };
-  
+
   const updateVoteLevel = (commentId: string, newVoteLevel: number | null) => {
     setUserComments((prevComments) =>
       prevComments.map((comment) =>
@@ -106,7 +104,6 @@ export default function Threads({
       )
     );
   };
-  
 
   const pathname = usePathname();
   const slug = pathname?.split("/").pop();
@@ -126,29 +123,30 @@ export default function Threads({
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  
   return (
     <div className="p-[1px] rounded-lg bg-gradient-to-b from-white/20 to-white/5">
       <div className="flex flex-col w-full h-screen bg-[#2E2E2E] overflow-hidden rounded-lg">
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#595959]">
           <div className="flex items-center gap-3">
-            <Image 
-              src="/images/topillfilled.png" 
+            <Image
+              src="/images/topillfilled.png"
               alt="Comments"
               width={24}
               height={24}
               className="text-[#FFFFFF]"
             />
             <div className="flex items-center gap-2">
-              <span className="text-[#FFFFFF] font-semibold text-lg">Comments</span>
+              <span className="text-[#FFFFFF] font-semibold text-lg">
+                Comments
+              </span>
               <span className="text-[#7E7E7E]">({commentCount})</span>
             </div>
           </div>
           <div className="flex items-center">
             <button className="p-2 hover:bg-[#2E2E2E] rounded-full transition-colors">
-              <Image 
-                src="/images/search-lg.png" 
+              <Image
+                src="/images/search-lg.png"
                 alt="Search"
                 width={20}
                 height={20}
@@ -159,13 +157,13 @@ export default function Threads({
         </div>
 
         {/* Comments List */}
-        <div 
+        <div
           className={`flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-[#595959] scrollbar-track-[#2E2E2E] ${
             disableScroll ? "overflow-hidden" : ""
           }`}
         >
-          <div className="space-y-1 p-2 pb-24" >
-            {sortedComments.map((comment) => (
+          <div className="space-y-1 p-2 pb-24">
+            {sortedComments.map((comment) =>
               comment.author === userName ? (
                 <SelfComment
                   key={comment.id}
@@ -196,7 +194,7 @@ export default function Threads({
                   }}
                 />
               )
-            ))}
+            )}
           </div>
         </div>
 
@@ -210,5 +208,5 @@ export default function Threads({
         </div>
       </div>
     </div>
-);
+  );
 }

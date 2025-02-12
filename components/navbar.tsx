@@ -1,155 +1,133 @@
-import { ModeToggle } from "@/components/theme-toggle";
-import { GithubIcon, TwitterIcon, CommandIcon } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
-import Search from "./search";
-import Anchor from "./anchor";
-import { SheetLeftbar } from "./leftbar";
-import { page_routes } from "@/lib/routes-config";
-import { SheetClose } from "@/components/ui/sheet";
+import Image from "next/image";
 import { getSession } from "@/lib/session";
+import Search from "./search"; // Keeping the search bar
+import CollapsibleDropdownSection from "./CollapsibleDropdownSection"; // Import the new component
 
-export const NAVLINKS = [
-  {
-    title: "Home",
-    href: `/`,
-  },
-  {
-    title: "Products",
-    href: `/`,
-    isDropDown: true,
-    dropdownItems: [
-      {title: "Product 1", href: `/`},
-      {title: "Product 2", href: `/`},
-    ],
-  },
-  {
-    title: "Resources",
-    href: `/`,
-    isDropDown: true,
-    dropdownItems: [
-      {title: "Resource 1", href: `/`},
-      {title: "Resource 2", href: `/`},
-    ],
-  },
-  {
-    title: "How It Works",
-    href: `/docs${page_routes[0].href}`,
-  },
-  {
-    title: "Research",
-    href: "/blog",
-  },
-  {
-    title: "Authors",
-    href: "/authors",
-  },
-];
-
-export async function Navbar() 
-{
+export async function Navbar() {
   const session = await getSession();
-  const name = session?.user.name;
+  const name = session?.user?.name;
+
   return (
-    <nav className="w-full border-b h-16 sticky top-0 z-50 bg-background">
-      <div className="sm:container mx-auto w-[95vw] h-full flex items-center justify-between md:gap-2">
-        <div className="flex items-center gap-5">
-          <SheetLeftbar />
-          <div className="flex items-center gap-6">
-            <div className="sm:flex hidden">
-              <Logo />
-            </div>
-            <div className="lg:flex hidden items-center gap-4 text-sm font-medium text-muted-foreground">
-              <NavMenu />
-            </div>
+    <nav className="w-full border-b h-16 sticky top-0 z-50 bg-black flex items-center">
+      <div className="container mx-auto flex items-center justify-between px-6">
+        {/* Left Section - Logo and Nav Links */}
+        <div className="flex items-center gap-6">
+          <Logo />
+          <div className="hidden lg:flex gap-6 text-gray-400 text-sm font-medium">
+            <NavLink href="/">Home</NavLink>
+            <Dropdown title="Products">
+              <DropdownItem href="#">...</DropdownItem>
+            </Dropdown>
+            <Dropdown title="Resources">
+              <CollapsibleDropdownSection
+                title="Contracts"
+                items={[
+                  { label: "Pulp NDA", href: "/resources/pulp-nda" },
+                  {
+                    label: "Pulp IC Agreement",
+                    href: "/resources/pulp-ic-agreement",
+                  },
+                ]}
+              />
+              <CollapsibleDropdownSection
+                title="Workplace Policies"
+                items={[
+                  {
+                    label: "Communication Guidelines",
+                    href: "/resources/communication-guidelines",
+                  },
+                  {
+                    label: "Operations Policies",
+                    href: "/resources/operations-policies",
+                  },
+                ]}
+              />
+            </Dropdown>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Search />
-            <div className="flex ml-2.5 sm:ml-0">
-              <ModeToggle />
-              {
-                name &&<p>Hello, {name}</p>
-              }
-              {
-                !name && <button className="bg-zinc-1000 w-28 hover:bg-zinc-900">
-                <a href="/auth/login">Log in</a>
-              </button>
-              }
-              {
-                !name && <button className="bg-gray-700 w-28 hover: bg-gray-900 rounded-md text-white">
-                  <a href="/auth/signup">Sign up</a>
-                </button>
-              }
+        {/* Right Section - Search Bar and Auth */}
+        <div className="flex items-center gap-4">
+          <Search />
+          {name ? (
+            <span className="text-white">Hello, {name}</span>
+          ) : (
+            <div className="flex gap-4 items-center">
+              <Link
+                href="/auth/login"
+                className="px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 transition"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/auth/signup"
+                className="bg-gray-700 px-4 py-2 rounded-md text-white hover:bg-gray-900 transition"
+              >
+                Sign Up
+              </Link>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </nav>
   );
 }
 
+// Logo Component
 export function Logo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
-      <img src={"/images/logo.svg"} alt="Logo" />
+    <Link href="/" className="flex items-center">
+      <img src="/images/logo.svg" alt="Logo" className="h-6" />
     </Link>
   );
 }
 
-export function NavMenu({ isSheet = false }) {
+// Reusable NavLink Component for Hover Effect
+function NavLink({ href, children }) {
   return (
-    <>
-      {NAVLINKS.map((item) => {
-        if(item.isDropDown){
-          return (
-            <div key={item.title}>
-              <div className="relative group">
-                <Anchor
-                  activeClassName="!text-primary md:font-semibold font-medium"
-                  absolute
-                  className="flex items-center gap-1 dark:text-stone-300/85 text-stone-800 underline"
-                  href={item.href}
-                >
-                  {item.title}
-                </Anchor>
-                <div className="absolute left-0 hidden group-hover:block mt-2 bg-black shadow-lg rounded-md w-48">
-                  {item.dropdownItems.map((dropdownItem) => (
-                    <Anchor
-                      key={dropdownItem.title}
-                      activeClassName="!text-primary font-semibold"
-                      className="block px-4 py-2 text-sm text-stone-800"
-                      href={dropdownItem.href}
-                    >
-                      {dropdownItem.title}
-                    </Anchor>
-                  ))}
-                </div>
-              </div>
-            </div>
-          );
-        }
-        const Comp = (
-          <Anchor
-            key={item.title + item.href}
-            activeClassName="!text-primary md:font-semibold font-medium"
-            absolute
-            className="flex items-center gap-1 dark:text-stone-300/85 text-stone-800"
-            href={item.href}
-          >
-            {item.title}
-          </Anchor>
-        );
-        return isSheet ? (
-          <SheetClose key={item.title + item.href} asChild>
-            {Comp}
-          </SheetClose>
-        ) : (
-          Comp
-        );
-      })}
-    </>
+    <Link
+      href={href}
+      className="text-gray-400 transition-colors duration-200 hover:text-white"
+    >
+      {children}
+    </Link>
+  );
+}
+
+// Dropdown Component with Persistent Hover
+function Dropdown({ title, children }) {
+  return (
+    <div className="relative group">
+      <button className="flex items-center gap-1 text-gray-400 transition-colors duration-200 hover:text-white">
+        {title}
+        <Image
+          src="/images/dropdown-arrow.svg"
+          alt="Dropdown Arrow"
+          width={12}
+          height={12}
+        />
+      </button>
+
+      {/* Dropdown Menu positioned directly below the button */}
+      <div
+        className="absolute left-0 top-full bg-black shadow-lg rounded-md w-64 p-3 
+                   hidden group-hover:flex flex-col"
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// Dropdown Item Component
+function DropdownItem({ href, children }) {
+  return (
+    <Link
+      href={href}
+      className="block px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors duration-200"
+    >
+      {children}
+    </Link>
   );
 }
