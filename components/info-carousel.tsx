@@ -103,13 +103,12 @@ const InfoCarousel: React.FC<PropType> = ( props ) => {
               borderRadius: "0px",
              } : {}}>
               {/* Logo */}
-              <div className="absolute top-4 left-4">
+              <div className="absolute top-4 left-4 w-40 h-10">
                 <Image
                   src={slide.logo}
                   alt="Logo"
-                  width={40}
-                  height={40}
-                  className="rounded"
+                  fill
+                  className="rounded object-contain"
                 />
               </div>
               {/* Status */}
