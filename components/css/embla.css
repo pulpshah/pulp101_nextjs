@@ -9,7 +9,7 @@
   max-width: 100%; 
   overflow: hidden;
   --slide-size: 25%;
-  --slide-spacing: 2rem;
+  --slide-spacing: 1rem;
   
 }
 .embla__viewport {
@@ -20,6 +20,7 @@
   display: flex;
   touch-action: pan-y pinch-zoom;
   margin-left: calc(var(--slide-spacing) * -1);
+  width: 100%;
 }
 .embla__slide {
   transform: translate3d(0, 0, 0);
@@ -32,6 +33,7 @@
   margin-left: 20px; /* Added marginb and borders */
   border: white solid;
   border-radius: 25px;
+  
 }
 .embla__slide__number {
   box-shadow: inset 0 0 0 0.2rem rgb(234, 234, 234);

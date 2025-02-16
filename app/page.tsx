@@ -10,7 +10,9 @@ import AnimatedSection from "@/components/animate-section"; //For animation easi
 import InfiniteScroll from "@/components/infinite-loop-scroll"; //for the infinite logo sliding show
 
 // Constants
-const OPTIONS: EmblaOptionsType = { align: "start" };
+
+const OPTIONS: EmblaOptionsType = { loop: true, align: "start" }
+
 const logos = [
   { src: "/images/pulpapi-logo.svg", alt: "API" },
   { src: "/images/suade-logo.svg", alt: "Suade" },
@@ -146,13 +148,17 @@ export default function Home() {
             Everything you need to confidently learn, test, and build Pulp
             software.
           </p>
-          <Link
-            href="/get-started"
-            className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg hover:bg-gray-800 relative"
-          >
-            <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
-            Get Started
-          </Link>
+          <div className="flex justify-center">
+            <Link
+              href="/get-started"
+              className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg transform h-14 w-38 transition duration-500 hover:scale-125 hover:bg-blue-600 flex justify-center items-center"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
+              Get Started
+            </Link>
+          </div>
+
+
         </AnimatedSection>
 
         <AnimatedSection className="mt-12 mb-24 w-full max-w-4xl px-4">
@@ -289,7 +295,7 @@ export default function Home() {
                 fontSize="36px"
                 supportingFontSize="20px"
               />
-              <div className="flex flex-col items-start gap-8">
+              <div className="flex flex-col items-start gap-8 mask-image-fade-x">
                 <div className="flex items-start gap-8">
                   <InfoCarousel
                     slides={SLIDES}
@@ -315,8 +321,8 @@ export default function Home() {
                 supportingFontSize="20px"
                 align="left"
               />
-              <div className="flex flex-col items-start gap-8">
-                <div className="flex items-start gap-8">
+              <div className="flex flex-col items-start gap-8 overflow-hidden mask-image-fade-x">
+                <div className="flex items-start gap-8 ">
                   <InfoCarousel
                     slides={SLIDES}
                     options={OPTIONS}
@@ -340,18 +346,20 @@ export default function Home() {
               supportingFontSize="20px"
               align="center"
             />
-            <Link
-              href="/get-started"
-              className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg hover:bg-gray-800 relative"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
-              Get Started
-            </Link>
+            <div className="flex justify-center">
+              <Link
+                href="/get-started"
+                className="bg-black text-white px-12 py-3 rounded-[12px] text-lg shadow-md border border-[0.5px] border-white backdrop-blur-lg transform h-14 w-38 transition duration-500 hover:scale-125 hover:bg-blue-600 flex justify-center items-center"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 blur-lg opacity-40 -z-10 rounded-[12px]"></span>
+                Get Started
+              </Link>
+            </div>
           </div>
         </div>
 
         {/*Infinite Scroll of Logos Section*/}
-        <div className="inline-flex flex-nowrap max-w-[600px] overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-200px),transparent_100%)]">
+        <div className="inline-flex flex-nowrap max-w-[600px] overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_28px,_black_calc(100%-200px),transparent_100%)]">
           <InfiniteScroll logos={logos}></InfiniteScroll>
           <InfiniteScroll logos={logos} aria-hidden="true"></InfiniteScroll>
         </div>
@@ -369,6 +377,7 @@ export default function Home() {
           </div>
         </div>
       </AnimatedSection>
+      
     </div>
   );
 }

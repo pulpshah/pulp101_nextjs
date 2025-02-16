@@ -19,6 +19,8 @@ import { cn } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
 
 
+
+
 const randomColors = () => {
   const colors = ["#00A676", "#007BFF", "#6F42C1"];
   let color = colors[Math.floor(Math.random() * colors.length)];
@@ -41,7 +43,7 @@ const darkenColor = (color: string): string => {
 
 
 const carouselVariant = cva(
-  "flex flex-col justify-end items-start p-6 gap-6 relative w-[11rem] h-[504px] shadow-[inset_0px_0px_24px_rgba(255,255,255,0.4),-4.96575px_4.96575px_24.8287px_#282828] backdrop-blur-[14.8972px] rounded-[14px] embla__slide",
+  "flex flex-col justify-end items-center p-6 gap-6 relative w-[11rem] h-[504px] shadow-[inset_0px_0px_24px_rgba(255,255,255,0.4),-4.96575px_4.96575px_24.8287px_#282828] backdrop-blur-[14.8972px] rounded-[14px] embla__slide",
   {
     variants: {
       color: {
@@ -88,8 +90,8 @@ const InfoCarousel: React.FC<PropType> = ( props ) => {
 
   return (
     <section className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className="embla__container pl-8 flex gap-8">
+      <div className="embla__viewport " ref={emblaRef}>
+        <div className="embla__container pl-8 flex space-x-4 gap-8 w-max">
           {slides.map((slide, index) => {
             const backgroundColor = randomColors();
             const descriptionColor = darkenColor(backgroundColor);

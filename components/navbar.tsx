@@ -78,7 +78,7 @@ export async function Navbar() {
 export function Logo() {
   return (
     <Link href="/" className="flex items-center">
-      <img src="/images/logo.svg" alt="Logo" className="h-6" />
+      <img src="/images/pulp101-logo.svg" alt="Logo" className="h-6" />
     </Link>
   );
 }
