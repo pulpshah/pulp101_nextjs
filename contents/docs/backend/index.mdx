@@ -1,0 +1,28 @@
+---
+title: "Backend Documentation Introduction"
+description: "An overview of how our backend is structured."
+---
+
+# Welcome to the Backend Documentation
+
+This file provides an overview of how our backend is structured at a high level. We’ll walk through the main layers and explain each one briefly.
+
+> **Note**: The exact setup may differ in your environment, but this serves as a good template.
+
+## API Layer
+
+Our API layer exposes REST or GraphQL endpoints (depending on your stack). Common responsibilities here include:
+
+- **Request validation** (ensuring payload is valid)  
+- **Authentication and authorization** checks  
+- **Routing** to the correct business logic  
+
+```ts
+// Example endpoint in TypeScript/Node
+import { Request, Response } from "express";
+
+export async function getUser(req: Request, res: Response) {
+  const userId = req.params.id;
+  // Fetch user from DB, handle errors, etc.
+  return res.json({ user: { id: userId, name: "Jane Doe" } });
+}

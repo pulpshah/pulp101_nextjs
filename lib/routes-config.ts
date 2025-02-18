@@ -8,293 +8,312 @@ export type EachRoute = {
 };
 
 export const ROUTES: EachRoute[] = [
+
   {
-    title: "Scoring",
-    href: "/scoring",
+    title: "Backend",
+    href: "/backend",
     noLink: true,
     items: [
       {
-        title: "Appeal",
-        href: "/appeal",
-        items: [
-          { title: "Ethos", href: "/ethos" },
-          { title: "Pathos", href: "/pathos", items: [
-            {title: "Emotion",
-              href: "/emotion"
-            },
-            {title: "Feeling",
-              href: "/feeling"
-            },
-            {
-              title: "Mood",
-              href: "/mood"
-            }
-          ]},
-          { title: "Logos", href: "/logos" },
-        ],
+        title: "Resource 1",
+        href: "/r1"
       },
       {
-        title: "Clarity",
-        href: "/clarity",
-        items: [
-          {title: "Aspect",
-            href: "/aspect"
-          },
-          {title: "Clause",
-            href: "/clause",
-            items: [
-              {title: "Clause Types",
-                href: "/clause-types"
-              }
-            ]
-          },
-          {
-            title: "PartOfSpeech",
-            href: "/partofspeech"
-          },
-          {
-            title: "Phrase Types",
-            href: "/phrase-types"
-          },
-          {
-            title: "VocabularyLevel",
-            href: "/vocab-level",
-            items: [
-              {
-                title: "VocabularyLevelType",
-                href: "/vocab-level-type"
-              }
-            ]
-          }
-        ]
-      },
-      { 
-        title: "Style", 
-        href: "/style",
-        items: [
-          {title: "Character",
-            href: "/character",
-            items: [
-              {title: "Charcter Types",
-                href: "/character-types"
-              }
-            ]
-          },
-          {
-            title: "Sentence",
-            href: "/sentence",
-            items: [
-              {
-                title: "Sentence Purpose",
-                href: "/sentence-purpose"
-              },
-              {
-                title: "SentenceType",
-                href: "/sentence-type"
-              },
-            ]
-          },
-          {
-            title: "Token",
-            href: "/token"
-          },
-          {
-            title: "Virtual Language",
-            href: "/virtual-language"
-          }
-        ]},
-      { 
-        title: "Critical Thinking",
-        href: "/critical-thinking",
-        items: [
-          {
-            title: "Argument",
-            href: "/arguments"
-          },
-          {
-            title: "Accuracy Risk",
-            href: "/accuracy-risk"
-          },
-          {
-            title: "Bias",
-            href: "/bias"
-          },
-          {
-            title: "Claim", 
-            href: "/claims",
-            items: [
-              {
-                title: "Claim Scores",
-                href: "/claim-scores"
-              },
-              {
-                title: "Claim Types",
-                href: "/claim-types"
-              },
-              {
-                title: "Knowledge Types",
-                href: "/knowledge-types"
-              },
-            ]
-          },
-          {
-            title: "Critical Thinking Rate",
-            href: "/critical-thinking-rate"
-          },
-          {title: "Cognitive Strength",
-            href: "/cognitive-strength",
-            items: [
-              {title: "Cognitive Dependability", 
-                href: "/cognitive-dependability"
-              },
-              {title: "Cognitive Risk",
-                href: "/cognitive-risk"
-              }
-            ]
-          },
-          {
-            title: "Fallacy",
-            href: "/fallacy"
-          },
-          {
-            title: "RiskLevel",
-            href: "/risk-level"
-          },
-          {
-            title: "StrengthLevel",
-            href: "/strength-level"
-          }
-        ]
-      },
-      { 
-        title: "Weights",
-        href: "/weights",
-        items: [
-          {
-            title: "Contextual Weight", 
-            href: "/contextual-weight",
-            items: [
-              {
-                title: "Age Range",
-                href: "/age-range"
-              },
-              {
-                title: "Alertness",
-                href: "/alertness"
-              },
-              {
-                title: "Conversation Style",
-                href: "/conversation-style"
-              },
-              {
-                title: "Demeanor",
-                href: "/demeanor"
-              },
-              {
-                title: "Demographics",
-                href: "/demographics"
-              },
-              {
-                title: "Intention",
-                href: "/intention"
-              },
-              {
-                title: "Mind-state",
-                href: "/mind-state"
-              },
-              {
-                title: "Psychographics",
-                href: "/psychographics"
-              },
-              {
-                title: "Sentiment",
-                href: "/sentiment"
-              },
-              {
-                title: "Speaker",
-                href: "/speaker"
-              },
-              {
-                title: "Topic",
-                href: "/topic"
-              },
-              {
-                title: "Turn",
-                href: "/turn",
-                items: [
-                  {
-                    title: "TurnType",
-                    href: "/turn-type"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            title: "Rhetorical Weight",
-            href: "/rhetorical-weight",
-            items: [
-              {
-                title: "Tone",
-                href: "/tone"
-              }
-            ]
-          },
-        ]
-      },
-      {
-        title: "Persuasive Force",
-        href: "/persuasive-force",
-        items: [
-          {
-            title: "Persuasion Coefficient",
-            href: "/persuasion-coefficient"
-          }
-        ]
+        title: "Resource 2",
+        href: "/r2"
       }
-    ],
-  },
-  {
-    title: "References",
-    href: "/references",
-    noLink: true,
-    items: [
-      { title: "Internal", href: "/internal" },
-      { title: "External", href: "/external" },
-      { title: "Multi Modal", href: "/multi-modal" },
-      { title: "Promoted", href: "/advertisment" },
-    ],
-  },
-  {
-    title: "Interactions",
-    href: "/interactions",
-    noLink: true,
-    items: [
-      { title: "Voting", href: "/voting" },
-      { title: "Get References", href: "/get-references"},
-      { title: "Reveal User", href: "/reveal-user" }
-    ],
-  },
-  {
-    title: "Data Visualization",
-    href: "/data-visualization",
-    noLink: true,
-    items: [
-      { title: "Rader Chart", href: "/rader-chart" },
-      { title: "Heatmap", href: "/heatmap" },
-      { title: "Line Chart", href: "/line-chart" },
-      { title: "Navigable Tree", href: "/nav-tree" },
-      { title: "Collabsible Bar Chart", href: "/collab-bar-chart" }
-    ],
-  },
-  {
-    title: "Glossary",
-    href: "/glossary",
-    noLink: true,
-    items: [
-      { title: "Information & Language Basics", href: "/information-and-language-basics" },
-    ],
-  },
+    ]
+  }
+
+  // OLD ROUTES FOR REFERENCE
+
+  //   {
+  //     title: "Scoring",
+  //     href: "/scoring",
+  //     noLink: true,
+  //     items: [
+  //       {
+  //         title: "Appeal",
+  //         href: "/appeal",
+  //         items: [
+  //           { title: "Ethos", href: "/ethos" },
+  //           { title: "Pathos", href: "/pathos", items: [
+  //             {title: "Emotion",
+  //               href: "/emotion"
+  //             },
+  //             {title: "Feeling",
+  //               href: "/feeling"
+  //             },
+  //             {
+  //               title: "Mood",
+  //               href: "/mood"
+  //             }
+  //           ]},
+  //           { title: "Logos", href: "/logos" },
+  //         ],
+  //       },
+  //       {
+  //         title: "Clarity",
+  //         href: "/clarity",
+  //         items: [
+  //           {title: "Aspect",
+  //             href: "/aspect"
+  //           },
+  //           {title: "Clause",
+  //             href: "/clause",
+  //             items: [
+  //               {title: "Clause Types",
+  //                 href: "/clause-types"
+  //               }
+  //             ]
+  //           },
+  //           {
+  //             title: "PartOfSpeech",
+  //             href: "/partofspeech"
+  //           },
+  //           {
+  //             title: "Phrase Types",
+  //             href: "/phrase-types"
+  //           },
+  //           {
+  //             title: "VocabularyLevel",
+  //             href: "/vocab-level",
+  //             items: [
+  //               {
+  //                 title: "VocabularyLevelType",
+  //                 href: "/vocab-level-type"
+  //               }
+  //             ]
+  //           }
+  //         ]
+  //       },
+  //       { 
+  //         title: "Style", 
+  //         href: "/style",
+  //         items: [
+  //           {title: "Character",
+  //             href: "/character",
+  //             items: [
+  //               {title: "Charcter Types",
+  //                 href: "/character-types"
+  //               }
+  //             ]
+  //           },
+  //           {
+  //             title: "Sentence",
+  //             href: "/sentence",
+  //             items: [
+  //               {
+  //                 title: "Sentence Purpose",
+  //                 href: "/sentence-purpose"
+  //               },
+  //               {
+  //                 title: "SentenceType",
+  //                 href: "/sentence-type"
+  //               },
+  //             ]
+  //           },
+  //           {
+  //             title: "Token",
+  //             href: "/token"
+  //           },
+  //           {
+  //             title: "Virtual Language",
+  //             href: "/virtual-language"
+  //           }
+  //         ]},
+  //       { 
+  //         title: "Critical Thinking",
+  //         href: "/critical-thinking",
+  //         items: [
+  //           {
+  //             title: "Argument",
+  //             href: "/arguments"
+  //           },
+  //           {
+  //             title: "Accuracy Risk",
+  //             href: "/accuracy-risk"
+  //           },
+  //           {
+  //             title: "Bias",
+  //             href: "/bias"
+  //           },
+  //           {
+  //             title: "Claim", 
+  //             href: "/claims",
+  //             items: [
+  //               {
+  //                 title: "Claim Scores",
+  //                 href: "/claim-scores"
+  //               },
+  //               {
+  //                 title: "Claim Types",
+  //                 href: "/claim-types"
+  //               },
+  //               {
+  //                 title: "Knowledge Types",
+  //                 href: "/knowledge-types"
+  //               },
+  //             ]
+  //           },
+  //           {
+  //             title: "Critical Thinking Rate",
+  //             href: "/critical-thinking-rate"
+  //           },
+  //           {title: "Cognitive Strength",
+  //             href: "/cognitive-strength",
+  //             items: [
+  //               {title: "Cognitive Dependability", 
+  //                 href: "/cognitive-dependability"
+  //               },
+  //               {title: "Cognitive Risk",
+  //                 href: "/cognitive-risk"
+  //               }
+  //             ]
+  //           },
+  //           {
+  //             title: "Fallacy",
+  //             href: "/fallacy"
+  //           },
+  //           {
+  //             title: "RiskLevel",
+  //             href: "/risk-level"
+  //           },
+  //           {
+  //             title: "StrengthLevel",
+  //             href: "/strength-level"
+  //           }
+  //         ]
+  //       },
+  //       { 
+  //         title: "Weights",
+  //         href: "/weights",
+  //         items: [
+  //           {
+  //             title: "Contextual Weight", 
+  //             href: "/contextual-weight",
+  //             items: [
+  //               {
+  //                 title: "Age Range",
+  //                 href: "/age-range"
+  //               },
+  //               {
+  //                 title: "Alertness",
+  //                 href: "/alertness"
+  //               },
+  //               {
+  //                 title: "Conversation Style",
+  //                 href: "/conversation-style"
+  //               },
+  //               {
+  //                 title: "Demeanor",
+  //                 href: "/demeanor"
+  //               },
+  //               {
+  //                 title: "Demographics",
+  //                 href: "/demographics"
+  //               },
+  //               {
+  //                 title: "Intention",
+  //                 href: "/intention"
+  //               },
+  //               {
+  //                 title: "Mind-state",
+  //                 href: "/mind-state"
+  //               },
+  //               {
+  //                 title: "Psychographics",
+  //                 href: "/psychographics"
+  //               },
+  //               {
+  //                 title: "Sentiment",
+  //                 href: "/sentiment"
+  //               },
+  //               {
+  //                 title: "Speaker",
+  //                 href: "/speaker"
+  //               },
+  //               {
+  //                 title: "Topic",
+  //                 href: "/topic"
+  //               },
+  //               {
+  //                 title: "Turn",
+  //                 href: "/turn",
+  //                 items: [
+  //                   {
+  //                     title: "TurnType",
+  //                     href: "/turn-type"
+  //                   }
+  //                 ]
+  //               }
+  //             ]
+  //           },
+  //           {
+  //             title: "Rhetorical Weight",
+  //             href: "/rhetorical-weight",
+  //             items: [
+  //               {
+  //                 title: "Tone",
+  //                 href: "/tone"
+  //               }
+  //             ]
+  //           },
+  //         ]
+  //       },
+  //       {
+  //         title: "Persuasive Force",
+  //         href: "/persuasive-force",
+  //         items: [
+  //           {
+  //             title: "Persuasion Coefficient",
+  //             href: "/persuasion-coefficient"
+  //           }
+  //         ]
+  //       }
+  //     ],
+  //   },
+  //   {
+  //     title: "References",
+  //     href: "/references",
+  //     noLink: true,
+  //     items: [
+  //       { title: "Internal", href: "/internal" },
+  //       { title: "External", href: "/external" },
+  //       { title: "Multi Modal", href: "/multi-modal" },
+  //       { title: "Promoted", href: "/advertisment" },
+  //     ],
+  //   },
+  //   {
+  //     title: "Interactions",
+  //     href: "/interactions",
+  //     noLink: true,
+  //     items: [
+  //       { title: "Voting", href: "/voting" },
+  //       { title: "Get References", href: "/get-references"},
+  //       { title: "Reveal User", href: "/reveal-user" }
+  //     ],
+  //   },
+  //   {
+  //     title: "Data Visualization",
+  //     href: "/data-visualization",
+  //     noLink: true,
+  //     items: [
+  //       { title: "Rader Chart", href: "/rader-chart" },
+  //       { title: "Heatmap", href: "/heatmap" },
+  //       { title: "Line Chart", href: "/line-chart" },
+  //       { title: "Navigable Tree", href: "/nav-tree" },
+  //       { title: "Collabsible Bar Chart", href: "/collab-bar-chart" }
+  //     ],
+  //   },
+  //   {
+  //     title: "Glossary",
+  //     href: "/glossary",
+  //     noLink: true,
+  //     items: [
+  //       { title: "Information & Language Basics", href: "/information-and-language-basics" },
+  //     ],
+  //   },
 ];
 
 export const RESEARCH_ROUTE: EachRoute[] = [
