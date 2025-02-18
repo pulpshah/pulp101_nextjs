@@ -1,13 +1,14 @@
 import type { Config } from "tailwindcss";
 import type { PluginAPI } from "tailwindcss/types/config";
+import typography from "@tailwindcss/typography";
 
 const config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{ts,tsx,mdx}",
+    "./components/**/*.{ts,tsx,mdx}",
+    "./app/**/*.{ts,tsx,mdx}",
+    "./src/**/*.{ts,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -20,7 +21,7 @@ const config = {
     },
     extend: {
       colors: {
-        textColor: "hsl(var(--text-color)",
+        textColor: "hsl(var(--text-color))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -79,24 +80,25 @@ const config = {
           to: { transform: "translateX(calc(-100% - 0.1rem))" },
         },
         typing: {
-          '0%': { width: '0ch' },
-          '100%': { width: '18ch' },
+          "0%": { width: "0ch" },
+          "100%": { width: "18ch" },
         },
         cursor: {
-          '0%, 100%': { borderColor: 'transparent' },
-          '50%': { borderColor: 'black' },
+          "0%, 100%": { borderColor: "transparent" },
+          "50%": { borderColor: "black" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "infinite-scroll": "infinite-scroll 20s linear infinite",
-        "typing": 'typing 2s forwards',
-        "cursor": 'cursor .4s step-end infinite alternate',
+        typing: "typing 2s forwards",
+        cursor: "cursor 0.4s step-end infinite alternate",
       },
     },
   },
   plugins: [
+    typography,
     function ({ addUtilities }: PluginAPI) {
       addUtilities({
         ".mask-image-fade-x": {
@@ -107,7 +109,7 @@ const config = {
         },
       });
     },
-  ]
+  ],
 } satisfies Config;
 
 export default config;

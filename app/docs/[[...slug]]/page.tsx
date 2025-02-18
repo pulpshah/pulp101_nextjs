@@ -14,30 +14,43 @@ export default async function DocsPage({ params: { slug = [] } }: PageProps) {
   const pathName = slug.join("/");
   const res = await getDocsForSlug(pathName);
 
-  if (!res) notFound();
-  
+  if (!res) {
+    notFound();
+  }
+
+  const { frontmatter, content } = res;
+
   return (
     <div className="flex items-start gap-10">
       <div className="flex-[4.5] pt-10">
         <DocsBreadcrumb paths={slug} />
+
         <Typography>
-          <h1 className="text-3xl -mt-2">{res.frontmatter.title}</h1>
+          {/* Title & Description */}
+          <h1 className="text-3xl -mt-2">{frontmatter.title}</h1>
           <p className="-mt-4 text-muted-foreground text-[16.5px]">
-            {res.frontmatter.description}
+            {frontmatter.description}
           </p>
-          <div>{res.content}</div>
+
+          {/* Render the actual MDX content */}
+          <article className="prose prose-invert mt-6">{content}</article>
+
           <Pagination pathname={pathName} />
         </Typography>
       </div>
+
+      {/* Table of Contents on the side */}
       <Toc path={pathName} />
     </div>
   );
 }
 
+// Generate <title> and <meta> description tags
 export async function generateMetadata({ params: { slug = [] } }: PageProps) {
   const pathName = slug.join("/");
   const res = await getDocsForSlug(pathName);
   if (!res) return null;
+
   const { frontmatter } = res;
   return {
     title: frontmatter.title,
@@ -45,6 +58,7 @@ export async function generateMetadata({ params: { slug = [] } }: PageProps) {
   };
 }
 
+// For static export (if using SSG)
 export function generateStaticParams() {
   return page_routes.map((item) => ({
     slug: item.href.split("/").slice(1),
