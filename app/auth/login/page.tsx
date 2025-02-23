@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import AnimatedText from '@/components/animate-text';
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -58,7 +59,7 @@ const LoginPage: React.FC = () => {
           
           {/* Left Section - Illustration */}
           <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-gradient-to-r from-purple-700 to-indigo-900 text-white p-10">
-            <h1 className="text-3xl font-bold">Hello! <br /> Good Morning</h1>
+            <AnimatedText className="text-3xl font-bold" text='Hello! Good Morning!' repeatDelay={1000}/>
             <p className="mt-4 text-center">Login to your account</p>
             <img src="/public/images/pulp101-logo.svg" alt="Illustration" className="w-full mt-6" />
           </div>
