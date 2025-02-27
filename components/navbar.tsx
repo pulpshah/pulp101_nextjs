@@ -1,41 +1,57 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getSession } from "@/lib/session";
-import Search from "./search"; // Keeping the search bar
-import CollapsibleDropdownSection from "./CollapsibleDropdownSection"; // Import the new component
+import CollapsibleDropdownSection from "./CollapsibleDropdownSection";
 
+// Navbar Component
 export async function Navbar() {
   const session = await getSession();
   const name = session?.user?.name;
 
   return (
-    <nav className="w-full border-b h-16 sticky top-0 z-50 bg-black flex items-center">
-      <div className="container mx-auto flex items-center justify-between px-6">
-        {/* Left Section - Logo and Nav Links */}
-        <div className="flex items-center gap-6">
+    <nav className="w-full border-b bg-black sticky top-0 z-50">
+      <div className="container mx-auto flex items-center h-16 px-8">
+        {/* Left: Logo */}
+        <div className="flex items-center">
           <Logo />
-          <div className="hidden lg:flex gap-6 text-gray-400 text-sm font-medium">
+        </div>
+
+        {/* Middle: Navigation Links (centered) */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="flex gap-[85px] font-inter font-semibold text-[14px] leading-[24px] tracking-normal">
+            {/* 1) Home (direct link) */}
             <NavLink href="/">Home</NavLink>
-            <Dropdown title="Products">
-              <DropdownItem href="#">...</DropdownItem>
+
+            {/* 2) About Pulp101 */}
+            <Dropdown title="About Pulp101">
+              <DropdownItem href="/about/apprenticeship">
+                Apprenticeship
+              </DropdownItem>
+              <DropdownItem href="/about/research">Research</DropdownItem>
             </Dropdown>
-            <Dropdown title="Resources">
+
+            {/* 3) Apprentice Resources */}
+            <Dropdown title="Apprentice Resources">
+              {/* Collapsible: Pulp Contracts */}
               <CollapsibleDropdownSection
-                title="Contracts"
+                title="Pulp Contracts"
                 items={[
                   { label: "Pulp NDA", href: "/resources/pulp-nda" },
-                  {
-                    label: "Pulp IC Agreement",
-                    href: "/resources/pulp-ic-agreement",
-                  },
+                  { label: "Pulp ICA", href: "/resources/pulp-ic-agreement" },
                 ]}
               />
+
+              {/* Collapsible: Pulp Workplace Policies */}
               <CollapsibleDropdownSection
-                title="Workplace Policies"
+                title="Pulp Workplace Policies"
                 items={[
                   {
-                    label: "Communication Guidelines",
-                    href: "/resources/communication-guidelines",
+                    label: "Communication Guideline",
+                    href: "/resources/communication-guideline",
+                  },
+                  {
+                    label: "Discord/Phone/Email",
+                    href: "/resources/discord-phone-email",
                   },
                   {
                     label: "Operations Policies",
@@ -43,28 +59,54 @@ export async function Navbar() {
                   },
                 ]}
               />
+
+              {/* Single links in the dropdown */}
+              <DropdownItem href="/resources/github-notion-loom">
+                GitHub/Notion/Loom
+              </DropdownItem>
+              <DropdownItem href="/resources/timesheets">
+                Timesheets
+              </DropdownItem>
+
+              {/* Conditional item: shown only if user is logged in */}
+              {session?.user && (
+                <DropdownItem href="/resources/log-in-after-auth">
+                  Log In (after auth)
+                </DropdownItem>
+              )}
+            </Dropdown>
+
+            {/* 4) Docs */}
+            <Dropdown title="Docs">
+              {/* Conditional item: shown only if user is logged in */}
+              {session?.user && (
+                <DropdownItem href="/docs/log-in-after-auth">
+                  Log In (after auth)
+                </DropdownItem>
+              )}
+              <DropdownItem href="/docs/api">API Docs</DropdownItem>
+              <DropdownItem href="/docs/sdk">SDK Docs</DropdownItem>
             </Dropdown>
           </div>
         </div>
 
-        {/* Right Section - Search Bar and Auth */}
-        <div className="flex items-center gap-4">
-          <Search />
+        {/* Right: Sign In / Request Invite or Greeting */}
+        <div className="flex items-center">
           {name ? (
             <span className="text-white">Hello, {name}</span>
           ) : (
-            <div className="flex gap-4 items-center">
+            <div className="flex gap-[37px] items-center">
               <Link
                 href="/auth/login"
-                className="px-4 py-2 rounded-md bg-black text-white hover:bg-gray-900 transition"
+                className="font-inter font-semibold text-[14px] leading-[24px] tracking-normal text-[#D9D9D9] transition-colors duration-200 hover:text-white"
               >
-                Log in
+                Sign In
               </Link>
               <Link
                 href="/auth/signup"
-                className="bg-gray-700 px-4 py-2 rounded-md text-white hover:bg-gray-900 transition"
+                className="bg-[#887998] px-4 py-2 rounded-md font-inter font-semibold text-[14px] leading-[24px] tracking-normal text-white hover:bg-[#574E61] transition"
               >
-                Sign Up
+                Request Invite
               </Link>
             </div>
           )}
@@ -83,23 +125,37 @@ export function Logo() {
   );
 }
 
-// Reusable NavLink Component for Hover Effect
-function NavLink({ href, children }) {
+// Reusable NavLink Component
+function NavLink({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
-      className="text-gray-400 transition-colors duration-200 hover:text-white"
+      className="font-inter font-semibold text-[14px] leading-[24px] tracking-normal text-[#D9D9D9] transition-colors duration-200 hover:text-white"
     >
       {children}
     </Link>
   );
 }
 
-// Dropdown Component with Persistent Hover
-function Dropdown({ title, children }) {
+// Dropdown Component
+function Dropdown({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="relative group">
-      <button className="flex items-center gap-1 text-gray-400 transition-colors duration-200 hover:text-white">
+      <button
+        className="flex items-center gap-1 font-inter font-semibold text-[14px] leading-[24px] tracking-normal text-[#D9D9D9] transition-colors duration-200 hover:text-white"
+      >
         {title}
         <Image
           src="/images/dropdown-arrow.svg"
@@ -108,8 +164,7 @@ function Dropdown({ title, children }) {
           height={12}
         />
       </button>
-
-      {/* Dropdown Menu positioned directly below the button */}
+      {/* Dropdown Menu */}
       <div
         className="absolute left-0 top-full bg-black shadow-lg rounded-md w-64 p-3 
                    hidden group-hover:flex flex-col"
@@ -121,11 +176,17 @@ function Dropdown({ title, children }) {
 }
 
 // Dropdown Item Component
-function DropdownItem({ href, children }) {
+function DropdownItem({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
   return (
     <Link
       href={href}
-      className="block px-4 py-2 text-sm text-gray-400 hover:text-white transition-colors duration-200"
+      className="block px-4 py-2 font-inter font-semibold text-[14px] leading-[24px] tracking-normal text-[#D9D9D9] transition-colors duration-200 hover:text-white"
     >
       {children}
     </Link>

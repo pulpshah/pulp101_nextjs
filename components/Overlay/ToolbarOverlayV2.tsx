@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import TextSelectionDropdown from './TextSelectionDropdown';
-import TopPillManager from '../TopPill/TopPillManager';
+// import TopPillManager from '../TopPill/TopPillManager';
 import { useSession } from "next-auth/react"
 
 export default function ToolbarOverlay({ children }: { children: React.ReactNode }) {
@@ -69,10 +69,10 @@ export default function ToolbarOverlay({ children }: { children: React.ReactNode
   return (
     <>
         <div className="flex justify-center">
-          <TopPillManager 
+          {/* <TopPillManager 
             email={userEmail} 
             aiInitialInput={aiInitialInput} 
-          />
+          /> */}
         </div>
 
       <div className="relative">
