@@ -7,6 +7,7 @@ const Pheaders = ({
   supporting,
   fontSize = "36px",
   supportingFontSize = "20px",
+  fontColor = "white", //Default
   letterSpacing = "0px", // Default letter spacing for h1
   supportingLetterSpacing = "0px", // Default letter spacing for h2
   align = "left",
@@ -14,6 +15,7 @@ const Pheaders = ({
   text: string;
   supporting: string;
   fontSize?: string;
+  fontColor?: string;
   supportingFontSize?: string;
   letterSpacing?: string; // Letter spacing for main header
   supportingLetterSpacing?: string; // Letter spacing for supporting text
@@ -30,6 +32,7 @@ const Pheaders = ({
               style={{
                 fontSize: fontSize,
                 fontWeight: 800,
+                color: fontColor,
                 lineHeight: "44px",
                 letterSpacing: letterSpacing, // Apply letter spacing
                 textAlign: align,
@@ -42,6 +45,7 @@ const Pheaders = ({
             className="font-normal inter text-textColor"
             style={{
               fontSize: supportingFontSize,
+              color: fontColor,
               fontWeight: 400,
               lineHeight: "30px",
               letterSpacing: supportingLetterSpacing, // Apply letter spacing

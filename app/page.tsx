@@ -1,3 +1,4 @@
+'use client';
 import { buttonVariants } from "@/components/ui/button";
 import { page_routes } from "@/lib/routes-config";
 import { MoveUpRightIcon, TerminalSquareIcon } from "lucide-react";
@@ -8,7 +9,8 @@ import InfoCarousel from "@/components/info-carousel";
 import { EmblaOptionsType } from "embla-carousel";
 import AnimatedSection from "@/components/animate-section"; //For animation easing in content purposes
 import InfiniteScroll from "@/components/infinite-loop-scroll"; //for the infinite logo sliding show
-
+import FeatureCarousel from "@/components/feature-carousel";
+import { Book, Rocket, Code } from 'lucide-react';
 // Constants
 
 const OPTIONS: EmblaOptionsType = { loop: true, align: "start" }
@@ -88,13 +90,52 @@ const SLIDES = [
   },
 ];
 
+const features = [
+    {
+      title: "Everything about Frontend",
+      description:
+        "Includes: Site navigation, search, internationalization, SEO, easy-to-read typography, code highlighting, dark mode and more.",
+      icon: <Book className="h-6 w-6 text-yellow-500" />,
+    },
+    {
+      title: "Everything about Backend",
+      description:
+        "Leverage the full power and performance of Astro. Extend Starlight with your favorite Astro integrations and libraries.",
+      icon: <Rocket className="h-6 w-6 text-purple-500" />,
+    },
+    {
+      title: "Everything about Design",
+      description:
+        "Write your documentation using Markdown, Markdoc, or MDX for flexibility and ease of use.",
+      icon: <Code className="h-6 w-6 text-green-500" />,
+    },
+    {
+      title: "Everything about AI/ML",
+      description:
+        "Includes: Site navigation, search, internationalization, SEO, easy-to-read typography, code highlighting, dark mode and more.",
+      icon: <Book className="h-6 w-6 text-yellow-500" />,
+    },
+    {
+      title: "Everything about NLP",
+      description:
+        "Leverage the full power and performance of Astro. Extend Starlight with your favorite Astro integrations and libraries.",
+      icon: <Rocket className="h-6 w-6 text-purple-500" />,
+    },
+    {
+      title: "Everything about Data Science",
+      description:
+        "Write your documentation using Markdown, Markdoc, or MDX for flexibility and ease of use.",
+      icon: <Code className="h-6 w-6 text-green-500" />,
+    },
+  ];
+
 const TOGGLE_CLASSES =
   "text-sm font-medium flex items-center gap-2 px-3 md:pl-3 md:pr-3.5 py-3 md:py-1.5 transition-colors relative z-10";
 
 // Main Component
 export default function Home() {
   return (
-    <div>
+    <div className="sm:container mx-auto w-[90vw] h-auto">
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center text-center px-4 mt-8 min-h-[80vh] text-textColor">
         <AnimatedSection className="mt-16">
@@ -175,7 +216,7 @@ export default function Home() {
 
       {/* Features Section */}
       <div
-        className="flex flex-col items-center py-24 self-stretch"
+        className="flex flex-col py-24 self-stretch"
         style={{
           backgroundImage: "url('/images/temporary_brain_pic_bg_removed.png')",
           backgroundSize: "cover",
@@ -192,96 +233,25 @@ export default function Home() {
           supportingLetterSpacing="0px"
         />
 
-        <AnimatedSection className="flex flex-wrap justify-between w-full max-w-7xl mt-8 gap-25">
-          {/* Left Column */}
-          <div className="flex-1">
-            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-white">
-              <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">
-                  Everything Front End
-                </h3>
-                <p className="text-gray-400 mt-2">Everything about Front-end</p>
-                <Link
-                  href="/frontend"
-                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
-                >
-                  Learn more →
-                </Link>
-              </div>
-              <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">
-                  Everything Back End
-                </h3>
-                <p className="text-gray-400 mt-2">Everything about Back-end</p>
-                <Link
-                  href="/docs/backend"
-                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
-                >
-                  Learn more →
-                </Link>
-              </div>
-              <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">
-                  Everything Design
-                </h3>
-                <p className="text-gray-400 mt-2">Everything about Design</p>
-                <Link
-                  href="/design"
-                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
-                >
-                  Learn more →
-                </Link>
-              </div>
+        {/* <div className="max-w-screen-xl flex self-stretch flex-col items-center gap-16 px-4">
+          <div className="flex flex-wrap w-full py-0 px-8 pb-12 content-stretch justify-between">
+            <div className=" border border-[0.5px] border-white p-8 bg-black bg-opacity-50 backdrop-blur-lg"> 
+              <h2>Hi Hello Can you hear me </h2>
+            </div>
+            <div className="border border-[0.5px] border-white  p-8 bg-black bg-opacity-50 backdrop-blur-lg"> 
+              <h2></h2>
+            </div>
+            <div className="border border-[0.5px] border-white p-8 bg-black bg-opacity-50 backdrop-blur-lg"> 
+              <h2></h2>
+            </div>
+            <div className="border border-[0.5px] border-white  p-8 bg-black bg-opacity-50 backdrop-blur-lg"> 
+              <h2></h2>
             </div>
           </div>
+        </div> */}
 
-          {/* Middle Column */}
-          <div className="flex-1">
-            <div className="flex flex-col gap-8 border-l-2 border-gray-600 hover:border-white">
-              <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">
-                  Everything Data Science
-                </h3>
-                <p className="text-gray-400 mt-2">
-                  Everything about Data Science
-                </p>
-                <Link
-                  href="/datascience"
-                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
-                >
-                  Learn more →
-                </Link>
-              </div>
-              <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">
-                  Everything NLP
-                </h3>
-                <p className="text-gray-400 mt-2">Everything about NLP</p>
-                <Link
-                  href="/nlp"
-                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
-                >
-                  Learn more →
-                </Link>
-              </div>
-              <div className="pl-4">
-                <h3 className="text-textColor text-xl font-semibold">
-                  Everything ML/AI
-                </h3>
-                <p className="text-gray-400 mt-2">Everything about ML/AI</p>
-                <Link
-                  href="/ml-ai"
-                  className="bg-white text-gray-900 font-semibold py-1.5 px-4 rounded-md hover:bg-gray-200 mt-3 inline-block"
-                >
-                  Learn more →
-                </Link>
-              </div>
-            </div>
-          </div>
+        <FeatureCarousel features={features} />
 
-          {/* Empty Column */}
-          <div className="flex-1"></div>
-        </AnimatedSection>
       </div>
 
       {/* Core Products Section */}
