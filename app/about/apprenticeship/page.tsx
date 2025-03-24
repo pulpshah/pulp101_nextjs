@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import FeatureCarousel from '@/components/feature-carousel';
 import { Settings, Code, MessageCircle, Layout } from 'lucide-react';
 import Pheaders from '@/components/paragraph-header';
+import AboutIntro from '@/components/AboutIntro';
 
 const apprenticeFeatures = [{
     title: 'Automation',
@@ -80,41 +81,68 @@ const apprenticeshipPage = () => {
                 </div>
             </div>
             <div className='flex flex-col md:flex-row items-center bg-gray-200 p-20'>
-                <div className='flex flex-col mt-20 bg-gray-200 text-black'>   {/* What We Look For */}
+                <div className='flex flex-col mt-20 bg-gray-200 text-black px-10'>   {/* What We Look For */}
                         <div className='flex flex-row items-center'>
                             <img src='/images/pulp101-logo.svg' className='bg-black w-[80px] h-[80px] p-2 rounded-full'/>
                         </div>
-                        <h1 className='text-3xl py-5 font-bold'>What We Look For</h1>
+                        <h1 className='text-3xl py-5 font-bold'>What We Look For...</h1>
                         <div>
                             <h3>We’re looking for individuals who are curious, motivated, and eager to learn. Whether you’re an aspiring software engineer, a tech enthusiast, or someone passionate about problem-solving, we want to hear from you. Here are some qualities we look for in an apprentice:
                             </h3>
                             <br/>
-                            <div>
-                                <Pheaders text='Curiosity' supporting='dasdawsd' fontSize='20px' supportingFontSize='15px' fontColor='black' />
+                            <div className='flex flex-row items-center justify-between p-10'>
+                                <div className='flex flex-col items-center w-[15vw]'>
+                                    <Pheaders text='A Strong Foundation' supporting='You don’t need to be an expert, but you should have a basic understanding of programming, problem-solving, and core technical concepts' fontSize='20px' supportingFontSize='15px' fontColor='black' />
+                                </div>
+                                <div className='w-[15vw]'>
+                                    <Pheaders text='Curiosity and Drive' supporting='We love apprentices who want to learn and grow. If you’re someone who’s excited to take on new challenges, we’ll give you the resources and support to thrive.' fontSize='20px' supportingFontSize='15px' fontColor='black' />
+                                </div>
+                                <div className='w-[15vw]'>
+                                    <Pheaders text='Collaboration Skills' supporting='Being a part of the Pulp team means working closely with others. We value apprentices who are comfortable collaborating, asking questions, and sharing ideas.' fontSize='20px' supportingFontSize='15px' fontColor='black' />
+                                </div>
+                                <div className='w-[15vw]'>
+                                    <Pheaders text='Creativity and Initiative' supporting='At Pulp, we encourage innovation and creativity. We’re looking for individuals who are excited to bring fresh ideas to the table and take initiative in tackling challenges.' fontSize='20px' supportingFontSize='15px' fontColor='black' />
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
             </div>
                 
-                <div className='flex flex-col items-center'>   {/* Our Approach to Mentorship */}
-                    <h1 className=''>Our Approach to Mentorship</h1>
-                    <div>
-                        <p>Mentorship is a cornerstone of our apprenticeship program. From your first day at Pulp, you’ll be paired with a mentor who will support your growth and development.
-                        </p>
+            <section className="bg-white text-gray-800 py-12 px-6">
+                <div className="max-w-3xl mx-auto text-center">
+                    <h2 className="text-2xl font-bold text-purple-600">Our Approach to Mentorship</h2>
+                    <p className="mt-4 text-lg">
+                    Mentorship is a cornerstone of our apprenticeship program. From your first day at Pulp, you’ll be paired with a mentor who will support your growth and development.
+                    </p>
+                    <p className="mt-4">
+                    At Pulp, we’re on a mission to <strong>push the boundaries of innovation</strong>. We believe that technology has the power to 
+                    <strong>transform industries</strong>, <strong>create new opportunities</strong>, and <strong>improve lives</strong>. As an apprentice at Pulp, 
+                    you’ll be at the forefront of that change, helping us create tools that make a real difference. 
+                    </p>
+                </div>
+
+                <div className="max-w-3xl mx-auto text-center mt-8">
+                    <h3 className="text-xl font-semibold text-purple-600">Hear from our Apprentices</h3>
+                    <div className="mt-4">
+                    <video className="w-full max-w-md mx-auto rounded-lg shadow-lg" controls>
+                    
+                    </video>
                     </div>
                 </div>
-                <div className='flex flex-col items-center'>   {/* How Can You Make a Change*/}
-                    <p>At Pulp, we’re on a mission to **push the boundaries of innovation**. We believe that technology has the power to **transform industries**, **create new opportunities**, and **improve lives**. As an apprentice at Pulp, you’ll be at the forefront of that change, helping us create tools that make a real difference. When you join our team, you’re not just joining a company—you’re becoming part of a **community**. A community that values **creativity**, **collaboration**, and **continuous growth**. By working with us, you’ll help shape the future of **automation**, **NLP**, and **user experience**. And through your contributions, you’ll gain skills that will set you up for a long-lasting and fulfilling career in technology. </p>
+
+                <div className="max-w-3xl mx-auto text-center mt-12">
+                    <h3 className="text-xl font-semibold text-purple-600">Join Our Team Today</h3>
+                    <p className="mt-4">
+                    Ready to take the next step in your tech career? Apply to be an apprentice at Pulp today and start building the skills 
+                    you need to succeed in the fast-paced world of technology. We can’t wait to meet you!
+                    </p>
+                    <a href="#" className="mt-6 inline-block bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-purple-700 transition">
+                    Apply Now
+                    </a>
                 </div>
-                <div className='flex flex-col items-center'>   {/* Hear from our Apprentices*/}
-                    <h1>Hear from our Apprentices</h1>
-                    <video src='https://www.youtube.com/watch?v=JF0Z6UZ1j0A' controls></video>
-                </div>
-                <div className='flex flex-col items-center'>   {/* Join Our Team Today*/}
-                    <h1>Join Our Team Today</h1>
-                    <p className="text-lg mb-8">Ready to take the next step in your tech career? Apply to be an apprentice at Pulp today and start building the skills you need to succeed in the fast-paced world of technology. We can’t wait to meet you!</p>
-                    <button className="bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-700 transition duration-300">Apply Now</button>
-                </div>
+            </section>
+            
             
         </div>
     )

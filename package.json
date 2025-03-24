@@ -43,6 +43,7 @@
     "graphql-yoga": "^5.7.0",
     "html2canvas": "^1.4.1",
     "jose": "^5.9.6",
+    "jspdf": "^3.0.1",
     "lucide-react": "^0.435.0",
     "mongodb": "^6.9.0",
     "neo4j-driver": "^5.26.0",
