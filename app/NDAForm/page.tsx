@@ -1,9 +1,16 @@
+// ============================================
+// File Purpose: Handles NDA form submission and uploading NDA files to AWS S3, while preserving the original NDA form content and styling.
+// Original Author: Brian Cao
+// Last Updated By: Mohammed Ihtisham
+// Last Updated On: 03/24/2025
+// ============================================
+
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
-import jsPDF from "jspdf";
+import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { image } from 'html2canvas/dist/types/css/types/image';
+import AWS from 'aws-sdk';
 
 
 const NDAForm = () => { 
@@ -17,6 +24,14 @@ const NDAForm = () => {
   //checks if the required fields are filled out
   const canvasRef = useRef<SignatureCanvas>(null);
 
+  // AWS S3 Configuration for NDA Upload
+  AWS.config.update({
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+    region: process.env.NEXT_PUBLIC_AWS_REGION,
+  });
+
+  const s3 = new AWS.S3();
 
   // Function to handle changes and validate letter inputs
   const handleInputChange = (setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +69,103 @@ const NDAForm = () => {
     }
   }, [receivingParty, individualAddress, printName, date]);
   
+  // Function to upload the PDF to AWS S3
+  const uploadToS3 = async (file: Blob) => {
+    const params = {
+      Bucket: process.env.NEXT_PUBLIC_S3_BUCKET_NAME!,
+      Key: `nda-uploads/NDA_Agreement_${Date.now()}.pdf`, // Customize file name
+      Body: file,
+      ContentType: 'application/pdf',
+    };
+
+    try {
+      const { Location } = await s3.upload(params).promise();
+      console.log('File uploaded to:', Location);
+      alert(`File uploaded successfully to ${Location}`);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Error uploading file.');
+    }
+  };
+
+  // Function to handle form submission (upload to AWS)
+  // Function to handle form submission (upload to AWS)
+const handleSubmit = async () => {
+  if (requiredFields) {
+      alert('Please fill out all required fields.');
+      return;
+  }
+
+  const input = document.getElementById("printable");
+
+  if (input) {
+      const pdf = new jsPDF("p", "px", "letter");
+      const canvas = await html2canvas(input as HTMLElement, {
+          scale: 1,
+          useCORS: true,
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.8);
+      const imgWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+
+      // Convert PDF to Blob
+      const pdfBlob = pdf.output("blob");
+
+      console.log("Converting PDF to Blob...");
+
+      // Convert Blob to Base64
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+          const base64Data = reader.result?.toString().split(",")[1];
+
+          if (!base64Data) {
+              console.error("Failed to convert PDF to Base64");
+              alert("Failed to prepare file for upload.");
+              return;
+          }
+
+          console.log("Base64 file prepared for upload");
+
+          try {
+              const fileName = `nda-uploads/NDA_Agreement_${Date.now()}.pdf`;
+              const fileType = "application/pdf";
+
+              console.log("Uploading file:", fileName);
+
+              const response = await fetch("/api/upload", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                      file: base64Data,
+                      fileName,
+                      fileType,
+                  }),
+              });
+
+              if (response.ok) {
+                  const { url } = await response.json();
+                  console.log("File uploaded to:", url);
+                  alert(`File uploaded successfully to ${url}`);
+              } else {
+                  const { error } = await response.json();
+                  console.error("Upload error:", error);
+                  alert(`Error uploading file: ${error}`);
+              }
+          } catch (error) {
+              console.error("Upload error:", error);
+              alert("Failed to upload file.");
+          }
+      };
+
+      reader.readAsDataURL(pdfBlob);
+  }
+};
+
 
   const handleDownloadPDF = async () => {
     const input = document.getElementById("printable");
@@ -359,6 +471,13 @@ const NDAForm = () => {
         onClick={handleDownloadPDF}
       >
         Download PDF
+      </button>
+
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
+        onClick={handleSubmit}
+      >
+        Submit
       </button>
       
       </div>
