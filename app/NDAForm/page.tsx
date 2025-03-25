@@ -2,7 +2,7 @@
 // File Purpose: Handles NDA form submission and uploading NDA files to AWS S3, while preserving the original NDA form content and styling.
 // Original Author: Brian Cao
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 03/24/2025
+// Last Updated On: 03/25/2025
 // ============================================
 
 'use client';
@@ -77,19 +77,16 @@ const NDAForm = () => {
       Body: file,
       ContentType: 'application/pdf',
     };
-
     try {
       const { Location } = await s3.upload(params).promise();
-      console.log('File uploaded to:', Location);
       alert(`File uploaded successfully to ${Location}`);
     } catch (error) {
-      console.error('Error uploading file:', error);
       alert('Error uploading file.');
     }
   };
 
-  // Function to handle form submission (upload to AWS)
-  // Function to handle form submission (upload to AWS)
+
+// Function to handle form submission (upload to AWS)
 const handleSubmit = async () => {
   if (requiredFields) {
       alert('Please fill out all required fields.');
@@ -97,75 +94,121 @@ const handleSubmit = async () => {
   }
 
   const input = document.getElementById("printable");
-
+  
   if (input) {
-      const pdf = new jsPDF("p", "px", "letter");
-      const canvas = await html2canvas(input as HTMLElement, {
-          scale: 1,
-          useCORS: true,
+    const pdf = new jsPDF("p", "px", "letter");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const margin = 40; 
+    const contentWidth = pageWidth - 2 * margin; 
+    const contentHeight = pageHeight - 2 * margin; 
+
+    const originalHeight = input.style.height;
+    const originalOverflow = input.style.overflow;
+    input.style.height = "auto";
+    input.style.overflow = "visible";
+    
+    const sections = Array.from(input.children); 
+
+    let position = margin; // Start at the top margin
+
+    for (const section of sections) {
+    
+      const canvas = await html2canvas(section as HTMLElement, {
+        scale: 1, 
+        useCORS: true,
+        windowHeight: section.scrollHeight, 
       });
 
-      const imgData = canvas.toDataURL("image/jpeg", 0.8);
-      const imgWidth = pdf.internal.pageSize.getWidth();
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+      const imgData = canvas.toDataURL("image/jpeg", 0.8); 
+      var imageDataPrinted = 0;
+      const aspectRatio = canvas.width / canvas.height;
+      
+      const imgWidth = contentWidth;
+      const imgHeight = imgWidth / aspectRatio;
 
-      // Convert PDF to Blob
-      const pdfBlob = pdf.output("blob");
+      // If the section is too tall for the current page, split it into multiple pages
+      let heightLeft = imgHeight;
+      while (heightLeft > 0 && imageDataPrinted < 1) {
+        
+        const remainingPageHeight = contentHeight - (position - margin);
 
-      console.log("Converting PDF to Blob...");
+        // If the remaining space is not enough for the current section, move to the next page
+        if (remainingPageHeight <= 0 || remainingPageHeight < imgHeight) {
+          pdf.addPage();
+          position = margin; // Reset 
+        }
 
-      // Convert Blob to Base64
-      const reader = new FileReader();
+        // Calculate the height of the current page's content
+        const currentPageHeight = heightLeft;
 
-      reader.onloadend = async () => {
-          const base64Data = reader.result?.toString().split(",")[1];
+        // Add the image to the PDF with margins
+        pdf.addImage(
+          imgData,
+          "JPEG", 
+          margin,
+          position, 
+          imgWidth, 
+          currentPageHeight, 
+          undefined, 
+          "FAST" 
+        );
+        imageDataPrinted++;
+        
+        heightLeft -= currentPageHeight;
+        position += currentPageHeight;
+      }
 
-          if (!base64Data) {
-              console.error("Failed to convert PDF to Base64");
-              alert("Failed to prepare file for upload.");
-              return;
-          }
-
-          console.log("Base64 file prepared for upload");
-
-          try {
-              const fileName = `nda-uploads/NDA_Agreement_${Date.now()}.pdf`;
-              const fileType = "application/pdf";
-
-              console.log("Uploading file:", fileName);
-
-              const response = await fetch("/api/upload", {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                      file: base64Data,
-                      fileName,
-                      fileType,
-                  }),
-              });
-
-              if (response.ok) {
-                  const { url } = await response.json();
-                  console.log("File uploaded to:", url);
-                  alert(`File uploaded successfully to ${url}`);
-              } else {
-                  const { error } = await response.json();
-                  console.error("Upload error:", error);
-                  alert(`Error uploading file: ${error}`);
-              }
-          } catch (error) {
-              console.error("Upload error:", error);
-              alert("Failed to upload file.");
-          }
-      };
-
-      reader.readAsDataURL(pdfBlob);
+    // Restore the original styles
+    input.style.height = originalHeight;
+    input.style.overflow = originalOverflow;
   }
-};
 
+  // Convert PDF to Blob
+  const pdfBlob = pdf.output("blob");
+
+  // Convert Blob to Base64
+  const reader = new FileReader();
+
+  reader.onloadend = async () => {
+    const base64Data = reader.result?.toString().split(",")[1];
+
+    if (!base64Data) {
+        alert("Failed to prepare file for upload.");
+        return;
+    }
+
+    try {
+        const fileName = `nda-uploads/NDA_Agreement_${Date.now()}.pdf`;
+        const fileType = "application/pdf";
+
+        const response = await fetch("/api/upload", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                file: base64Data,
+                fileName,
+                fileType,
+            }),
+        });
+
+        if (response.ok) {
+            const { url } = await response.json();
+            alert(`File uploaded successfully to ${url}`);
+        } else {
+            const { error } = await response.json();
+            alert(`Error uploading file: ${error}`);
+        }
+    } catch (error) {
+        alert("Failed to upload file.");
+      }
+    };
+    reader.readAsDataURL(pdfBlob);
+    }
+  };
 
   const handleDownloadPDF = async () => {
     const input = document.getElementById("printable");
@@ -174,7 +217,6 @@ const handleSubmit = async () => {
       const pdf = new jsPDF("p", "px", "letter");
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-  
 
       const margin = 40; 
       const contentWidth = pageWidth - 2 * margin; 
@@ -184,14 +226,12 @@ const handleSubmit = async () => {
       const originalOverflow = input.style.overflow;
       input.style.height = "auto";
       input.style.overflow = "visible";
-  
      
       const sections = Array.from(input.children); 
   
       let position = margin; // Start at the top margin
   
       for (const section of sections) {
-        
       
         const canvas = await html2canvas(section as HTMLElement, {
           scale: 1, 
@@ -200,13 +240,9 @@ const handleSubmit = async () => {
         });
 
         const imgData = canvas.toDataURL("image/jpeg", 0.8); 
-
         var imageDataPrinted = 0;
-
-        
         const aspectRatio = canvas.width / canvas.height;
   
-        
         const imgWidth = contentWidth;
         const imgHeight = imgWidth / aspectRatio;
   
@@ -237,8 +273,7 @@ const handleSubmit = async () => {
             "FAST" 
           );
           imageDataPrinted++;
-  
-          
+      
           heightLeft -= currentPageHeight;
           position += currentPageHeight;
         }
