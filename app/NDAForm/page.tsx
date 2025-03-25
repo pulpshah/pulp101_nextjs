@@ -86,129 +86,149 @@ const NDAForm = () => {
   };
 
 
-// Function to handle form submission (upload to AWS)
-const handleSubmit = async () => {
-  if (requiredFields) {
+  // Function to handle form submission (upload to AWS)
+  const handleSubmit = async () => {
+    if (requiredFields) {
       alert('Please fill out all required fields.');
       return;
-  }
-
-  const input = document.getElementById("printable");
-  
-  if (input) {
-    const pdf = new jsPDF("p", "px", "letter");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-
-    const margin = 40; 
-    const contentWidth = pageWidth - 2 * margin; 
-    const contentHeight = pageHeight - 2 * margin; 
-
-    const originalHeight = input.style.height;
-    const originalOverflow = input.style.overflow;
-    input.style.height = "auto";
-    input.style.overflow = "visible";
-    
-    const sections = Array.from(input.children); 
-
-    let position = margin; // Start at the top margin
-
-    for (const section of sections) {
-    
-      const canvas = await html2canvas(section as HTMLElement, {
-        scale: 1, 
-        useCORS: true,
-        windowHeight: section.scrollHeight, 
-      });
-
-      const imgData = canvas.toDataURL("image/jpeg", 0.8); 
-      var imageDataPrinted = 0;
-      const aspectRatio = canvas.width / canvas.height;
-      
-      const imgWidth = contentWidth;
-      const imgHeight = imgWidth / aspectRatio;
-
-      // If the section is too tall for the current page, split it into multiple pages
-      let heightLeft = imgHeight;
-      while (heightLeft > 0 && imageDataPrinted < 1) {
-        
-        const remainingPageHeight = contentHeight - (position - margin);
-
-        // If the remaining space is not enough for the current section, move to the next page
-        if (remainingPageHeight <= 0 || remainingPageHeight < imgHeight) {
-          pdf.addPage();
-          position = margin; // Reset 
-        }
-
-        // Calculate the height of the current page's content
-        const currentPageHeight = heightLeft;
-
-        // Add the image to the PDF with margins
-        pdf.addImage(
-          imgData,
-          "JPEG", 
-          margin,
-          position, 
-          imgWidth, 
-          currentPageHeight, 
-          undefined, 
-          "FAST" 
-        );
-        imageDataPrinted++;
-        
-        heightLeft -= currentPageHeight;
-        position += currentPageHeight;
-      }
-
-    // Restore the original styles
-    input.style.height = originalHeight;
-    input.style.overflow = originalOverflow;
-  }
-
-  // Convert PDF to Blob
-  const pdfBlob = pdf.output("blob");
-
-  // Convert Blob to Base64
-  const reader = new FileReader();
-
-  reader.onloadend = async () => {
-    const base64Data = reader.result?.toString().split(",")[1];
-
-    if (!base64Data) {
-        alert("Failed to prepare file for upload.");
-        return;
     }
 
-    try {
-        const fileName = `nda-uploads/NDA_Agreement_${Date.now()}.pdf`;
-        const fileType = "application/pdf";
+    const input = document.getElementById("printable") as HTMLElement | null;
+    
+    if (input) {
+      const pdf = new jsPDF("p", "px", "letter");
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
 
-        const response = await fetch("/api/upload", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                file: base64Data,
-                fileName,
-                fileType,
-            }),
+      const margin = 40; 
+      const contentWidth = pageWidth - 2 * margin; 
+      const contentHeight = pageHeight - 2 * margin; 
+
+      // Save original styles
+      const originalHeight = input.style.height;
+      const originalOverflow = input.style.overflow;
+      input.style.height = "auto";
+      input.style.overflow = "visible";
+      
+      const sections = Array.from(input.children);
+
+      let position = margin; // Start at the top margin
+
+      for (const section of sections) {
+        const canvas = await html2canvas(section as HTMLElement, {
+          scale: 1,
+          useCORS: true,
+          windowHeight: section.scrollHeight,
         });
 
-        if (response.ok) {
+        const imgData = canvas.toDataURL("image/jpeg", 0.8);
+        let imageDataPrinted = 0;
+        const aspectRatio = canvas.width / canvas.height;
+        
+        const imgWidth = contentWidth;
+        const imgHeight = imgWidth / aspectRatio;
+
+        let heightLeft = imgHeight;
+        while (heightLeft > 0 && imageDataPrinted < 1) {
+          const remainingPageHeight = contentHeight - (position - margin);
+
+          if (remainingPageHeight <= 0 || remainingPageHeight < imgHeight) {
+            pdf.addPage();
+            position = margin; // Reset position
+          }
+
+          const currentPageHeight = Math.min(heightLeft, remainingPageHeight);
+
+          pdf.addImage(
+            imgData,
+            "JPEG",
+            margin,
+            position,
+            imgWidth,
+            currentPageHeight
+          );
+          imageDataPrinted++;
+          
+          heightLeft -= currentPageHeight;
+          position += currentPageHeight;
+        }
+      }
+
+      // Restore original styles
+      input.style.height = originalHeight;
+      input.style.overflow = originalOverflow;
+
+      // Convert PDF to Blob
+      const pdfBlob = pdf.output("blob");
+
+      // Convert Blob to Base64
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+        const base64Data = reader.result?.toString().split(",")[1];
+
+        if (!base64Data) {
+          alert("Failed to prepare file for upload.");
+          return;
+        }
+
+        try {
+          const fileName = `nda-uploads/NDA_Agreement_${Date.now()}.pdf`;
+          const fileType = "application/pdf";
+
+          // ✅ Step 1: Upload to S3
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              file: base64Data,
+              fileName,
+              fileType,
+            }),
+          });
+
+          if (response.ok) {
             const { url } = await response.json();
             alert(`File uploaded successfully to ${url}`);
-        } else {
+
+            // ✅ Step 2: Send to Neo4j (store S3 link and form data)
+            const neo4jResponse = await fetch("/api/neo4j", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: printName,
+                address: individualAddress,
+                date: date,
+                s3Link: url,
+              }),
+            });
+
+            if (neo4jResponse.ok) {
+              alert("NDA data stored successfully in Neo4j");
+            } else {
+              const { error } = await neo4jResponse.json();
+              console.error("Neo4j storage error:", error);
+              alert(`Failed to store NDA data in Neo4j: ${error}`);
+            }
+          } else {
             const { error } = await response.json();
+            console.error("S3 upload error:", error);
             alert(`Error uploading file: ${error}`);
+          }
+        } catch (error) {
+          console.error("File upload failed:", error);
+          alert("Failed to upload file.");
         }
-    } catch (error) {
-        alert("Failed to upload file.");
-      }
-    };
-    reader.readAsDataURL(pdfBlob);
+      };
+
+      reader.readAsDataURL(pdfBlob);
     }
   };
+
 
   const handleDownloadPDF = async () => {
     const input = document.getElementById("printable");
