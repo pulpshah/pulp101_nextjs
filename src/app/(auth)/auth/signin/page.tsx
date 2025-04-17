@@ -87,7 +87,7 @@ function SignInForm() {
       <div className="w-full max-w-md space-y-8 p-8 rounded-lg shadow-xl" style={{ background: 'var(--card-bg)', borderColor: 'var(--card-border)', borderWidth: '1px' }}>
         <div className="flex flex-col items-center">
           <ThemeAwareImage
-            src="/horizontal-logo.svg"
+            src="/images/horizontal-logo.svg"
             alt="Logo"
             width={80}
             height={80}
@@ -119,7 +119,7 @@ function SignInForm() {
               '--tw-ring-offset-color': 'var(--background)'
             }}
           >
-            <Image src="/google-logo.svg" alt="Google" width={18} height={18} />
+            <Image src="/images/google-logo.svg" alt="Google" width={18} height={18} />
             Sign in with Google
           </button>
         </div>

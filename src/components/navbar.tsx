@@ -29,7 +29,7 @@ export async function Navbar() {
           ) : (
             <div className="flex gap-[37px] items-center">
               <Link
-                href="/auth/login"
+                href="/auth/signin"
                 className="font-inter font-semibold text-[14px] leading-[24px] tracking-normal text-[#D9D9D9] transition-colors duration-200 hover:text-white"
               >
                 Sign In

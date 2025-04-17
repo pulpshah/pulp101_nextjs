@@ -1,14 +1,16 @@
 import type { Config } from "tailwindcss";
 import type { PluginAPI } from "tailwindcss/types/config";
 import typography from "@tailwindcss/typography";
+import forms from "@tailwindcss/forms";
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx,mdx}",
     "./components/**/*.{ts,tsx,mdx}",
     "./app/**/*.{ts,tsx,mdx}",
     "./src/**/*.{ts,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}", // <- from original project
   ],
   prefix: "",
   theme: {
@@ -21,6 +23,19 @@ const config = {
     },
     extend: {
       colors: {
+        // Original default gray palette — for fallback & compatibility
+        gray: {
+          100: "#f5f5f5",
+          200: "#e5e5e5",
+          300: "#d4d4d4",
+          400: "#a3a3a3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
+        },
+        // Your design tokens (via CSS variables)
         textColor: "hsl(var(--text-color))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -56,16 +71,17 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       fontFamily: {
+        sans: ["Inter", "sans-serif"], // classic default fallback
         code: ["var(--font-geist-mono)"],
         regular: ["var(--font-geist-sans)"],
         RG: ['Roc Grotesk', 'sans-serif'],
         inter: ['Inter'],
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
@@ -99,6 +115,7 @@ const config = {
   },
   plugins: [
     typography,
+    forms,
     function ({ addUtilities }: PluginAPI) {
       addUtilities({
         ".mask-image-fade-x": {
@@ -110,6 +127,6 @@ const config = {
       });
     },
   ],
-} satisfies Config;
+};
 
 export default config;
