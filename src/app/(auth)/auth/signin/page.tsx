@@ -11,8 +11,8 @@ import Image from "next/image";
 function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
-  const errorType = searchParams.get("error");
+  const callbackUrl = searchParams?.get("callbackUrl") || "/";
+  const errorType = searchParams?.get("error");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
