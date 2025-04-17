@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("../styles/syntax.css");
+@import '../../styles/syntax.css';
 
 @layer base {
   :root {
@@ -111,12 +111,15 @@ pre>code {
 
 /* Hide scrollbar on WebKit browsers */
 .scroll-container {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .scroll-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
+  /* Chrome, Safari, Opera */
 }
 
 
