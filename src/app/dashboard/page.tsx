@@ -1,32 +1,56 @@
-import { DashboardCard } from "@/components/dashboard/DashboardCard";
-import { ProgressTracker } from "@/components/dashboard/ProgressTracker";
-import { TaskChecklist } from "@/components/dashboard/TaskChecklist";
+// ============================================
+// File Purpose: Dashboard page that displays user profile summary, task statistics, and task table for onboarding tracking.
+// Original Author: Mohammed Ihtisham
+// Last Updated By: Mohammed Ihtisham
+// Last Updated On: 04/19/2025
+// ============================================
 
-export default function DashboardPage() {
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { ProfileSummaryCard } from "@/components/dashboard/ProfileSummaryCard";
+import { TaskStatCard } from "@/components/dashboard/TaskStatCard";
+import { TaskTable } from "@/components/dashboard/TaskTable";
+
+export default async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+
   return (
     <main className="min-h-screen bg-gray-950 text-white px-6 py-12 md:px-16 space-y-12">
-      <h1 className="text-4xl font-bold text-white">Welcome to your Onboarding Dashboard</h1>
-      <p className="text-gray-400 text-lg">Track your progress and complete setup tasks below.</p>
+      {/* Welcome Text */}
+      <div>
+      <h1 className="text-3xl md:text-4xl font-bold mb-4">
+        Welcome, {user?.name?.split(" ")[0] ?? "Guest"} 👋
+      </h1>
+      <p className="text-gray-400 text-md">
+        Glad to have you back on your onboarding journey.
+      </p>
+    </div>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        <DashboardCard title="Welcome Package" status="Complete" />
-        <DashboardCard title="Access Credentials" status="Pending" />
-        <DashboardCard title="First Team Meeting" status="Scheduled" />
-        <DashboardCard title="Handbook Training" status="In Progress" />
-        <DashboardCard title="Project Tools Setup" status="Pending" />
-        <DashboardCard title="Feedback Session" status="Upcoming" />
-      </section>
 
-      <ProgressTracker progress={45} />
+      {/* Profile and Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
+        {/* Profile */}
+        <div className="lg:col-span-1">
+          <ProfileSummaryCard
+            name={user?.name ?? "Guest"}
+            role="Software Engineer Intern"
+            location="Boston, MA"
+            startDate="Joined on 3rd June 2024"
+            image={user?.image ?? ""}
+          />
+        </div>
 
-      <TaskChecklist
-        tasks={[
-          { label: "Read Team Handbook", completed: true },
-          { label: "Join Slack + Email", completed: false },
-          { label: "Set up GitHub + Vercel", completed: false },
-          { label: "Schedule intro call", completed: false },
-        ]}
-      />
+        {/* Stats */}
+        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <TaskStatCard title="Overdue Tasks" count={2} color="red" />
+          <TaskStatCard title="Pending Tasks" count={10} color="yellow" />
+          <TaskStatCard title="Completed Tasks" count={5} color="green" />
+        </div>
+      </div>
+
+      {/* Task Table */}
+      <TaskTable />
     </main>
   );
 }
