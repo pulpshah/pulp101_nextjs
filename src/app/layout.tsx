@@ -84,6 +84,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
+                {/* AuthProvider wraps everything that needs session awareness */}
                 <AuthProvider>
                   <Navbar />
                   {children}

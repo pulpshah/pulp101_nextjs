@@ -1,13 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getSession } from "@/lib/session";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import CollapsibleDropdownSection from "./CollapsibleDropdownSection";
 import Dropdown from "./Dropdown";
 import DropdownItem from "./DropdownItem";
 
+import { UserDropdown } from "@components/UserDropdown";;
+
 export async function Navbar() {
-  const session = await getSession();
+  const session = await getServerSession(authOptions);
   const name = session?.user?.name;
+  const image = session?.user?.image;
 
   return (
     <nav className="w-full border-b bg-black sticky top-0 z-50">
@@ -22,10 +26,10 @@ export async function Navbar() {
           <NavMenu />
         </div>
 
-        {/* Right: Sign In / Request Invite or Greeting */}
+        {/* Right: Profile or Sign In */}
         <div className="flex items-center">
           {name ? (
-            <span className="text-white">Hello, {name}</span>
+            <UserDropdown name={name} image={image} />
           ) : (
             <div className="flex gap-[37px] items-center">
               <Link
@@ -49,15 +53,21 @@ export async function Navbar() {
 }
 
 // Logo Component
-export function Logo() {
+function Logo() {
   return (
     <Link href="/" className="flex items-center">
-      <Image src="/images/pulp101-logo.svg" alt="Logo" width={100} height={24} priority />
+      <Image
+        src="/images/pulp101-logo.svg"
+        alt="Logo"
+        width={100}
+        height={24}
+        priority
+      />
     </Link>
   );
 }
 
-// Reusable NavLink Component
+// NavLink
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <Link
@@ -69,8 +79,8 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
-// Reusable NavMenu Component
-export function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
+// NavMenu
+function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
   const containerClass = isSheet
     ? "flex flex-col gap-2.5 font-inter font-semibold text-[14px] leading-[24px] tracking-normal"
     : "flex gap-[85px] font-inter font-semibold text-[14px] leading-[24px] tracking-normal";

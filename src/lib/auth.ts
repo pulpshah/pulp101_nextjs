@@ -113,5 +113,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET || "your-secret-key",
+  secret: process.env.NEXTAUTH_SECRET || "8f3a12e9d4b7c6k5m2n9p8q7r4t3v2w1x",
 }; 
