@@ -7,24 +7,49 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
 import TagList from '@/components/account/TagList';
 
 const UserInfoForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: 'Jill Anderson',
-    dob: '1999-05-12',
-    email: 'jill.anderson@example.com',
-    phone: '+1 (555) 123-4567',
-    laddersID: 'LFL-028475',
-    discord: 'jillux#2025',
-    school: 'MIT',
-    major: 'Computer Science & Business Analytics',
+  const { data: session } = useSession();
+
+  const [formData, setFormData] = useState<{
+    fullName: string;
+    dob: string;
+    email: string;
+    phone: string;
+    laddersID: string;
+    discord: string;
+    school: string;
+    major: string;
+    resume: string;
+    interests: string[];
+    address: string;
+  }>({
+    fullName: '',
+    dob: '',
+    email: '',
+    phone: '',
+    laddersID: '',
+    discord: '',
+    school: '',
+    major: '',
     resume: '',
-    interests: ['Traveling', 'UI Design', 'Productivity Tools'],
-    address: '123 Brooklyn Ave, NY 11201',
+    interests: [],
+    address: '',
   });
+
+  useEffect(() => {
+    if (session?.user) {
+      setFormData((prev) => ({
+        ...prev,
+        fullName: session.user.name || '',
+        email: session.user.email || '',
+      }));
+    }
+  }, [session]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,7 +58,7 @@ const UserInfoForm = () => {
 
   return (
     <motion.div
-      className="bg-[#1a1a1a] rounded-2xl shadow-sm p-6 space-y-6 border border-[#2c2c2c]"
+      className="bg-[#1a1a1a] rounded-2xl shadow-sm p-6 space-y-6 border border-[#2c2c2c] min-h-[665px]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
@@ -67,20 +92,7 @@ const UserInfoForm = () => {
           </div>
         ))}
 
-        <div className="sm:col-span-2">
-          <label className="text-sm font-medium text-gray-300">Resume</label>
-          <input
-            type="file"
-            name="resume"
-            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-500/10 file:text-orange-400 hover:file:bg-orange-500/20"
-          />
-        </div>
-
-        <div className="sm:col-span-2">
-          <label className="text-sm font-medium text-gray-300">Interests</label>
-          <TagList tags={formData.interests} />
-        </div>
-
+        {/* Home Address BEFORE Resume */}
         <div className="sm:col-span-2">
           <label className="text-sm font-medium text-gray-300">Home Address</label>
           <input
@@ -90,6 +102,37 @@ const UserInfoForm = () => {
             onChange={handleChange}
             className="mt-1 w-full rounded-md border border-[#333] bg-[#0d0d0d] text-white placeholder:text-gray-500 focus:ring-orange-400 focus:border-orange-400 text-sm"
           />
+        </div>
+
+        {/* Resume Field */}
+        <div className="sm:col-span-2">
+          <label className="text-sm font-medium text-gray-300">Resume</label>
+          <input
+            type="file"
+            name="resume"
+            className="mt-1 block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-orange-500/10 file:text-orange-400 hover:file:bg-orange-500/20"
+          />
+        </div>
+
+        {/* Interests Field */}
+        <div className="sm:col-span-2">
+          <label className="text-sm font-medium text-gray-300 mb-1 block">Interests</label>
+          {formData.interests.length > 0 ? (
+            <TagList tags={formData.interests} />
+          ) : (
+            <button
+              type="button"
+              onClick={() =>
+                setFormData((prev) => ({
+                  ...prev,
+                  interests: ['N/A'],
+                }))
+              }
+              className="text-sm px-4 py-2 mt-1 bg-orange-500/10 text-orange-400 rounded-md hover:bg-orange-500/20 transition-all"
+            >
+              ➕ Add Interest
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
