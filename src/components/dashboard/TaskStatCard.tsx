@@ -8,13 +8,14 @@
 
 'use client';
 
-import { motion } from "framer-motion";
-import { AlertCircle, Clock, CheckCircle } from "lucide-react";
+import { motion } from 'framer-motion';
+import { AlertCircle, Clock, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 const icons = {
-  red: <AlertCircle className="text-red-400" />,
-  yellow: <Clock className="text-yellow-400" />,
-  green: <CheckCircle className="text-green-400" />,
+  red: { icon: <AlertCircle className="w-5 h-5 text-red-500" />, bg: "bg-red-900/20" },
+  yellow: { icon: <Clock className="w-5 h-5 text-yellow-400" />, bg: "bg-yellow-900/20" },
+  green: { icon: <CheckCircle className="w-5 h-5 text-green-400" />, bg: "bg-green-900/20" },
 };
 
 export function TaskStatCard({
@@ -24,20 +25,38 @@ export function TaskStatCard({
 }: {
   title: string;
   count: number;
-  color: "red" | "yellow" | "green";
+  color: 'red' | 'yellow' | 'green';
 }) {
+  const { icon, bg } = icons[color];
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="bg-gray-900 rounded-xl p-5 border border-gray-700 flex flex-col justify-center items-start"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.3 }}
+      className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border border-gray-700 shadow-sm hover:shadow-md flex flex-col justify-between h-full"
     >
-      <div className="flex items-center gap-3">
-        {icons[color]}
-        <h3 className="text-lg font-semibold">{title}</h3>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-4">
+        <div className={`rounded-full p-2 ${bg}`}>
+          {icon}
+        </div>
+        <h3 className="text-md font-semibold text-white">{title}</h3>
       </div>
-      <p className="text-3xl font-bold mt-2">{count}</p>
+
+      {/* Count */}
+      <p className="text-5xl font-extrabold text-white tracking-tight mb-4">{count}</p>
+
+      {/* View All Button */}
+      <div className="mt-auto text-right">
+        <Link
+          href="/tasks"
+          className="text-sm text-purple-400 hover:text-purple-300 hover:underline transition"
+        >
+          View All →
+        </Link>
+      </div>
     </motion.div>
   );
 }
+
+

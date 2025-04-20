@@ -3,7 +3,7 @@
 // status tags, deadlines, and action buttons for onboarding tracking.
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/19/2025
+// Last Updated On: 04/20/2025
 // ============================================
 
 'use client';
@@ -74,7 +74,7 @@ export function TaskTable() {
         <table className="w-full text-left text-sm border-collapse">
           <thead>
             <tr className="border-b border-gray-700">
-              <th className="py-2 px-4 text-purple-400">S. No.</th>
+              <th className="py-2 px-4 text-purple-400">Item No.</th>
               <th className="py-2 px-4 text-purple-400">Task Name</th>
               <th className="py-2 px-4 text-purple-400">Description</th>
               <th className="py-2 px-4 text-purple-400">Deadline</th>

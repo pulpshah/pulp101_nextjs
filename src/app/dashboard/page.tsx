@@ -43,7 +43,7 @@ export default async function DashboardPage() {
 
         {/* Stats */}
         <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <TaskStatCard title="Overdue Tasks" count={2} color="red" />
+          <TaskStatCard title="Incomplete Tasks" count={2} color="red" />
           <TaskStatCard title="Pending Tasks" count={10} color="yellow" />
           <TaskStatCard title="Completed Tasks" count={5} color="green" />
         </div>

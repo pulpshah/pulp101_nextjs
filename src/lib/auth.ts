@@ -1,3 +1,10 @@
+// ============================================
+// File Purpose: NextAuth configuration with Neo4j integration and Google/Credentials providers
+// Original Author: Mohammed Ihtisham
+// Last Updated By: Mohammed Ihtisham
+// Last Updated On: 04/20/2025
+// ============================================
+
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -69,7 +76,6 @@ export const authOptions: NextAuthOptions = {
 
           const user = result.records[0].get('u').properties;
 
-          // Use bcrypt to compare the provided password with the stored hash
           const passwordMatch = await bcrypt.compare(credentials.password, user.password);
 
           if (passwordMatch) {
@@ -93,11 +99,34 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/auth/signin",
-    newUser: "/auth/signup", // Redirect new users to the sign-up page
+    newUser: "/auth/signup",
   },
   callbacks: {
+    async signIn({ user }) {
+      try {
+        const session = driver.session();
+        await session.run(
+          `
+          MERGE (u:User { email: $email })
+          ON CREATE SET u.createdAt = datetime()
+          SET u.name = $name,
+              u.image = $image,
+              u.updatedAt = datetime()
+          `,
+          {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          }
+        );
+        await session.close();
+        return true;
+      } catch (err) {
+        console.error("Neo4j SignIn Error:", err);
+        return false;
+      }
+    },
     async jwt({ token, user, account }) {
-      // Persist the OAuth access_token to the token right after signin
       if (account && user) {
         token.accessToken = account.access_token;
         token.id = user.id;
@@ -107,11 +136,10 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token && session.user) {
         session.user.id = token.id;
-        // Add access token to the session
         session.accessToken = token.accessToken;
       }
       return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET || "8f3a12e9d4b7c6k5m2n9p8q7r4t3v2w1x",
-}; 
+};
