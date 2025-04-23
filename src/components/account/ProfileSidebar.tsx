@@ -2,12 +2,12 @@
 // File Purpose: Profile card (editable image upload)
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/20/2025
+// Last Updated On: 04/23/2025
 // ============================================
 
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { motion } from 'framer-motion';
@@ -17,14 +17,22 @@ const ProfileSidebar = () => {
   const { data: session } = useSession();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const defaultImage = session?.user?.image || '/images/avatar-placeholder.jpg';
-  const [profileImage, setProfileImage] = useState<string>(defaultImage);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (session?.user?.image) {
+      setProfileImage(session.user.image); // Set Gmail profile photo by default
+    }
+  }, [session]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const newImageUrl = URL.createObjectURL(file);
       setProfileImage(newImageUrl);
+
+      // TODO: Save newImageUrl to Neo4j here
+      console.log('Save this image to Neo4j:', newImageUrl);
     }
   };
 
@@ -37,15 +45,15 @@ const ProfileSidebar = () => {
     >
       {/* Profile Picture */}
       <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-orange-500 shadow-sm group">
-      {profileImage.startsWith('blob:') ? (
-      <img
-        src={profileImage}
-        alt="Profile Picture"
-        className="object-cover w-full h-full"
-      />
+        {profileImage?.startsWith('blob:') ? (
+          <img
+            src={profileImage}
+            alt="Profile Picture"
+            className="object-cover w-full h-full"
+          />
         ) : (
           <Image
-            src={profileImage}
+            src={profileImage || '/images/avatar-placeholder.jpg'}
             alt="Profile Picture"
             fill
             className="object-cover"
@@ -66,7 +74,7 @@ const ProfileSidebar = () => {
         />
       </div>
 
-      {/* Info */}
+      {/* User Info */}
       <div className="text-center">
         <h2 className="text-xl font-semibold text-white">{session?.user?.name || 'Your Name'}</h2>
         <p className="text-sm text-orange-400 font-medium">UI Designer</p>
@@ -78,6 +86,7 @@ const ProfileSidebar = () => {
         “I’m looking for a site that will simplify the planning of my business trips.”
       </p>
 
+      {/* Tags */}
       <div className="flex flex-wrap gap-2 justify-center mt-4">
         {['Organized', 'Hardworking', 'Protective', 'Passionate'].map((tag) => (
           <span
