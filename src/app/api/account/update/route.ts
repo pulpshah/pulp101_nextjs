@@ -12,7 +12,6 @@ import driver from '@/lib/neo4j';
 
 export async function POST(req: Request) {
     const session = await getServerSession(authOptions);
-
     if (!session?.user?.email) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -30,6 +29,10 @@ export async function POST(req: Request) {
         interests,
         address,
         image,
+        role,
+        city,
+        state,
+        quote
     } = await req.json();
 
     const neoSession = driver.session();
@@ -37,20 +40,24 @@ export async function POST(req: Request) {
     try {
         const result = await neoSession.run(
             `
-      MATCH (u:User { email: $email })
-      SET 
-        u.name = $fullName,
-        u.dob = $dob,
-        u.phone = $phone,
-        u.laddersID = $laddersID,
-        u.discord = $discord,
-        u.school = $school,
-        u.major = $major,
-        u.resume = $resume,
-        u.interests = $interests,
-        u.address = $address,
-        u.image = $image
-      RETURN u
+        MATCH (u:User { email: $email })
+        SET 
+          u.name = $fullName,
+          u.dob = $dob,
+          u.phone = $phone,
+          u.laddersID = $laddersID,
+          u.discord = $discord,
+          u.school = $school,
+          u.major = $major,
+          u.resume = $resume,
+          u.interests = $interests,
+          u.address = $address,
+          u.image = $image,
+          u.role = $role,
+          u.city = $city,
+          u.state = $state,
+          u.quote = $quote
+        RETURN u
       `,
             {
                 email,
@@ -65,6 +72,10 @@ export async function POST(req: Request) {
                 interests,
                 address,
                 image,
+                role,
+                city,
+                state,
+                quote
             }
         );
 

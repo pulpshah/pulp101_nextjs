@@ -77,7 +77,7 @@ const UserInfoForm = () => {
 
   return (
     <motion.div
-      className="bg-[#1a1a1a] rounded-2xl shadow-sm p-6 space-y-6 border border-[#2c2c2c] min-h-[665px]"
+      className="bg-[#1a1a1a] rounded-2xl shadow-sm p-6 space-y-6 border border-[#2c2c2c] min-h-[680px]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
