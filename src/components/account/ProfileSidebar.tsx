@@ -1,8 +1,8 @@
 // ============================================
-// File Purpose: ProfileSidebar with editable modal, Neo4j persistence, and profile photo upload
+// File Purpose: ProfileSidebar with editable modal, Neo4j persistence, and profile photo upload from both main and modal
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/23/2025
+// Last Updated On: 04/24/2025
 // ============================================
 
 'use client';
@@ -28,6 +28,8 @@ const ProfileSidebar = () => {
   const [joinedDate, setJoinedDate] = useState('');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const modalFileInputRef = useRef<HTMLInputElement>(null);
+
   const [tempImage, setTempImage] = useState<string>(profileImage);
   const [tempRole, setTempRole] = useState(role);
   const [tempCity, setTempCity] = useState(city);
@@ -39,12 +41,16 @@ const ProfileSidebar = () => {
     const fetchData = async () => {
       const res = await fetch('/api/account/profile');
       const data = await res.json();
+
       setRole(data.role || 'Role');
       setCity(data.city || 'City');
       setStateLoc(data.state || 'State');
       setQuote(data.quote || "Here's a quote about me");
 
-      if (data.image) setProfileImage(data.image);
+      if (data.image) {
+        setProfileImage(data.image);
+        setTempImage(data.image);
+      }
 
       if (data.createdAt) {
         const formatted = new Date(data.createdAt).toLocaleDateString('en-US', {
@@ -58,24 +64,31 @@ const ProfileSidebar = () => {
     fetchData();
   }, []);
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const updateImage = async (imageUrl: string) => {
+    await fetch('/api/account/profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: imageUrl }),
+    });
+  };
+
+  const handleImageChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fromModal = false
+  ) => {
     const file = e.target.files?.[0];
     if (file) {
       const newImageUrl = URL.createObjectURL(file);
-      setProfileImage(newImageUrl);
-      setTempImage(newImageUrl);
-  
-      // Immediately save to Neo4j
-      await fetch('/api/account/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          image: newImageUrl
-        })
-      });
+
+      if (fromModal) {
+        setTempImage(newImageUrl);
+      } else {
+        setProfileImage(newImageUrl);
+      }
+
+      await updateImage(newImageUrl);
     }
   };
-  
 
   const handleSave = async () => {
     if (!tempRole || !tempCity || !tempState || !tempQuote) return;
@@ -94,7 +107,7 @@ const ProfileSidebar = () => {
         city: tempCity,
         state: tempState,
         quote: tempQuote,
-        image: tempImage, // Save new profile image URL if uploaded
+        image: tempImage,
       }),
     });
   };
@@ -139,7 +152,7 @@ const ProfileSidebar = () => {
           type="file"
           accept="image/*"
           ref={fileInputRef}
-          onChange={handleImageChange}
+          onChange={(e) => handleImageChange(e, false)}
           className="hidden"
         />
       </div>
@@ -172,21 +185,21 @@ const ProfileSidebar = () => {
             </button>
             <h2 className="text-white text-lg font-semibold mb-2">Edit Profile</h2>
 
-            {/* Image Editor */}
+            {/* Modal Image Editor */}
             <div className="relative w-28 h-28 mx-auto rounded-full overflow-hidden border-4 border-orange-500 group">
               <Image src={tempImage} alt="Profile" fill className="object-cover" />
               <div
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => modalFileInputRef.current?.click()}
                 className="absolute inset-0 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
               >
                 <FiEdit className="text-white" size={18} />
               </div>
               <input
-                ref={fileInputRef}
+                ref={modalFileInputRef}
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={handleImageChange}
+                onChange={(e) => handleImageChange(e, true)}
               />
             </div>
 
