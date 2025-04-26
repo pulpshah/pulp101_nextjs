@@ -1,63 +1,52 @@
 // ============================================
 // File Purpose: TaskTable component that lists tasks with search functionality,
 // status tags, deadlines, and action buttons for onboarding tracking.
+// Now accepts dynamic tasks via props instead of dummy data.
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
 // Last Updated On: 04/20/2025
+// This Update On: 04/26/2025
 // ============================================
 
 'use client';
 
-import { useState } from "react";
-import Link from "next/link";
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
 
-type TaskStatus = "Not Started" | "In Progress" | "Complete";
+export type TaskStatus = 'Not Started' | 'In Progress' | 'Completed';
 
-interface Task {
+export interface Task {
   name: string;
   description: string;
-  deadline: string;
+  deadline: string;          // format: YYYY-MM-DD
   status: TaskStatus;
-  link: string;
 }
 
-const dummyTasks: Task[] = [
-  {
-    name: "Upload ID Proofs",
-    description: "Upload the ID Proofs in Profile section.",
-    deadline: "2024-04-21",
-    status: "Not Started",
-    link: "/tasks/upload-id-proofs",
-  },
-  {
-    name: "Company Policies",
-    description: "Acknowledge the attached documents.",
-    deadline: "2024-04-25",
-    status: "In Progress",
-    link: "/tasks/company-policies",
-  },
-  {
-    name: "Upload Experience Certificate",
-    description: "Upload the experience certificates.",
-    deadline: "2024-04-27",
-    status: "Complete",
-    link: "/tasks/experience-certificate",
-  },
-  {
-    name: "Upload Release Documents",
-    description: "Upload the release documents.",
-    deadline: "2024-04-30",
-    status: "Not Started",
-    link: "/tasks/release-documents",
-  },
-];
+interface TaskTableProps {
+  tasks: Task[];
+}
 
-export function TaskTable() {
-  const [search, setSearch] = useState("");
+// Utility to slugify task names into URL-friendly paths
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 
-  const filteredTasks = dummyTasks.filter((task) =>
-    task.name.toLowerCase().includes(search.toLowerCase()) ||
-    task.description.toLowerCase().includes(search.toLowerCase())
+export function TaskTable({ tasks }: TaskTableProps) {
+  const [search, setSearch] = useState('');
+
+  // filter by name or description
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter((task) => {
+        const q = search.toLowerCase();
+        return (
+          task.name.toLowerCase().includes(q) ||
+          task.description.toLowerCase().includes(q)
+        );
+      }),
+    [search, tasks]
   );
 
   return (
@@ -83,36 +72,43 @@ export function TaskTable() {
             </tr>
           </thead>
           <tbody>
-            {filteredTasks.map((task, i) => (
-              <tr key={i} className="border-b border-gray-800 hover:bg-gray-800/60">
-                <td className="py-2 px-4">{i + 1}</td>
-                <td className="py-2 px-4">{task.name}</td>
-                <td className="py-2 px-4">{task.description}</td>
-                <td className="py-2 px-4">{task.deadline}</td>
-                <td className="py-2 px-4">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium
-                      ${
-                        task.status === "Complete"
-                          ? "bg-green-700 text-green-200"
-                          : task.status === "In Progress"
-                          ? "bg-yellow-700 text-yellow-200"
-                          : "bg-gray-700 text-gray-300"
-                      }`}
-                  >
-                    {task.status}
-                  </span>
-                </td>
-                <td className="py-2 px-4">
-                  <Link
-                    href={task.link}
-                    className="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1 rounded-md"
-                  >
-                    {task.status === "Complete" ? "View" : "Complete"}
-                  </Link>
-                </td>
-              </tr>
-            ))}
+            {filteredTasks.map((task, i) => {
+              const link = `/tasks/${slugify(task.name)}`;
+              return (
+                <tr
+                  key={i}
+                  className="border-b border-gray-800 hover:bg-gray-800/60"
+                >
+                  <td className="py-2 px-4">{i + 1}</td>
+                  <td className="py-2 px-4">{task.name}</td>
+                  <td className="py-2 px-4">{task.description}</td>
+                  <td className="py-2 px-4">{task.deadline}</td>
+                  <td className="py-2 px-4">
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium
+                        ${
+                          task.status === 'Completed'
+                            ? 'bg-green-700 text-green-200'
+                            : task.status === 'In Progress'
+                            ? 'bg-yellow-700 text-yellow-200'
+                            : 'bg-gray-700 text-gray-300'
+                        }`
+                    }
+                    >
+                      {task.status}
+                    </span>
+                  </td>
+                  <td className="py-2 px-4">
+                    <Link
+                      href={link}
+                      className="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1 rounded-md transition-all"
+                    >
+                      {task.status === 'Completed' ? 'View' : 'Complete'}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
