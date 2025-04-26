@@ -1,16 +1,15 @@
 // ============================================
-// File Purpose: TaskTable component that lists tasks with search functionality,
-// status tags, deadlines, and action buttons for onboarding tracking.
-// Now accepts dynamic tasks via props instead of dummy data.
+// File Purpose: TaskTable component with dynamic tasks, search, status updates, and special redirect
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
 // Last Updated On: 04/20/2025
-// This Update On: 04/26/2025
+// This Update On: 04/27/2025
 // ============================================
 
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export type TaskStatus = 'Not Started' | 'In Progress' | 'Completed';
@@ -18,7 +17,7 @@ export type TaskStatus = 'Not Started' | 'In Progress' | 'Completed';
 export interface Task {
   name: string;
   description: string;
-  deadline: string;          // format: YYYY-MM-DD
+  deadline: string;
   status: TaskStatus;
 }
 
@@ -26,7 +25,6 @@ interface TaskTableProps {
   tasks: Task[];
 }
 
-// Utility to slugify task names into URL-friendly paths
 const slugify = (text: string) =>
   text
     .toLowerCase()
@@ -34,20 +32,51 @@ const slugify = (text: string) =>
     .replace(/(^-|-$)/g, '');
 
 export function TaskTable({ tasks }: TaskTableProps) {
+  const router = useRouter();
   const [search, setSearch] = useState('');
+  const [rows, setRows] = useState<Task[]>(tasks);
+  const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
-  // filter by name or description
   const filteredTasks = useMemo(
     () =>
-      tasks.filter((task) => {
+      rows.filter((task) => {
         const q = search.toLowerCase();
         return (
           task.name.toLowerCase().includes(q) ||
           task.description.toLowerCase().includes(q)
         );
       }),
-    [search, tasks]
+    [search, rows]
   );
+
+  const handleComplete = async (taskName: string) => {
+    setLoadingMap((prev) => ({ ...prev, [taskName]: true }));
+    try {
+      const res = await fetch('/api/tasks/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: taskName, status: 'In Progress' }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+
+      // Update local state
+      setRows((prev) =>
+        prev.map((t) =>
+          t.name === taskName ? { ...t, status: 'In Progress' } : t
+        )
+      );
+
+      // Redirect for the personal info task
+      if (taskName === 'Update Personal Information') {
+        router.push('/account');
+      }
+    } catch (error) {
+      console.error('Failed to update task status:', error);
+      alert('Failed to mark task in progress.');
+    } finally {
+      setLoadingMap((prev) => ({ ...prev, [taskName]: false }));
+    }
+  };
 
   return (
     <div className="bg-gray-900 p-6 rounded-xl border border-gray-700 shadow-md">
@@ -74,9 +103,10 @@ export function TaskTable({ tasks }: TaskTableProps) {
           <tbody>
             {filteredTasks.map((task, i) => {
               const link = `/tasks/${slugify(task.name)}`;
+              const isLoading = loadingMap[task.name];
               return (
                 <tr
-                  key={i}
+                  key={task.name}
                   className="border-b border-gray-800 hover:bg-gray-800/60"
                 >
                   <td className="py-2 px-4">{i + 1}</td>
@@ -99,12 +129,22 @@ export function TaskTable({ tasks }: TaskTableProps) {
                     </span>
                   </td>
                   <td className="py-2 px-4">
-                    <Link
-                      href={link}
-                      className="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1 rounded-md transition-all"
-                    >
-                      {task.status === 'Completed' ? 'View' : 'Complete'}
-                    </Link>
+                    {task.status !== 'Completed' ? (
+                      <button
+                        onClick={() => handleComplete(task.name)}
+                        disabled={isLoading}
+                        className="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1 rounded-md transition-all disabled:opacity-50"
+                      >
+                        {isLoading ? 'Updating...' : 'Complete'}
+                      </button>
+                    ) : (
+                      <Link
+                        href={link}
+                        className="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1 rounded-md transition-all"
+                      >
+                        View
+                      </Link>
+                    )}
                   </td>
                 </tr>
               );
