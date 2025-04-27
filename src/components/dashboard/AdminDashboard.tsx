@@ -10,6 +10,7 @@
 import { ProfileSummaryCard } from './ProfileSummaryCard';
 import { AdminStats } from './AdminStats';
 import { AdminStudentTable } from './AdminStudentTable';
+import { useSession } from 'next-auth/react';
 
 interface User {
   name: string;
@@ -24,6 +25,11 @@ interface AdminDashboardProps {
 }
 
 export function AdminDashboard({ users }: AdminDashboardProps) {
+  const { data: session } = useSession();
+  const adminName = session?.user?.name || 'Admin User';
+  const adminEmail = session?.user?.email || 'admin@pulp101.com';
+  const adminImage = session?.user?.image || '/admin-profile.png';
+
   return (
     <main className="min-h-screen bg-gray-950 text-white px-6 py-12 md:px-16 space-y-12">
       {/* Welcome text */}
@@ -38,15 +44,15 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-stretch">
         <div className="lg:col-span-1">
           <ProfileSummaryCard
-            name="Admin User"
-            role="Admin"
+            name={adminName}
+            role={adminEmail}
             location="Pulp Internet HQ"
             startDate="Admin Access"
-            image="/admin-profile.png"
+            image={adminImage}
           />
         </div>
         <div className="lg:col-span-3">
-          <AdminStats users={users} />
+          <AdminStats />
         </div>
       </div>
 
