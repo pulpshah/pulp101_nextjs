@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import AboutIntro from "@/components/AboutIntro";
 import { motion, useViewportScroll, useTransform } from 'framer-motion';
+import { HiArrowRight } from 'react-icons/hi';  // at the top with your other imports
 
 // Reusable Section Component
 interface SectionProps {
@@ -183,7 +184,7 @@ const About: React.FC = () => {
 
 
           <Section title="Why Pulp101?">
-          <div className="relative flex flex-col lg:flex-row items-center bg-gradient-to-r from-black via-purple-900 to-black p-16 sm:p-20 rounded-2xl overflow-hidden min-h-[80vh]">
+          <div className="relative flex flex-col lg:flex-row items-center bg-gradient-to-r from-black via-purple-900 to-black p-16 sm:p-20 rounded-2xl overflow-hidden min-h-[60vh]">
           
           {/* Soft background graphic (parallax) */}
           <div
@@ -233,15 +234,47 @@ const About: React.FC = () => {
 
 
           {/* Call-to-Action */}
-          <div className="text-center mt-12">
-            <Link
-              href="/docs"
-              className="inline-block bg-white text-black px-8 py-4 rounded-md text-lg font-semibold transition duration-200 hover:bg-gray-200"
-            >
-              Get Started
-            </Link>
-          </div>
+          <motion.div
+            className="
+              glow-border
+              relative
+              my-16
+              py-12
+              px-8
+              bg-gradient-to-r from-purple-900 to-black
+              rounded-3xl
+              overflow-hidden
+              transition-transform duration-300 hover:scale-105
+            "
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
+            {/* subtle texture, optional */}
+            <div
+              className="absolute inset-0 bg-[url('/images/cta-pattern.png')] bg-center bg-cover opacity-10"
+              aria-hidden="true"
+            />
 
+            <div className="relative z-10 max-w-lg mx-auto text-center space-y-6">
+              <h4 className="text-2xl font-semibold text-white">
+                Ready to explore Pulp101 in depth?
+              </h4>
+              <Link
+                href="/docs"
+                className="
+                  inline-flex items-center 
+                  bg-white text-black font-bold 
+                  px-6 py-3 rounded-full shadow-lg 
+                  transition-all duration-300 hover:bg-gray-200 hover:scale-105
+                "
+              >
+                Get Started
+                <HiArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </main>
     </>

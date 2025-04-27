@@ -180,3 +180,25 @@ body {
 .animate-spin {
     animation: spin 1s linear infinite;
 }
+
+/* =========================
+   Pulse Glow Border
+   ========================= */
+   @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px rgba(191, 90, 242, 0.5),
+        0 0 40px rgba(191, 90, 242, 0.3);
+    }
+    50% {
+      box-shadow: 
+        0 0 40px rgba(191, 90, 242, 0.8),
+        0 0 80px rgba(191, 90, 242, 0.5);
+    }
+  }
+  
+  .glow-border {
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
+  
+  
