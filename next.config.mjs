@@ -2,6 +2,7 @@ import withMDX from '@next/mdx';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // existing settings
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   images: {
     remotePatterns: [
@@ -18,6 +19,11 @@ const nextConfig = {
         destination: '/api/:path*',
       },
     ];
+  },
+
+  // ← Add this block:
+  experimental: {
+    esmExternals: 'loose',
   },
 };
 
