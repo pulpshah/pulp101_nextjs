@@ -9,18 +9,20 @@ interface SectionProps {
   title: string;
   children: React.ReactNode;
 }
+// Reusable Section Component
 const Section: React.FC<SectionProps> = ({ title, children }) => (
   <motion.section
-    className="mb-12"
+    className="mb-12 min-h-[60vh] flex flex-col justify-center"
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
+    viewport={{ once: false, amount: 0.3 }}
     transition={{ duration: 0.6, ease: "easeOut" }}
   >
     <motion.h2
       className="text-3xl font-semibold mb-4 text-white"
       initial={{ x: -20, opacity: 0 }}
       whileInView={{ x: 0, opacity: 1 }}
+      viewport={{ once: false, amount: 0.3 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       {title}
@@ -28,6 +30,7 @@ const Section: React.FC<SectionProps> = ({ title, children }) => (
     {children}
   </motion.section>
 );
+
 
 const About: React.FC = () => {
   const { scrollY } = useViewportScroll();
@@ -44,8 +47,8 @@ const About: React.FC = () => {
 
           {/* What is Pulp 101? */}
           <Section title="What is Pulp 101?">
-            <div className="relative bg-fixed bg-center bg-gradient-to-br from-purple-900 via-black to-purple-950 p-10 rounded-2xl shadow-2xl">
-              <div className="flex flex-col lg:flex-row items-center gap-10">
+          <div className="relative bg-fixed bg-center bg-gradient-to-br from-purple-900 via-black to-purple-950 p-8 rounded-2xl shadow-2xl">
+              <div className="flex flex-col lg:flex-row items-center gap-5">
 
                 {/* Left side - fancy description */}
                 <div className="flex-1 text-center lg:text-left">
@@ -76,7 +79,7 @@ const About: React.FC = () => {
 
           {/* Key Features */}
           <Section title="Key Features">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               <div className="bg-gradient-to-br from-purple-800 via-purple-900 to-black p-6 rounded-2xl shadow-lg border border-purple-600 hover:scale-105 hover:shadow-purple-500/60 transition-all duration-300 ease-in-out">
                 <h3 className="text-2xl font-bold text-white mb-2">
                   Interactive, Engaging Documentation
@@ -108,67 +111,126 @@ const About: React.FC = () => {
 
           {/* Our Goals */}
           <Section title="Our Goals">
-            <div className="flex flex-col gap-12 mt-8">
-              {[
-                ["01", "Streamlined Onboarding", "Helping students and interns hit the ground running with clear pathways, training, and support from day one."],
-                ["02", "Empowered SDK Users", "Providing developers the resources they need to master Pulp’s SDK and unlock powerful automation and NLP capabilities."],
-                ["03", "Collaborative Growth", "Building a strong community where users, students, and team members grow and innovate together."]
-              ].map(([num, title, desc], i) => (
+            <div className="flex flex-col lg:flex-row items-start gap-12 mt-8">
+              
+              {/* ← Left: Your goals list */}
+              <div className="flex-1 flex flex-col gap-12">
+                {/* Goal 1 */}
                 <motion.div
-                  key={num}
                   className="flex flex-col md:flex-row items-center gap-6"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                >
-                  <div className="text-5xl font-extrabold text-purple-400">{num}</div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{title}</h3>
-                    <p className="text-gray-400 max-w-2xl">{desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </Section>
-
-          {/* Why Pulp101? */}
-          <Section title="Why Pulp101?">
-            <div className="relative flex flex-col-reverse lg:flex-row items-center bg-fixed bg-center bg-gradient-to-r from-black via-purple-900 to-black p-8 rounded-2xl shadow-2xl">
-              {/* Text Column */}
-              <div className="lg:w-3/5 space-y-4">
-                <motion.p
-                  className="text-lg text-gray-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 0.6 }}
                 >
-                  Pulp101 is your go-to guide for everything Pulp—technical deep dives, team culture insights, and the exact workflows we use to build at scale.
-                </motion.p>
-                <motion.p
-                  className="text-lg text-gray-300"
+                  <div className="text-5xl font-extrabold text-purple-400">01</div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Streamlined Onboarding</h3>
+                    <p className="text-gray-400 max-w-2xl">
+                      Helping students and interns hit the ground running with clear pathways, training, and support from day one.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Goal 2 */}
+                <motion.div
+                  className="flex flex-col md:flex-row items-center gap-6"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                  In essence, Pulp101 is where <span className="text-purple-400 font-semibold">innovation</span> meets <span className="text-purple-400 font-semibold">community</span>.  
-                  It’s the bridge between powerful SDKs and a collaborative ecosystem that empowers you to create, automate, and transform.
-                </motion.p>
+                  <div className="text-5xl font-extrabold text-purple-400">02</div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Empowered SDK Users</h3>
+                    <p className="text-gray-400 max-w-2xl">
+                      Providing developers the resources they need to master Pulp’s SDK and unlock powerful automation and NLP capabilities.
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Goal 3 */}
+                <motion.div
+                  className="flex flex-col md:flex-row items-center gap-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: false, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <div className="text-5xl font-extrabold text-purple-400">03</div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Collaborative Growth</h3>
+                    <p className="text-gray-400 max-w-2xl">
+                      Building a strong community where users, students, and team members grow and innovate together through collaboration.
+                    </p>
+                  </div>
+                </motion.div>
               </div>
 
-              {/* Big “101” Accent with Parallax */}
-              <motion.div
-                style={{ y: y101 }}
-                className="lg:w-2/5 flex justify-center mb-6 lg:mb-0"
-              >
-                <div className="text-8xl font-extrabold text-purple-500 opacity-20">
-                  101
-                </div>
-              </motion.div>
+              {/* Right: Spline animation placeholder */}
+              <div className="flex-1 relative min-h-[60vh] rounded-2xl overflow-hidden bg-black">
+                <iframe
+                  src="https://my.spline.design/worldplanet-wOepMSkHYCtvTFa4MmCLzkV9/"
+                  frameBorder="0"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full pointer-events-none bg-transparent"
+                />
+              </div>
+
+
             </div>
           </Section>
+
+
+          <Section title="Why Pulp101?">
+          <div className="relative flex flex-col lg:flex-row items-center bg-gradient-to-r from-black via-purple-900 to-black p-16 sm:p-20 rounded-2xl overflow-hidden min-h-[80vh]">
+          
+          {/* Soft background graphic (parallax) */}
+          <div
+            className="absolute inset-0 bg-fixed bg-center bg-[url('/images/your-tech-pattern.png')] opacity-20"
+            aria-hidden="true"
+          />
+
+          {/* Text + CTA */}
+          <motion.div
+            className="relative z-10 lg:w-2/3 space-y-6"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-4xl font-extrabold text-white">Why Pulp101?</h3>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              Pulp101 is your one-stop hub for mastering our SDK, understanding our workflows, and plugging into the collaborative culture that powers Pulp’s innovation.
+            </p>
+            <p className="text-lg text-gray-300 leading-relaxed">
+              From interactive code examples to behind-the-scenes team insights, Pulp101 equips you with everything you need to build, automate, and transform.
+            </p>
+            <Link
+              href="/docs"
+              className="inline-block bg-purple-500 text-black font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-purple-400 transition"
+            >
+              Dive In
+            </Link>
+          </motion.div>
+
+          {/* Decorative Illustration or Logo */}
+          <motion.div
+            className="relative z-10 lg:w-1/3 flex justify-center mt-8 lg:mt-0"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <img
+              src="/images/pulp101-illustration.svg"
+              alt="Pulp 101 Illustration"
+              className="w-60 h-60 object-contain animate-float-slow"
+            />
+          </motion.div>
+        </div>
+      </Section>
+
 
           {/* Call-to-Action */}
           <div className="text-center mt-12">
