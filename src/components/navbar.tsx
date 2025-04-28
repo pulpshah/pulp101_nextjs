@@ -53,7 +53,7 @@ export async function Navbar() {
 }
 
 // Logo Component
-function Logo() {
+export function Logo() {
   return (
     <Link href="/" className="flex items-center">
       <Image
@@ -80,7 +80,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 }
 
 // NavMenu
-function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
+export function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
   const containerClass = isSheet
     ? "flex flex-col gap-2.5 font-inter font-semibold text-[14px] leading-[24px] tracking-normal"
     : "flex gap-[85px] font-inter font-semibold text-[14px] leading-[24px] tracking-normal";

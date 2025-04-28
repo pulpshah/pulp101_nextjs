@@ -13,6 +13,7 @@
     "@ai-sdk/react": "^1.0.5",
     "@auth/neo4j-adapter": "^2.7.1",
     "@aws-sdk/client-s3": "^3.772.0",
+    "@headlessui/react": "^2.2.2",
     "@huggingface/inference": "^2.8.1",
     "@huggingface/transformers": "^3.0.1",
     "@mdx-js/loader": "^3.1.0",
