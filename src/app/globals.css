@@ -167,6 +167,36 @@ blockquote>p::before {
   display: none;
 }
 
+/*Made this for ICA and NDA agreement pages*/
+.label_text {
+  display: block;
+  margin-bottom: 0.25rem; 
+  font-size: 0.875rem;
+  font-weight: 500; 
+  color: #4a5568; 
+}
+
+.arg-box {
+  width: 100%; /* w-full */
+  border-radius: 0.5rem; /* rounded-lg */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  background-color: #f9fafb; /* bg-gray-50 */
+  padding: 0.75rem; /* p-3 */
+  font-size: 0.875rem; /* text-sm */
+  color: #4a5568; /* text-gray-700 */
+}
+
+.arg-box::placeholder {
+  color: #cbd5e0; /* placeholder-gray-400 */
+}
+
+.arg-box:focus {
+  border-color: #3b82f6; /* focus:border-blue-500 */
+  ring: 2px solid #bfdbfe; /* focus:ring-2 focus:ring-blue-200 */
+  outline: none; /* outline-none */
+  transition: all 0.2s ease; /* transition */
+}
+/*end*/
 
 .highlight-line {
   @apply bg-primary/5 border-l-2 border-primary/30;
