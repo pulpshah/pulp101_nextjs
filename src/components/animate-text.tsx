@@ -77,13 +77,14 @@ const AnimateText = ({
         }}
       >
         {textArray.map((line) => (
-          <span>
+          <span key={line}>
             {line.split(" ").map((word : string) => (
-              <span className="inline-block">
+              <span className="inline-block" key={word}>
                 {word.split("").map((char) => (
                   <motion.span
                     className="inline-block"
                     variants={defaultAnimations}
+                    key={char}
                   >
                     {char}
                   </motion.span>

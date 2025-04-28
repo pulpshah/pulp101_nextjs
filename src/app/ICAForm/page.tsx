@@ -390,7 +390,7 @@ const ICAForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="label_text">Client's Mailing Address</label>
+          <label className="label_text">Client&apos;s Mailing Address</label>
           <input
             type="text"
             className="arg-box"
@@ -401,7 +401,7 @@ const ICAForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="label_text">Contractor's Mailing Address</label>
+          <label className="label_text">Contractor&apos;s Mailing Address</label>
           <input
             type="text"
             className="arg-box"

@@ -29,7 +29,7 @@ const apprenticeFeatures = [{
 ];
 
 
-const apprenticeshipPage = () => {
+const ApprenticeshipPage = () => {
     const [showSpline, setShowSpline] = useState(false);
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const apprenticeshipPage = () => {
                 What is an Apprenticeship?
                 </h1>
                 <p className="text-lg md:text-2xl text-gray-200 max-w-3xl animate-fade-in-slow">
-                An apprenticeship at Pulp is more than just learning to code — it's about sharpening your problem-solving skills, mastering technical craftsmanship, and becoming part of a vibrant, collaborative community building the future of tech.
+                An apprenticeship at Pulp is more than just learning to code — it&apos;s about sharpening your problem-solving skills, mastering technical craftsmanship, and becoming part of a vibrant, collaborative community building the future of tech.
                 </p>
             </div>
 
@@ -135,7 +135,7 @@ const apprenticeshipPage = () => {
 
                 {/* Section Heading */}
                 <div className="text-center">
-                <h2 className="text-5xl font-extrabold text-purple-400 mb-4 animate-fade-in">What You'll Work On</h2>
+                <h2 className="text-5xl font-extrabold text-purple-400 mb-4 animate-fade-in">What You&apos;ll Work On</h2>
                 <p className="text-lg text-gray-300 animate-fade-in-slow">
                     Dive into impactful real-world projects across automation, NLP, software engineering, and UX design.
                 </p>
@@ -262,11 +262,11 @@ const apprenticeshipPage = () => {
                 <div className="flex flex-col gap-6 animate-fade-in">
                 <h2 className="text-5xl font-extrabold text-purple-400">Our Approach to Mentorship</h2>
                 <p className="text-lg text-gray-300 max-w-3xl">
-                    Mentorship is the foundation of our apprenticeship program. From your first day, you'll be paired with a mentor who supports your growth and helps you unlock your potential.
+                    Mentorship is the foundation of our apprenticeship program. From your first day, you&apos;ll be paired with a mentor who supports your growth and helps you unlock your potential.
                 </p>
                 <p className="text-lg text-gray-400 max-w-3xl">
-                    At Pulp, we're on a mission to <span className="text-purple-400 font-semibold">push the boundaries of innovation</span>. 
-                    As an apprentice, you'll be building real tools that transform industries and empower people.
+                    At Pulp, we&apos;re on a mission to <span className="text-purple-400 font-semibold">push the boundaries of innovation</span>. 
+                    As an apprentice, you&apos;ll be building real tools that transform industries and empower people.
                 </p>
                 </div>
 
@@ -287,7 +287,7 @@ const apprenticeshipPage = () => {
                 <div className="flex flex-col gap-6 animate-slide-up delay-200">
                 <h3 className="text-4xl font-bold text-yellow-400">Join Our Team Today</h3>
                 <p className="text-lg text-gray-300 max-w-3xl">
-                    Ready to launch your career? Apply to become a Pulp apprentice and start building skills that will set you apart. We can't wait to meet you!
+                    Ready to launch your career? Apply to become a Pulp apprentice and start building skills that will set you apart. We can&apos;t wait to meet you!
                 </p>
                 <a
                     href="#"
@@ -308,4 +308,4 @@ const apprenticeshipPage = () => {
 
 }
 
-export default apprenticeshipPage;
+export default ApprenticeshipPage;

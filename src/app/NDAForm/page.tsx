@@ -317,7 +317,7 @@ const NDAForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium">Recipient's Address</label>
+          <label className="block text-sm font-medium">Recipient&apos;s Address</label>
           <input
             type="text"
             className="w-full border rounded p-2 bg-white"
