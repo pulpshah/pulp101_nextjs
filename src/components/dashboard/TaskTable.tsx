@@ -2,7 +2,7 @@
 // File Purpose: TaskTable component with dynamic tasks, search, status updates, special redirects, and NDA preview modal
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/27/2025
+// Last Updated On: 04/30/2025
 // ============================================
 
 'use client';
@@ -93,7 +93,9 @@ export function TaskTable({ tasks }: TaskTableProps) {
         const res = await fetch('/api/account/profile');
         if (!res.ok) throw new Error(await res.text());
         const data = await res.json();
-        if (data?.ndaFileUrl) {
+        console.log('Fetched profile data:', data);
+
+        if (data?.ndaFileUrl && typeof data.ndaFileUrl === 'string') {
           setNdaFileUrl(data.ndaFileUrl);
         } else {
           setNdaFileUrl(null);

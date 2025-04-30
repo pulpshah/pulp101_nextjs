@@ -2,7 +2,7 @@
 // File Purpose: API route to GET/POST user profile including role, location, and quote
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/23/2025
+// Last Updated On: 04/30/2025
 // ============================================
 
 import { NextResponse } from 'next/server';
@@ -39,7 +39,8 @@ export async function GET() {
              u.city AS city,
              u.state AS state,
              u.quote AS quote,
-             u.createdAt AS createdAt
+             u.createdAt AS createdAt,
+             u.ndaFileUrl AS ndaFileUrl
       `,
             { email: session.user.email }
         );
@@ -67,46 +68,11 @@ export async function GET() {
             state: r.get('state') || '',
             quote: r.get('quote') || '',
             createdAt: r.get('createdAt') || '',
+            ndaFileUrl: r.get('ndaFileUrl') || '',
         });
     } catch (err) {
         console.error('Neo4j Fetch Error:', err);
         return NextResponse.json({ error: 'Profile fetch failed' }, { status: 500 });
-    } finally {
-        await neoSession.close();
-    }
-}
-
-export async function POST(req: Request) {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { role, city, state, quote } = await req.json();
-    const neoSession = driver.session();
-
-    try {
-        await neoSession.run(
-            `
-      MATCH (u:User { email: $email })
-      SET u.role = $role,
-          u.city = $city,
-          u.state = $state,
-          u.quote = $quote
-      `,
-            {
-                email: session.user.email,
-                role,
-                city,
-                state,
-                quote,
-            }
-        );
-
-        return NextResponse.json({ message: 'Profile updated' });
-    } catch (err) {
-        console.error('Neo4j Update Error:', err);
-        return NextResponse.json({ error: 'Update failed' }, { status: 500 });
     } finally {
         await neoSession.close();
     }
