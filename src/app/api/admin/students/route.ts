@@ -49,7 +49,7 @@ export async function GET() {
         u.email        AS email,
         u.ndaFileUrl   AS ndaFileUrl,
         u.icaFileUrl   AS icaFileUrl,
-        u.resumeFileUrl AS resumeFileUrl
+        u.resume AS resumeFileUrl
       ORDER BY u.name
       `
         );
