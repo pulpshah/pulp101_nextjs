@@ -10,11 +10,12 @@ export const metadata: Metadata = {
 };
 
 export default async function BlogIndexPage() {
-  const blogs = (await getAllBlogs()).sort(
-    (a, b) =>
-      stringToDate(b.frontmatter.date).getTime() -
-      stringToDate(a.frontmatter.date).getTime()
-  );
+  const blogs = (await getAllBlogs()).sort((a, b) => {
+    const dateA = a.frontmatter?.date ? stringToDate(a.frontmatter.date) : new Date(0);
+    const dateB = b.frontmatter?.date ? stringToDate(b.frontmatter.date) : new Date(0);
+    return dateB.getTime() - dateA.getTime();
+  });
+  
   return (
     <div className="w-full mx-auto flex flex-col gap-1 sm:min-h-[91vh] min-h-[88vh] pt-2">
       <div className="mb-7 flex flex-col gap-2">
@@ -70,24 +71,31 @@ function BlogCard({
 }
 
 function AvatarGroup({ users, max = 4 }: { users: Author[]; max?: number }) {
-  const displayUsers = users.slice(0, max);
-  const remainingUsers = Math.max(users.length - max, 0);
+  const displayUsers = (users ?? []).slice(0, max);
+  const remainingUsers = Math.max((users?.length ?? 0) - max, 0);
 
   return (
     <div className="flex items-center">
-      {displayUsers.map((user, index) => (
-        <Avatar
-          key={user.username}
-          className={`inline-block border-2 w-9 h-9 border-background ${
-            index !== 0 ? "-ml-3" : ""
-          } `}
-        >
-          <AvatarImage src={user.avatar} alt={user.username} />
-          <AvatarFallback>
-            {user.username.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-      ))}
+      {displayUsers.map((user, index) => {
+        if (!user || typeof user.username !== "string") return null;
+
+        const username = user.username ?? "";
+        const avatar = user.avatar ?? "";
+
+        return (
+          <Avatar
+            key={username || index}
+            className={`inline-block border-2 w-9 h-9 border-background ${
+              index !== 0 ? "-ml-3" : ""
+            }`}
+          >
+            <AvatarImage src={avatar} alt={username || "Author"} />
+            <AvatarFallback>
+              {username.slice(0, 2).toUpperCase() || "??"}
+            </AvatarFallback>
+          </Avatar>
+        );
+      })}
       {remainingUsers > 0 && (
         <Avatar className="-ml-3 inline-block border-2 border-background hover:translate-y-1 transition-transform">
           <AvatarFallback>+{remainingUsers}</AvatarFallback>
@@ -96,3 +104,4 @@ function AvatarGroup({ users, max = 4 }: { users: Author[]; max?: number }) {
     </div>
   );
 }
+

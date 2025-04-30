@@ -1,3 +1,10 @@
+// ============================================
+// File Purpose: Utility functions for styling, routing, date formatting, and debounce
+// Original Author: Mohammed Ihtisham
+// Last Updated By: Mohammed Ihtisham
+// Last Updated On: 04/30/2025
+// ============================================
+
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { EachRoute, RESEARCH_ROUTE, ROUTES } from "./routes-config";
@@ -42,36 +49,31 @@ export function helperSearch(
 
 export function advanceSearch(query: string) {
   return ROUTES.map((node) =>
-    helperSearch(query, node, "", 1, query.length == 0 ? 2 : undefined)
+    helperSearch(query, node, "", 1, query.length === 0 ? 2 : undefined)
   ).flat();
 }
 
 export function advanceSearchResearch(query: string) {
   return RESEARCH_ROUTE.map((node) =>
-    helperSearch(query, node, "", 1, query.length == 0 ? 2 : undefined)
+    helperSearch(query, node, "", 1, query.length === 0 ? 2 : undefined)
   ).flat();
 }
 
 // Thursday, May 23, 2024
-export function formatDate(dateStr: string): string {
-  const [day, month, year] = dateStr.split("-").map(Number);
-  const date = new Date(year, month - 1, day);
-
+export function formatDate(dateStr: string | undefined): string {
+  const date = stringToDate(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   };
-
   return date.toLocaleDateString("en-US", options);
 }
 
-//  May 23, 2024
-export function formatDate2(dateStr: string): string {
-  const [day, month, year] = dateStr.split("-").map(Number);
-  const date = new Date(year, month - 1, day);
-
+// May 23, 2024
+export function formatDate2(dateStr: string | undefined): string {
+  const date = stringToDate(dateStr);
   const options: Intl.DateTimeFormatOptions = {
     month: "short",
     day: "numeric",
@@ -80,8 +82,17 @@ export function formatDate2(dateStr: string): string {
   return date.toLocaleDateString("en-US", options);
 }
 
-export function stringToDate(date: string) {
-  const [day, month, year] = date.split("-").map(Number);
+export function stringToDate(dateStr: string | undefined): Date {
+  if (!dateStr || typeof dateStr !== "string") {
+    return new Date(0); // fallback date
+  }
+
+  const parts = dateStr.split("-").map(Number);
+  if (parts.length !== 3 || parts.some((n) => isNaN(n))) {
+    return new Date(0);
+  }
+
+  const [day, month, year] = parts;
   return new Date(year, month - 1, day);
 }
 

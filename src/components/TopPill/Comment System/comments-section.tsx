@@ -96,7 +96,8 @@ const convertComments = (array: any[]): Comment[] => {
     setShowComments((prevState) => !prevState);
   };
   const pathname = usePathname();
-  const slug = pathname?.split("/").pop();
+  const slug = typeof pathname === 'string' ? pathname.split("/").pop() : null;
+
 
   const handleDockLineClick = () => {
     setExpandComments((prevState) => !prevState);

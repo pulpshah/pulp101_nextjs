@@ -109,6 +109,7 @@ export default function Threads({
   const slug = typeof pathname === "string" ? pathname.split("/").pop() || "" : "";
 
 
+
   // const updateVoteLevel = (commentId: string, newVoteLevel: number | null) => {
   //   setUserComments((prevComments) =>
   //     prevComments.map((comment) =>
