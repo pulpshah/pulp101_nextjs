@@ -108,23 +108,53 @@ const UserInfoForm = () => {
     setIsEditing(false);
   };
 
-  const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleResumeUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (!file) return;
-
-    // Validate file
-    if (file.type !== 'application/pdf') {
-      alert('Only PDF files are allowed.');
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File must be smaller than 5MB.');
-      return;
-    }
-
-    setFormData((prev) => ({ ...prev, resume: URL.createObjectURL(file) }));
+  
+    const reader = new FileReader();
+  
+    reader.onloadend = async () => {
+      const base64Data = reader.result?.toString().split(',')[1];
+      if (!base64Data) return alert('Could not read file.');
+  
+      const fileName = `resumes/${file.name.replace(/\s+/g, "_")}_${Date.now()}.pdf`;
+      const fileType = file.type;
+  
+      try {
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ file: base64Data, fileName, fileType }),
+        });
+  
+        if (!uploadRes.ok) throw new Error('Upload failed');
+  
+        const { url } = await uploadRes.json();
+        alert('Resume uploaded successfully.');
+  
+        // update user profile
+        const updateRes = await fetch('/api/account/update-resume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ resumeUrl: url }),
+        });
+  
+        if (!updateRes.ok) {
+          console.error('Resume URL not saved.');
+        } else {
+            console.log('Resume URL saved to Neo4j.');
+            setFormData((prev) => ({ ...prev, resume: url }));
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Upload failed.');
+      }
+    };
+  
+    reader.readAsDataURL(file);
   };
+  
 
   return (
     <>
