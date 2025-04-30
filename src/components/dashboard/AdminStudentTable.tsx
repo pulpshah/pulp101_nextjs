@@ -7,42 +7,32 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import { FiDownload, FiLoader } from 'react-icons/fi';
 
-interface Student {
+interface User {
   name: string;
   email: string;
-  ndaFileUrl: string | null;
-  icaFileUrl: string | null;
-  resumeFileUrl: string | null;
+  ndaFileUrl?: string | null;
+  icaFileUrl?: string | null;
+  resumeFileUrl?: string | null;
 }
 
-export function AdminStudentTable() {
-  const [students, setStudents] = useState<Student[]>([]);
+interface AdminStudentTableProps {
+  users: User[];
+}
+
+export function AdminStudentTable({ users }: AdminStudentTableProps) {
   const [search, setSearch] = useState('');
   const [modalUrl, setModalUrl] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const res = await fetch('/api/admin/students');
-        const data = await res.json();
-        setStudents(data.students || []);
-      } catch (error) {
-        console.error('Failed to load students:', error);
-      }
-    };
-
-    fetchStudents();
-  }, []);
-
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(search.toLowerCase()) ||
-    student.email.toLowerCase().includes(search.toLowerCase())
+  const filteredStudents = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(search.toLowerCase()) ||
+      user.email.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleView = (url: string) => {
@@ -77,7 +67,6 @@ export function AdminStudentTable() {
                 <tr key={student.email} className="border-b border-gray-800 hover:bg-gray-800/60">
                   <td className="py-2 px-4">{student.name}</td>
                   <td className="py-2 px-4">{student.email}</td>
-                  {/* NDA */}
                   <td className="py-2 px-4">
                     {student.ndaFileUrl ? (
                       <button
@@ -90,7 +79,6 @@ export function AdminStudentTable() {
                       <span className="text-gray-400 text-xs">Not Uploaded</span>
                     )}
                   </td>
-                  {/* ICA */}
                   <td className="py-2 px-4">
                     {student.icaFileUrl ? (
                       <button
@@ -103,7 +91,6 @@ export function AdminStudentTable() {
                       <span className="text-gray-400 text-xs">Not Uploaded</span>
                     )}
                   </td>
-                  {/* Resume */}
                   <td className="py-2 px-4">
                     {student.resumeFileUrl ? (
                       <button
@@ -123,7 +110,6 @@ export function AdminStudentTable() {
         </div>
       </div>
 
-      {/* Modal */}
       <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)} className="fixed z-50 inset-0 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen p-4">
           <Dialog.Panel className="bg-gray-900 rounded-2xl shadow-lg p-6 w-full max-w-4xl">
@@ -134,10 +120,7 @@ export function AdminStudentTable() {
               {isLoading ? (
                 <FiLoader className="animate-spin text-purple-400 text-4xl" />
               ) : modalUrl ? (
-                <iframe
-                  src={modalUrl}
-                  className="w-full h-[600px] rounded-md"
-                />
+                <iframe src={modalUrl} className="w-full h-[600px] rounded-md" />
               ) : (
                 <p className="text-gray-400">No document found.</p>
               )}

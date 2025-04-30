@@ -106,7 +106,8 @@ export default function Threads({
   };
 
   const pathname = usePathname();
-  const slug = pathname?.split("/").pop();
+  const slug = typeof pathname === "string" ? pathname.split("/").pop() || "" : "";
+
 
   // const updateVoteLevel = (commentId: string, newVoteLevel: number | null) => {
   //   setUserComments((prevComments) =>
@@ -202,7 +203,7 @@ export default function Threads({
         <div className="fixed bottom-0 left-2 right-0 w-[93%] bg-neutral-800 border-t border-neutral-800 px-1 py-1 rounded-lg">
           <AddCommentPill
             onAddComment={handleAddComment}
-            slug={usePathname()?.split("/").pop() || ""}
+            slug={slug}
             email={email}
           />
         </div>
