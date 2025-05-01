@@ -2,15 +2,16 @@
 // File Purpose: AdminDashboard page showing student stats and deliverables
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/27/2025
+// Last Updated On: 05/01/2025
 // ============================================
 
 'use client';
 
 import { ProfileSummaryCard } from './ProfileSummaryCard';
-import { AdminStats } from './AdminStats';
 import { AdminStudentTable } from './AdminStudentTable';
 import { useSession } from 'next-auth/react';
+import { StatCard } from './AdminStats';
+import { FaUsers, FaFileAlt, FaClock } from 'react-icons/fa';
 
 interface User {
   name: string;
@@ -29,6 +30,16 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
   const adminName = session?.user?.name || 'Admin User';
   const adminEmail = session?.user?.email || 'admin@pulp101.com';
   const adminImage = session?.user?.image || '/admin-profile.png';
+
+  const totalUsers = users.length;
+  const completeUsers = users.filter(
+    (u) => u.ndaFileUrl && u.resumeFileUrl && u.icaFileUrl
+  ).length;
+  const usersWithNoProgress = users.filter(
+    (u) => !u.ndaFileUrl && !u.resumeFileUrl && !u.icaFileUrl
+  ).length;
+  const missingDocs = totalUsers - completeUsers;
+  const completionRate = totalUsers > 0 ? Math.round((completeUsers / totalUsers) * 100) : 0;
 
   return (
     <main className="min-h-screen bg-gray-950 text-white px-6 py-12 md:px-16 space-y-12">
@@ -51,8 +62,28 @@ export function AdminDashboard({ users }: AdminDashboardProps) {
             image={adminImage}
           />
         </div>
-        <div className="lg:col-span-3">
-          <AdminStats />
+        <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatCard
+            title="Total Completion Rate"
+            value={`${completionRate}%`}
+            icon={<FaFileAlt />}
+            tooltip="The percentage of users who have submitted all key deliverables."
+            linkHref="/admin/users"
+          />
+          <StatCard
+            title="Users with No Progress"
+            value={String(usersWithNoProgress)}
+            icon={<FaClock />}
+            tooltip="Users who have not submitted any of the required documents."
+            linkHref="/admin/users?filter=no-progress"
+          />
+          <StatCard
+            title="Missing Key Documents"
+            value={`${missingDocs} / ${totalUsers}`}
+            icon={<FaUsers />}
+            tooltip="Users who are missing at least one of the NDA, ICA, or Resume."
+            linkHref="/admin/users?filter=incomplete"
+          />
         </div>
       </div>
 

@@ -1,76 +1,72 @@
 // ============================================
-// File Purpose: AdminStats component for displaying deliverables submission statistics
+// File Purpose: AdminStats component showing deliverable submission stats
 // Original Author: Mohammed Ihtisham
 // Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/27/2025
+// Last Updated On: 05/01/2025
 // ============================================
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { FiInfo } from 'react-icons/fi';
+import Link from 'next/link';
+import { useState } from 'react';
 
-interface Stats {
-  ndaSubmitted: number;
-  icaSubmitted: number;
-  resumeSubmitted: number;
-  totalStudents: number;
+interface StatCardProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  tooltip?: string;
+  linkHref?: string;
+  large?: boolean;
 }
 
-export function AdminStats() {
-  const [stats, setStats] = useState<Stats>({
-    ndaSubmitted: 0,
-    icaSubmitted: 0,
-    resumeSubmitted: 0,
-    totalStudents: 0,
-  });
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await fetch('/api/admin/students');
-        const data = await res.json();
-        const students = data.students || [];
-
-        const ndaSubmitted = students.filter((s: any) => s.ndaFileUrl).length;
-        const icaSubmitted = students.filter((s: any) => s.icaFileUrl).length;
-        const resumeSubmitted = students.filter((s: any) => s.resumeFileUrl).length;
-
-        setStats({
-          ndaSubmitted,
-          icaSubmitted,
-          resumeSubmitted,
-          totalStudents: students.length,
-        });
-      } catch (error) {
-        console.error('Failed to load admin stats:', error);
-      }
-    };
-
-    fetchStats();
-  }, []);
+export function StatCard({
+  title,
+  value,
+  icon,
+  tooltip,
+  linkHref,
+  large = false,
+}: StatCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div className="bg-gray-900 p-6 rounded-xl border border-gray-700 shadow-md text-center">
-        <h3 className="text-purple-400 font-bold mb-2">NDA Submissions</h3>
-        <p className="text-white text-2xl font-bold">
-          {stats.ndaSubmitted} / {stats.totalStudents}
-        </p>
+    <div className="relative bg-gray-900 rounded-xl shadow-md border border-gray-700 p-6 flex flex-col justify-between hover:shadow-purple-500/20 transition-all group min-h-[180px]">
+      <div className="flex justify-between items-start">
+        <div className="flex items-center gap-3 text-purple-400 text-xl">
+          {icon}
+          <h2 className="font-semibold text-white text-lg">{title}</h2>
+        </div>
+        {tooltip && (
+          <div
+            className="relative"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <FiInfo className="text-gray-400 hover:text-white cursor-pointer" />
+            {isHovered && (
+              <div className="absolute right-0 bottom-full mb-4 w-56 bg-gray-800 text-gray-200 text-sm rounded-lg shadow-lg p-3 z-50">
+                {tooltip}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="bg-gray-900 p-6 rounded-xl border border-gray-700 shadow-md text-center">
-        <h3 className="text-purple-400 font-bold mb-2">ICA Submissions</h3>
-        <p className="text-white text-2xl font-bold">
-          {stats.icaSubmitted} / {stats.totalStudents}
-        </p>
-      </div>
+      <p className={`font-extrabold text-white ${large ? 'text-5xl' : 'text-4xl'} mt-4`}>
+        {value}
+      </p>
 
-      <div className="bg-gray-900 p-6 rounded-xl border border-gray-700 shadow-md text-center">
-        <h3 className="text-purple-400 font-bold mb-2">Resume Submissions</h3>
-        <p className="text-white text-2xl font-bold">
-          {stats.resumeSubmitted} / {stats.totalStudents}
-        </p>
-      </div>
+      {linkHref && (
+        <div className="mt-auto flex justify-end">
+          <Link
+            href={linkHref}
+            className="text-purple-400 text-sm hover:underline transition-all"
+          >
+            View All →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
