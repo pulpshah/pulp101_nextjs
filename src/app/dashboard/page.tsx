@@ -8,6 +8,7 @@
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import driver from '@/lib/neo4j';
+import { redirect } from 'next/navigation';
 
 import { AdminDashboard } from '@/components/dashboard/AdminDashboard';
 import { StudentDashboard } from '@/components/dashboard/StudentDashboard';
@@ -17,7 +18,7 @@ export default async function DashboardPage() {
   const user = session?.user;
 
   if (!user) {
-    return <div className="text-center p-12">Unauthorized</div>;
+    redirect('/auth/signin');
   }
 
   const dbSession = driver.session();

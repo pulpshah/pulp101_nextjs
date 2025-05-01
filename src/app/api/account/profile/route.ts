@@ -77,3 +77,49 @@ export async function GET() {
         await neoSession.close();
     }
 }
+
+export async function POST(req: Request) {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const {
+        image,
+        role,
+        city,
+        state,
+        quote,
+    } = await req.json();
+
+    const neoSession = driver.session();
+
+    try {
+        await neoSession.run(
+            `
+        MATCH (u:User { email: $email })
+        SET u.image = $image,
+            u.role = $role,
+            u.city = $city,
+            u.state = $state,
+            u.quote = $quote
+        `,
+            {
+                email: session.user.email,
+                image,
+                role,
+                city,
+                state,
+                quote,
+            }
+        );
+
+        return NextResponse.json({ message: 'Profile updated successfully' });
+    } catch (error) {
+        console.error('Neo4j Update Error:', error);
+        return NextResponse.json({ error: 'Update failed' }, { status: 500 });
+    } finally {
+        await neoSession.close();
+    }
+}
+
