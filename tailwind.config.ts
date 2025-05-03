@@ -22,11 +22,9 @@ const config: Config = {
       },
     },
     extend: {
-      // === add this block ===
       backgroundAttachment: {
         fixed: "fixed",
       },
-      // =======================
       colors: {
         gray: {
           100: "#f5f5f5",
@@ -75,11 +73,11 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["Inter", "sans-serif"], // Inter as the default sans-serif font
         code: ["var(--font-geist-mono)"],
         regular: ["var(--font-geist-sans)"],
         RG: ["Roc Grotesk", "sans-serif"],
-        inter: ["Inter"],
+        inter: ["Inter"], // Explicit Inter font family
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -117,8 +115,7 @@ const config: Config = {
     },
   },
   variants: {
-    // enable bg-fixed as a responsive utility
-    backgroundAttachment: ["responsive"],
+    backgroundAttachment: ["responsive"], // Enable bg-fixed as a responsive utility
   },
   plugins: [
     typography,

@@ -11,7 +11,7 @@ const researchItems: { title: string; description: string; icon: React.ReactElem
   { title: 'Publication', description: 'Collaborate on whitepapers, case studies, and blog posts to share Pulp’s latest findings.', icon: <BookOpen className="h-6 w-6 text-yellow-500" /> },
 ];
 
-export default function ResearchPage() {
+function ResearchPage() {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
@@ -135,3 +135,5 @@ export default function ResearchPage() {
     </main>
   );
 }
+
+export default ResearchPage;
