@@ -10,7 +10,7 @@ const config: Config = {
     "./components/**/*.{ts,tsx,mdx}",
     "./app/**/*.{ts,tsx,mdx}",
     "./src/**/*.{ts,tsx,mdx}",
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}", // <- from original project
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -22,8 +22,12 @@ const config: Config = {
       },
     },
     extend: {
+      // === add this block ===
+      backgroundAttachment: {
+        fixed: "fixed",
+      },
+      // =======================
       colors: {
-        // Original default gray palette — for fallback & compatibility
         gray: {
           100: "#f5f5f5",
           200: "#e5e5e5",
@@ -35,7 +39,6 @@ const config: Config = {
           800: "#262626",
           900: "#171717",
         },
-        // Your design tokens (via CSS variables)
         textColor: "hsl(var(--text-color))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -72,11 +75,11 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"], // classic default fallback
+        sans: ["Inter", "sans-serif"],
         code: ["var(--font-geist-mono)"],
         regular: ["var(--font-geist-sans)"],
-        RG: ['Roc Grotesk', 'sans-serif'],
-        inter: ['Inter'],
+        RG: ["Roc Grotesk", "sans-serif"],
+        inter: ["Inter"],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -112,6 +115,10 @@ const config: Config = {
         cursor: "cursor 0.4s step-end infinite alternate",
       },
     },
+  },
+  variants: {
+    // enable bg-fixed as a responsive utility
+    backgroundAttachment: ["responsive"],
   },
   plugins: [
     typography,

@@ -1,3 +1,5 @@
+//WHAT IS PULP 101
+
 "use client";
 import React from "react";
 import Link from "next/link";

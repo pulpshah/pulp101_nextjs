@@ -288,3 +288,15 @@ blockquote>p::before {
     }
   }
   
+  @layer utilities {
+    /* apply fixed attachment plus sensible defaults */
+    .parallax {
+      @apply bg-fixed bg-cover bg-center bg-no-repeat;
+      /* fallback for older browsers */
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+  

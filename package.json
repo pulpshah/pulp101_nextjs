@@ -33,6 +33,7 @@
     "@tailwindcss/forms": "^0.5.10",
     "@tavily/core": "^0.0.2",
     "ai": "^3.4.33",
+    "animejs": "^4.0.2",
     "aws-sdk": "^2.1692.0",
     "bcrypt": "^5.1.1",
     "child_process": "^1.0.2",
