@@ -105,7 +105,7 @@ export function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
         <CollapsibleDropdownSection
           title="Pulp Workplace Policies"
           items={[
-            { label: "Communication Guideline", href: "/resources/communication-guideline" },
+            { label: "Communication Guidelines", href: "/resources/communication-guideline" },
             { label: "Discord/Phone/Email", href: "/resources/discord-phone-email" },
             { label: "Operations Policies", href: "/resources/operations-policies" },
           ]}
