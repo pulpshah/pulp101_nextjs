@@ -21,8 +21,8 @@ const bestPractices = [
   { title: 'Be Professional & Respectful', desc: 'Maintain professionalism in all channels.' },
   { title: 'Use Async Communication', desc: 'Leverage Notion or Loom for non-urgent discussions.' },
   { title: 'Keep Discussions Public', desc: 'Share in public channels unless privacy is required.' },
-  { title: 'Use Loom for Complex Topics', desc: 'Record quick videos to explain intricate ideas.' },
-  { title: 'Acknowledge Messages', desc: 'React or reply briefly to confirm receipt.' },
+  { title: 'Visualize & Verbalize Complex Topics', desc: 'Record concise, frequent videos that break down intricate ideas into clear, accessible insights.' },
+  { title: 'Engage in Conversations', desc: 'React or reply briefly to confirm receipt.' },
 ];
 
 export default function CommunicationGuidelinePage() {
@@ -71,7 +71,9 @@ export default function CommunicationGuidelinePage() {
         variants={sectionVariants}
       >
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-4xl font-semibold text-white mb-8">Discord – Daily Team Communication</h2>
+          <h2 className="text-4xl font-semibold text-white mb-8">
+            Discord – Daily Team Communication
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {discordItems.map((item, i) => (
               <motion.div
@@ -89,16 +91,30 @@ export default function CommunicationGuidelinePage() {
               </motion.div>
             ))}
           </div>
+
           <div className="mt-6 text-gray-300">
-            <Pheaders text="Best Practices:" supporting="" fontSize="20px" supportingFontSize="16px" fontColor="white" />
-            <ul className="list-disc list-inside mt-2 text-gray-400 space-y-1">
-              <li>Use <strong>threaded messages</strong> to keep conversations organized.</li>
-              <li>Mention team members with <strong>@username</strong> only when necessary.</li>
+            <Pheaders
+              text="Best Practices:"
+              supporting=""
+              fontSize="20px"
+              supportingFontSize="16px"
+              fontColor="white"
+            />
+            {/* bump the list up to remove the gap */}
+            <ul className="-mt-2 list-disc list-inside text-gray-400 space-y-1">
+              <li>
+                Use <strong>threaded messages</strong> to keep conversations organized.
+              </li>
+              <li>
+                Mention team members with <strong>@username</strong> only when necessary.
+              </li>
               <li>Keep discussions relevant to the channel’s topic.</li>
             </ul>
           </div>
         </div>
       </motion.section>
+
+
 
       {/* Best Practices Cards */}
       <motion.section

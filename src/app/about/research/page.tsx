@@ -35,7 +35,7 @@ function ResearchPage() {
             Research at Pulp
           </h1>
           <p className="text-lg md:text-xl text-gray-300">
-            At Pulp, research isn’t just about sitting in a lab or studying theories in isolation—it’s about <strong>interconnecting</strong> with various areas of the company and <strong>learning by doing</strong>. As an apprentice or team member, you’ll have the opportunity to engage in meaningful research that spans across <strong>automation</strong>, <strong>natural language processing (NLP)</strong>, <strong>interaction design</strong>, and more.
+          At Pulp, research isn’t just about sitting in a lab or studying theories in isolation, it&apos;s about embracing <strong>interdisciplinary</strong> collaboration across various areas of the company and <strong>learning by doing</strong>. As an apprentice or team member, you&apos;ll have the opportunity to engage in meaningful research that spans <strong>automation</strong>, <strong>natural language processing (NLP)</strong>, <strong>interaction design</strong>, and more.
           </p>
         </div>
       </section>
