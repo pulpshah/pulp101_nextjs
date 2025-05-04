@@ -1,3 +1,4 @@
+//Created by Oluwadamilare Akabashorun 05/04/25
 "use client";
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Database, ChartLine, Globe } from 'lucide-react';
@@ -45,7 +46,6 @@ function ResearchPage() {
       {/* Why Research Section */}
       <section
         className="h-screen bg-gradient-to-b from-gray-900 to-black bg-fixed bg-center bg-no-repeat flex items-center justify-center"
-
       >
         <div className="max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10 px-6 items-center">
           <div className="space-y-6 text-center md:text-left">
@@ -60,10 +60,10 @@ function ResearchPage() {
             </blockquote>
           </div>
 
-          {/* Animated SVG or Lottie Graphic */}
+          {/* Image from Base64 */}
           <div className="flex justify-center">
             <Image
-              src="/assets/research-animation.gif" // swap for lottie, SVG, or image
+              src="/images/pulp-image.jpeg" // (use full string)
               alt="Research Graphic"
               width={400}
               height={400}
@@ -72,7 +72,6 @@ function ResearchPage() {
           </div>
         </div>
       </section>
-
       {/* Opportunities to Learn and Develop */}
       <section
         className="h-screen bg-black bg-fixed flex items-center justify-center"
@@ -85,28 +84,48 @@ function ResearchPage() {
               {
                 icon: '💡',
                 title: 'Interest-Driven Exploration',
-                desc: 'Freedom to dive into areas you’re passionate about.'
+                desc: 'Freedom to dive into areas you’re passionate about.',
+                border: 'border-yellow-400',
+                glow: 'hover:shadow-[0_0_25px_8px_rgba(250,204,21,0.8)]',
+                bg: 'bg-yellow-400',
               },
               {
                 icon: '🧩',
                 title: 'Interdisciplinary Connection',
-                desc: 'Connect coding skills with design, data analysis, and AI.'
+                desc: 'Connect coding skills with design, data analysis, and AI.',
+                border: 'border-purple-500',
+                glow: 'hover:shadow-[0_0_25px_8px_rgba(168,85,247,0.8)]',
+                bg: 'bg-purple-500',
               },
               {
                 icon: '🤝',
                 title: 'Collaboration with Experts',
-                desc: 'Access a network of seasoned professionals for real-world insights.'
+                desc: 'Access a network of seasoned professionals for real-world insights.',
+                border: 'border-green-500',
+                glow: 'hover:shadow-[0_0_25px_8px_rgba(34,197,94,0.8)]',
+                bg: 'bg-green-500',
               },
             ].map((item, i) => (
-              <div key={i} className="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:shadow-lg transition">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h4 className="text-xl font-semibold text-white">{item.title}</h4>
-                <p className="text-gray-400">{item.desc}</p>
+              <div
+                key={i}
+                className={`p-6 rounded-2xl bg-black border ${item.border} shadow-lg ${item.glow} hover:scale-105 transition-all duration-300 ease-in-out animate-slide-up delay-${i * 100} text-center`}
+              >
+                <div className={`w-20 h-20 mx-auto mb-4 flex items-center justify-center rounded-full ${item.bg}`}>
+                  <span className="text-4xl">{item.icon}</span>
+                </div>
+                <Pheaders
+                  text={item.title}
+                  supporting={item.desc}
+                  fontSize="20px"
+                  supportingFontSize="15px"
+                  fontColor="white"
+                />
               </div>
             ))}
           </div>
         </div>
       </section>
+
 
 
       {/* Featured Research Projects Section */}
