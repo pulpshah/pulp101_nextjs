@@ -82,8 +82,8 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 // NavMenu
 export function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
   const containerClass = isSheet
-    ? "flex flex-col gap-2.5 font-inter font-semibold text-[14px] leading-[24px] tracking-normal"
-    : "flex gap-[85px] font-inter font-semibold text-[14px] leading-[24px] tracking-normal";
+    ? "flex flex-col gap-2.5 font-inter border-solid border-white font-semibold text-[14px] leading-[24px] tracking-normal"
+    : "flex gap-[85px] font-inter border-solid border-white font-semibold text-[14px] leading-[24px] tracking-normal";
 
   return (
     <div className={containerClass}>
@@ -105,7 +105,7 @@ export function NavMenu({ isSheet = false }: { isSheet?: boolean }) {
         <CollapsibleDropdownSection
           title="Pulp Workplace Policies"
           items={[
-            { label: "Communication Guideline", href: "/resources/communication-guideline" },
+            { label: "Communication Guidelines", href: "/resources/communication-guideline" },
             { label: "Discord/Phone/Email", href: "/resources/discord-phone-email" },
             { label: "Operations Policies", href: "/resources/operations-policies" },
           ]}

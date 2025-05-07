@@ -1,8 +1,8 @@
 // ============================================
 // File Purpose: Root layout wrapper for the Pulp101 app with theming, auth, and global styles
 // Original Author: Mohammed Ihtisham
-// Last Updated By: Mohammed Ihtisham
-// Last Updated On: 04/30/2025
+// Last Updated By: Assistant
+// Last Updated On: 05/03/2025
 // ============================================
 
 import type { Metadata } from "next";
@@ -32,13 +32,19 @@ export default function RootLayout({
     <ClientApplication>
       <html lang="en" suppressHydrationWarning>
         <head>
+          {/* Poppins */}
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
             rel="stylesheet"
           />
+          {/* Inter */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+            rel="stylesheet"
+          />
         </head>
         <body
-          className={`${GeistSans.variable} ${GeistMono.variable} font-regular antialiased`}
+          className={`${GeistSans.variable} ${GeistMono.variable} font-inter antialiased`}
           suppressHydrationWarning
         >
           <ToolbarOverlay>
@@ -49,7 +55,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <AuthProvider>
-                <Navbar />
+                <Navbar/>
                 {children}
               </AuthProvider>
             </ThemeProvider>

@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import ContractTesting from '@/components/ContractTesting';
-import NDAForm from '../NDAForm/page';
+import NDAForm from '../resources/pulp-nda/page';
 
 const App: React.FC = () => {
     const [currentDocument, setCurrentDocument] = useState(0);

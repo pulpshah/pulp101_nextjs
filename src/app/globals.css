@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 @import '../../styles/syntax.css';
+/* Add this to your global CSS file (e.g., styles/globals.css) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
@@ -69,6 +71,7 @@
   }
 
   body {
+    font-family: 'Inter', sans-serif;
     @apply bg-background text-foreground;
   }
 }
@@ -285,6 +288,18 @@ blockquote>p::before {
   @keyframes rotate-glow {
     to {
       transform: rotate(360deg);
+    }
+  }
+  
+  @layer utilities {
+    /* apply fixed attachment plus sensible defaults */
+    .parallax {
+      @apply bg-fixed bg-cover bg-center bg-no-repeat;
+      /* fallback for older browsers */
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
     }
   }
   

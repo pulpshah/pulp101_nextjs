@@ -32,7 +32,7 @@ export default function CollapsibleDropdownSection({
         {title}
       </button>
       {open && (
-        <div className="ml-4 mt-1 flex flex-col bg-black rounded-md p-2 border border-[#D9D9D9]">
+        <div className="ml-4 mt-1 flex flex-col bg-black rounded-md p-2 border border-white">
           {items.map((item, index) => (
             <Link
               key={index}
