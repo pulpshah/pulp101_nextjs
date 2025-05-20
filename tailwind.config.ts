@@ -1,12 +1,16 @@
 import type { Config } from "tailwindcss";
+import type { PluginAPI } from "tailwindcss/types/config";
+import typography from "@tailwindcss/typography";
+import forms from "@tailwindcss/forms";
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{ts,tsx,mdx}",
+    "./components/**/*.{ts,tsx,mdx}",
+    "./app/**/*.{ts,tsx,mdx}",
+    "./src/**/*.{ts,tsx,mdx}",
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -18,7 +22,22 @@ const config = {
       },
     },
     extend: {
+      backgroundAttachment: {
+        fixed: "fixed",
+      },
       colors: {
+        gray: {
+          100: "#f5f5f5",
+          200: "#e5e5e5",
+          300: "#d4d4d4",
+          400: "#a3a3a3",
+          500: "#737373",
+          600: "#525252",
+          700: "#404040",
+          800: "#262626",
+          900: "#171717",
+        },
+        textColor: "hsl(var(--text-color))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -53,16 +72,17 @@ const config = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"], // Inter as the default sans-serif font
+        code: ["var(--font-geist-mono)"],
+        regular: ["var(--font-geist-sans)"],
+        RG: ["Roc Grotesk", "sans-serif"],
+        inter: ["Inter"], // Explicit Inter font family
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-      },
-      fontFamily: {
-        code: ["var(--font-geist-mono)"],
-        regular: ["var(--font-geist-sans)"],
-        RG: ['Roc Grotesk', 'sans-serif'],
-        inter: ['Inter'],
       },
       keyframes: {
         "accordion-down": {
@@ -73,14 +93,44 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "infinite-scroll": {
+          to: { transform: "translateX(calc(-100% - 0.1rem))" },
+        },
+        typing: {
+          "0%": { width: "0ch" },
+          "100%": { width: "18ch" },
+        },
+        cursor: {
+          "0%, 100%": { borderColor: "transparent" },
+          "50%": { borderColor: "black" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "infinite-scroll": "infinite-scroll 20s linear infinite",
+        typing: "typing 2s forwards",
+        cursor: "cursor 0.4s step-end infinite alternate",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-} satisfies Config;
+  variants: {
+    backgroundAttachment: ["responsive"], // Enable bg-fixed as a responsive utility
+  },
+  plugins: [
+    typography,
+    forms,
+    function ({ addUtilities }: PluginAPI) {
+      addUtilities({
+        ".mask-image-fade-x": {
+          WebkitMaskImage:
+            "linear-gradient(to left, rgba(208, 27, 27, 0) 0%, rgb(234, 42, 42) 128px, rgb(168, 36, 36) calc(100% - 128px), rgba(255, 255, 0, 0) 100%)",
+          maskImage:
+            "linear-gradient(to right, rgba(172, 66, 66, 0) 0%, rgb(202, 39, 39) 48px, rgb(227, 47, 47) calc(100% - 128px), rgba(0, 0, 0, 0) 100%)",
+        },
+      });
+    },
+  ],
+};
 
 export default config;

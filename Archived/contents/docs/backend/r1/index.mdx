@@ -1,0 +1,33 @@
+---
+title: "Resource 1"
+description: "Detailed overview of Resource 1 in our backend."
+---
+
+# Resource 1
+
+**Resource 1** is a key part of our backend, responsible for managing data and processes related to FooBar operations. This document explains its endpoints, usage, and common workflows.
+
+> **Note**: You can adapt these examples to your specific environment or framework.
+
+## Overview
+
+Resource 1 provides:
+
+- **CRUD operations** for FooBar entities  
+- **Validation** of incoming requests  
+- **Integration** with our caching/queue layer  
+
+## Endpoints
+
+Here are some example endpoints for Resource 1 (assuming an Express-like setup):
+
+```ts
+// GET /resource1/:id
+import { Request, Response } from "express";
+
+export async function getResource1(req: Request, res: Response) {
+  const { id } = req.params;
+  // Fetch data from the DB or cache
+  const result = await getResource1ById(id);
+  return res.json({ data: result });
+}
